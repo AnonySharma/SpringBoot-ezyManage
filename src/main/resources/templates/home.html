@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="text-white">Welcome to ezyManage!</h4>
+					</div>
+					<br />
+					<br />
+					<br />
+					<br />
+					<a href="/login/" class="btn float-right login_btn">Login</a>
+					<br />
+					<a href="/register/" class="btn float-right login_btn">Register</a>
+					<br />
+					<a href="/admin/" class="btn float-right login_btn">Admin</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

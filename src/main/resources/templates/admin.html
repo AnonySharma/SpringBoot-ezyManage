@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body style="background-image: none !important">
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<h1 class="text-center">ALL USERS</h1>
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">id</th>
+						<th scope="col">Username</th>
+						<th scope="col">Role</th>
+						<th scope="col">isAdmin</th>
+						<th scope="col">Edit</th>
+						<th scope="col">Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user:${userList}">
+						<td th:text="${user.id}"></td>
+						<td th:text="${user.username}"></td>
+						<td th:text="${user.role}"></td>
+						<td th:text="${user.isAdmin}"></td>
+						<td><a th:href="${'?id=' + user.id}" class="btn btn-primary">Edit</a></td>
+						<td><a th:href="${'?delete&id=' + user.id}" class="btn btn-danger">Delete</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
