@@ -11,8 +11,7 @@ public class EzyManageApplication {
 
 	@Bean
 	BCryptPasswordEncoder passwordEncoder() {
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		return bCryptPasswordEncoder;
+		return new BCryptPasswordEncoder();
 	}
 
 	public static void main(String[] args) {

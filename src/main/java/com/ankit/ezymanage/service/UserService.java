@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.ankit.ezymanage.model.User;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 public interface UserService {
 	void saveUser(User user);
 
@@ -12,4 +14,6 @@ public interface UserService {
 	User getUser(String username);
 
 	List<User> getUsers();
+
+	public UserDetails loadUserByUsername(String username);
 }

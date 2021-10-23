@@ -15,7 +15,7 @@
 						</div>
 					</div>
 					<div class="card-body">
-						<form method="POST" th:object="${user}" th:action="@{/register/}">
+						<form method="POST" th:object="${user}" th:action="@{/login/}">
 							<div class="input-group form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -26,6 +26,8 @@
 									th:field="*{username}"
 									placeholder="username"
 									name="username"
+									required
+									autofocus
 								/>
 							</div>
 							<div class="input-group form-group">
@@ -38,6 +40,7 @@
 									th:field="*{password}"
 									placeholder="password"
 									name="password"
+									required
 								/>
 							</div>
 							<div class="row align-items-center remember"><input type="checkbox" />Remember Me</div>

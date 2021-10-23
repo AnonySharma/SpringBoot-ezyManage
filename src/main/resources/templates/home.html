@@ -7,17 +7,24 @@
 			<div class="d-flex justify-content-center h-100">
 				<div class="card">
 					<div class="card-header">
-						<h4 class="text-white">Welcome to ezyManage!</h4>
+						<div th:if="${loggedIn == true}">
+							<span class="text-white" th:text="${'Hello ' + username + '!'}"></span>
+							<a th:href="@{/logout/}" class="float-right"><span class="badge badge-danger">Logout</span></a>
+							<br />
+						</div>
 					</div>
 					<br />
+					<h4 class="text-white text-center">Welcome to ezyManage!</h4>
 					<br />
-					<br />
-					<br />
-					<a href="/login/" class="btn float-right login_btn">Login</a>
-					<br />
-					<a href="/register/" class="btn float-right login_btn">Register</a>
-					<br />
-					<a href="/admin/" class="btn float-right login_btn">Admin</a>
+					<div class="mx-auto">
+						<a href="/login/" class="btn float-right login_btn">Login</a>
+						<br />
+						<br />
+						<a href="/register/" class="btn float-right login_btn">Register</a>
+						<br />
+						<br />
+						<a href="/admin/" class="btn float-right login_btn">Admin</a>
+					</div>
 				</div>
 			</div>
 		</div>
