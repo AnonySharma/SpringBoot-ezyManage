@@ -36,9 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().anyRequest().permitAll();
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/error/");
         // http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
-        http.authorizeRequests().and().formLogin().loginPage("/login/").defaultSuccessUrl("/").failureUrl("/error/")
-                .usernameParameter("username").passwordParameter("password").and().logout().logoutUrl("/logout/")
-                .logoutSuccessUrl("/");
+        http.authorizeRequests().and().formLogin().loginPage("/login/").defaultSuccessUrl("/loggedin/")
+                .failureUrl("/error/").usernameParameter("username").passwordParameter("password").and().logout()
+                .logoutUrl("/logout/").logoutSuccessUrl("/loggedout/");
 
     }
 

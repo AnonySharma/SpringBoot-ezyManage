@@ -38,6 +38,11 @@ public class ProfileDAO {
 		return jdbcTemplate.queryForObject(sql, profileRowMapper, username);
 	}
 
+	public void deleteProfileByUsername(String username) {
+		final String sql = "DELETE FROM profile WHERE username=?";
+		jdbcTemplate.update(sql, username);
+	}
+
 	private boolean isValid(String s) {
 		return ((s != null) && (s != ""));
 	}

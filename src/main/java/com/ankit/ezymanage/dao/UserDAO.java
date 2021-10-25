@@ -52,6 +52,11 @@ public class UserDAO {
 		return jdbcTemplate.queryForObject(sql, userRowMapper, username);
 	}
 
+	public void deleteUserByUsername(String username) {
+		final String sql = "DELETE FROM user WHERE username=?";
+		jdbcTemplate.update(sql, username);
+	}
+
 	public User getUserDataById(Long id) {
 		final String sql = "SELECT * FROM user WHERE id=?";
 		return jdbcTemplate.queryForObject(sql, userRowMapper, id);

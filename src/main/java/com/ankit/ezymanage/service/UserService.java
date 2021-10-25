@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface UserService {
 	void saveUser(User user);
 
+	void deleteUser(String username);
+
 	void addRoleToUser(String username, String roleName);
 
 	User getUser(String username);

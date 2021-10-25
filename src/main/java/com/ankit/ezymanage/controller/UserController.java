@@ -76,15 +76,20 @@ public class UserController extends RootController {
 
 		System.out.println(username + " is logged in!!");
 		System.out.println("Edited successfully!");
+		System.out.println("Check 1!");
+		System.out.println(profile);
 		System.out.println(profile.getDateOfBirth().toString());
 
+		System.out.println("Check 2!");
 		if (profile.getDateOfBirth() != null) {
 			DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
+			System.out.println("Check 3!");
 			Date date = (Date) formatter.parse(profile.getDateOfBirth().toString());
 			profile.setDateOfBirth(date);
 			System.out.println(date.toString());
 		}
 
+		System.out.println("Check 4!");
 		profileService.updateProfile(profile);
 
 		System.out.println(model.toString());

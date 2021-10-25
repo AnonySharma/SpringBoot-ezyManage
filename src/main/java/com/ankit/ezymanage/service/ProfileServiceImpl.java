@@ -26,6 +26,11 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    public void deleteProfileByUsername(String username) {
+        profileDAO.deleteProfileByUsername(username);
+    }
+
+    @Override
     public void updateProfile(Profile profile) {
         profileDAO.updateProfile(profile);
     }

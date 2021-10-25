@@ -5,20 +5,19 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class Profile {
-    private String username;
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private Long phoneNumber;
-    private Character gender;
-    private String email;
-    private String address; // TODO: Add different parts
-    private Long aadhaarNumber;
+    private String username = "";
+    private String firstName = "";
+    private String middleName = "";
+    private String lastName = "";
+    private Long phoneNumber = Long.parseLong("0");
+    private Character gender = 'N';
+    private String email = "";
+    private String address = ""; // TODO: Add different parts
+    private Long aadhaarNumber = Long.parseLong("0");
     @DateTimeFormat(pattern = "mm/dd/yyyy")
     private Date dateOfBirth;
 
     public Profile() {
-        setGender('N');
     }
 
     public Profile(String username) {

@@ -1,0 +1,27 @@
+<script th:if="${errorMsg}" th:fragment="toast" th:inline="javascript">
+	iziToast.error({
+		title: "Error",
+		message: [[${errorMsg}]],
+	});
+</script>
+
+<script th:if="${successMsg}" th:fragment="toast" th:inline="javascript">
+	iziToast.success({
+		title: "Great",
+		message: [[${successMsg}]],
+	});
+</script>
+
+<script th:if="${warningMsg}" th:fragment="toast" th:inline="javascript">
+	iziToast.warning({
+		title: "Caution",
+		message: [[${warningMsg}]],
+	});
+</script>
+
+<script th:if="${infoMsg}" th:fragment="toast" th:inline="javascript">
+	iziToast.info({
+		title: "Info",
+		message: [[${infoMsg}]],
+	});
+</script>

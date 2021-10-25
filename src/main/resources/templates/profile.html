@@ -12,7 +12,7 @@
             <h1 class="text-center text-white mt-2" th:if="${show}">Edit Profile</h1>
 			
             <form method="POST" th:action="@{/profile/edit/}" th:object="${profile}" class="forms-sample text-white">
-                <h1 th:text="${show}"></h1>
+                <!-- <h1 th:text="${show}"></h1> -->
                 <br>
                 <div class="form-group">
                     <label for="inputUsername1">Username</label>
@@ -64,6 +64,7 @@
                 </div>
             </form>
 		</h1>
+        <script th:replace="components/toast :: toast"></script>
         <script>
             $('#inputDOBdiv').datepicker({
                 autoclose: true,

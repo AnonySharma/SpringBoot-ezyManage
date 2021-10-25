@@ -63,6 +63,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public void deleteUser(String username) {
+        profileService.deleteProfileByUsername(username);
+        userDAO.deleteUserByUsername(username);
+    }
+
+    @Override
     public List<User> getUsers() {
         return userDAO.getAllUsers();
     }
