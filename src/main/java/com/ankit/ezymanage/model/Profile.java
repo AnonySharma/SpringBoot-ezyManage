@@ -2,36 +2,43 @@ package com.ankit.ezymanage.model;
 
 import java.util.Date;
 
-// TODO: Split User into User and Profile
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Profile {
     private String username;
     private String firstName;
     private String middleName;
     private String lastName;
     private Long phoneNumber;
-    private char gender;
-    private Date dateOfBirth;
+    private Character gender;
     private String email;
     private String address; // TODO: Add different parts
     private Long aadhaarNumber;
-    private String role;
+    @DateTimeFormat(pattern = "mm/dd/yyyy")
+    private Date dateOfBirth;
 
     public Profile() {
+        setGender('N');
     }
 
-    public Profile(String username, String firstName, String middleName, String lastName, Long phoneNumber, char gender,
-            Date dateOfBirth, String email, String address, Long aadhaarNumber, String role) {
+    public Profile(String username) {
+        this.username = username;
+    }
+
+    public Profile(String username, String firstName, String middleName, String lastName, Long phoneNumber,
+            Character gender, Date dateOfBirth, String email, String address, Long aadhaarNumber) {
         this.username = username;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
+        if (gender == null)
+            setGender('N');
         this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.address = address;
         this.aadhaarNumber = aadhaarNumber;
-        this.role = role;
     }
 
     public String getUsername() {
@@ -74,11 +81,11 @@ public class Profile {
         this.phoneNumber = phoneNumber;
     }
 
-    public char getGender() {
+    public Character getGender() {
         return gender;
     }
 
-    public void setGender(char gender) {
+    public void setGender(Character gender) {
         this.gender = gender;
     }
 
@@ -114,11 +121,11 @@ public class Profile {
         this.aadhaarNumber = aadhaarNumber;
     }
 
-    public String getRole() {
-        return role;
+    @Override
+    public String toString() {
+        return "Profile [aadhaarNumber=" + aadhaarNumber + ", address=" + address + ", dateOfBirth=" + dateOfBirth
+                + ", email=" + email + ", firstName=" + firstName + ", gender=" + gender + ", lastName=" + lastName
+                + ", middleName=" + middleName + ", phoneNumber=" + phoneNumber + ", username=" + username + "]";
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

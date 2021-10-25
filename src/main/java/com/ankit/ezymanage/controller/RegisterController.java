@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class RegisterController {
+public class RegisterController extends RootController {
     private final UserService userService;
 
     @Autowired
     public RegisterController(UserService userService) {
+        super(userService);
         this.userService = userService;
     }
 
@@ -26,6 +27,7 @@ public class RegisterController {
     public ModelAndView registerGoto(Model model) {
         System.out.println("go and register!!!!!!");
         model.addAttribute("user", new User());
+        makeChangesIfAuthenticated(model);
         return new ModelAndView("register");
     }
 
@@ -39,6 +41,7 @@ public class RegisterController {
         System.out.println(userToSave.toString());
         userService.saveUser(userToSave);
 
+        makeChangesIfAuthenticated(model);
         System.out.println("just registered!!!!!!");
         return "redirect:/";
     }

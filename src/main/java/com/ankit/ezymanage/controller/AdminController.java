@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class AdminController {
+public class AdminController extends RootController {
     private UserService userService;
 
     @Autowired
     public AdminController(UserService userService) {
+        super(userService);
         this.userService = userService;
     }
 
@@ -24,6 +25,7 @@ public class AdminController {
     public ModelAndView adminHome(Model model) {
         List<User> userList = userService.getUsers();
         System.out.println(userList);
+        makeChangesIfAuthenticated(model);
         model.addAttribute("userList", userList);
         return new ModelAndView("admin");
     }

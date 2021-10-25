@@ -16,11 +16,12 @@
 	<div th:if="${loggedIn == true}">
 		<div class="dropdown bg-dark profile">
 			<a id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<img src="https://via.placeholder.com/50/FFFF00/000000?text=A" style="cursor: pointer;"/>
+				<img th:src="'https://via.placeholder.com/40/FD964B/000000?text=' + ${#strings.capitalize(username[0])}" style="cursor: pointer;" class="rounded-circle"/>
 			</a>
 			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-				<a class="dropdown-item" href="#">Profile</a>
+				<a class="dropdown-item" th:href="@{/profile/}">Profile</a>
 				<a class="dropdown-item" href="#">Settings</a>
+				<a class="dropdown-item" th:href="@{/admin/}">Admin</a>
 				<div class="dropdown-divider"></div>
 				<a class="dropdown-item font-weight-bold text-danger" th:href="@{/logout/}">Logout</a>
 			</div>

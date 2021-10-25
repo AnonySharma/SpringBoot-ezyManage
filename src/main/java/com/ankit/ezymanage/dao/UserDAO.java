@@ -27,6 +27,7 @@ public class UserDAO {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		final String sql = "INSERT INTO user(id, username, password, role, isadmin) VALUES(?, ?, ?, ?, ?)";
 		jdbcTemplate.update(sql, user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isAdmin());
+
 	}
 
 	private RowMapper<User> userRowMapper = new RowMapper<User>() {

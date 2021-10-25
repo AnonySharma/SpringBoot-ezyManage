@@ -15,5 +15,9 @@ public interface UserService {
 
 	List<User> getUsers();
 
-	public UserDetails loadUserByUsername(String username);
+	UserDetails loadUserByUsername(String username);
+
+	String findLoggedInUsername();
+
+	boolean isLoggedIn();
 }

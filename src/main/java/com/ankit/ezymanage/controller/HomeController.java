@@ -1,6 +1,6 @@
 package com.ankit.ezymanage.controller;
 
-import com.ankit.ezymanage.service.SecurityService;
+import com.ankit.ezymanage.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController extends RootController {
     @Autowired
-    public HomeController(SecurityService securityService) {
-        super(securityService);
+    public HomeController(UserService userService) {
+        super(userService);
     }
 
     @RequestMapping({ "/", "", "home" })
@@ -23,7 +23,8 @@ public class HomeController extends RootController {
     }
 
     @RequestMapping("/error/")
-    public String errorManager() {
+    public String errorManager(Model model) {
+        makeChangesIfAuthenticated(model);
         System.out.println("ERRRORRR !!!!!!");
         // System.out.println(model.toString());
         return "redirect:/error";
