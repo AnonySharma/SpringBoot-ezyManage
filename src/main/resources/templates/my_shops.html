@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="text-white text-center">List of shops under you:</h4>
+					</div>
+					<br />
+					<div class="mx-auto">
+						<a href="/newshop/" class="btn float-right login_btn">New Shop</a>
+						<br />
+						<br />
+						<span th:if="${shops eq null or #lists.size(shops) eq 0}" class="text-white">No shops found.</span>
+						<div th:if="${shops ne null and #lists.size(shops) ne 0}">
+							<table class="table table-bordered text-white">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">Id</th>
+										<th scope="col">Name</th>
+										<th scope="col">Type</th>
+										<th scope="col"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="shop:${shops}">
+										<td th:text="${shop.shopId}"></td>
+										<td th:text="${shop.name}"></td>
+										<td th:text="${shop.type}"></td>
+										<td>
+											<a th:href="@{/shops/__${shop.shopId}__/}" class="btn btn-success">Open</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+	</body>
+</html>
