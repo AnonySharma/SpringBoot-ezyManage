@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card">
+					<div class="card-header">
+						<h3>Add New Product</h3>
+					</div>
+					<div class="card-body">
+						<form method="POST" th:action="@{${postLink}}" th:object="${product}" class="forms-sample text-white">
+							<br />
+							<div class="form-group">
+								<label for="inputName">Name</label>
+								<input type="text" class="form-control" id="inputName" th:field="*{name}" placeholder="Name" />
+							</div>
+							<div class="form-group">
+								<label for="inputDescription">Description</label>
+								<input
+									type="text"
+									class="form-control"
+									id="inputDescription"
+									th:field="*{description}"
+									placeholder="Description"
+								/>
+							</div>
+							<div class="form-group">
+								<label for="inputPrice">Price</label>
+								<input
+									type="text"
+									class="form-control"
+									th:field="*{price}"
+									id="inputPrice"
+									placeholder="Price"
+								/>
+							</div>
+							<div class="form-group">
+								<label for="inputImage">Image URL</label>
+								<input
+									type="text"
+									class="form-control"
+									th:field="*{image}"
+									id="inputImage"
+									placeholder="Image"
+								/>
+							</div>
+							<button type="submit" class="btn btn-primary mr-2">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+	</body>
+</html>

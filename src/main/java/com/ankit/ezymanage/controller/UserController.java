@@ -31,13 +31,12 @@ public class UserController extends RootController {
 
 	@RequestMapping("/profile/")
 	public String profileManager(Model model) {
+		if (!userService.isLoggedIn())
+			return "redirect:/login/";
+
 		makeChangesIfAuthenticated(model);
 		System.out.println("Profile page !!!!!!");
 		String username = userService.findLoggedInUsername();
-
-		if (username == null)
-			return "redirect:/login/";
-
 		Profile profile = profileService.getProfile(username);
 		model.addAttribute("profile", profile);
 		System.out.println(profile.toString());
@@ -48,13 +47,12 @@ public class UserController extends RootController {
 
 	@GetMapping("/profile/edit/")
 	public String profileEditManager(Model model) {
+		if (!userService.isLoggedIn())
+			return "redirect:/login/";
+
 		makeChangesIfAuthenticated(model);
 		System.out.println("Profile edit page !!!!!!");
 		String username = userService.findLoggedInUsername();
-
-		if (username == null)
-			return "redirect:/login/";
-
 		Profile profile = profileService.getProfile(username);
 		model.addAttribute("profile", profile);
 		model.addAttribute("edit_form", true);

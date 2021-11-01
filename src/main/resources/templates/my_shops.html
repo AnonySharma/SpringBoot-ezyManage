@@ -27,11 +27,11 @@
 								</thead>
 								<tbody>
 									<tr th:each="shop:${shops}">
-										<td th:text="${shop.shopId}"></td>
+										<td th:text="${shop.id}"></td>
 										<td th:text="${shop.name}"></td>
 										<td th:text="${shop.type}"></td>
 										<td>
-											<a th:href="@{/shops/__${shop.shopId}__/}" class="btn btn-success">Open</a>
+											<a th:href="@{/shops/__${shop.id}__/}" class="btn btn-success">Open</a>
 										</td>
 									</tr>
 								</tbody>

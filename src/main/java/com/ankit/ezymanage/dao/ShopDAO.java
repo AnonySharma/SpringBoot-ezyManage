@@ -24,22 +24,61 @@ public class ShopDAO {
                 shop.getGSTIN(), shop.getOwner());
     }
 
+    public Shop getShopById(int id) {
+        final String sql = "SELECT * FROM shops WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, shopRowMapper, id);
+    }
+
     public List<Shop> getAllShops() {
         final String sql = "SELECT * FROM shops";
-        return jdbcTemplate.query(sql, userRowMapper);
+        return jdbcTemplate.query(sql, shopRowMapper);
     }
 
     public List<Shop> getAllShopsUnder(String username) {
         final String sql = "SELECT * FROM shops where owner=?";
-        return jdbcTemplate.query(sql, userRowMapper, username);
+        return jdbcTemplate.query(sql, shopRowMapper, username);
+    }
+
+    public Shop getShop(int id) {
+        final String sql = "SELECT * FROM shops WHERE id=?";
+        return jdbcTemplate.queryForObject(sql, shopRowMapper, id);
+    }
+
+    public void updateShop(Shop shop) {
+        final String sql = "UPDATE shops SET name=?, type=?, phone=?, email=?, gstin=?, owner=? WHERE id=?";
+        jdbcTemplate.update(sql, shop.getName(), shop.getType(), shop.getPhone(), shop.getEmail(), shop.getGSTIN(),
+                shop.getOwner(), shop.getId());
+    }
+
+    public void deleteShop(int id) {
+        final String sql = "DELETE FROM shops WHERE id=?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    public void addProductToShop(int shopId, int productId) {
+        final String sql = "INSERT INTO shop_products(shop_id, product_id) VALUES(?, ?)";
+        jdbcTemplate.update(sql, shopId, productId);
+    }
+
+    public void removeProductFromShop(int shopId, int productId) {
+        final String sql = "DELETE FROM shop_products WHERE shop_id=? AND product_id=?";
+        jdbcTemplate.update(sql, shopId, productId);
     }
 
     // TODO: Fix phone
-    private RowMapper<Shop> userRowMapper = new RowMapper<Shop>() {
+    private RowMapper<Shop> shopRowMapper = new RowMapper<Shop>() {
         @Override
         public Shop mapRow(ResultSet row, int i) throws SQLException {
-            return new Shop(row.getInt("id"), row.getString("name"), row.getString("owner"), row.getString("type"),
-                    null, row.getString("email"), row.getString("gstin"));
+            Shop shop = new Shop();
+            shop.setId(row.getInt("id"));
+            shop.setName(row.getString("name"));
+            shop.setType(row.getString("type"));
+            shop.setPhone(null);
+            shop.setEmail(row.getString("email"));
+            shop.setGSTIN(row.getString("gstin"));
+            shop.setOwner(row.getString("owner"));
+            return shop;
         }
     };
+
 }

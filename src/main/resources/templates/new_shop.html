@@ -10,7 +10,7 @@
 						<h3>Add New Shop</h3>
 					</div>
 					<div class="card-body">
-						<form method="POST" th:action="@{/newshop/}" th:object="${shop}" class="forms-sample text-white">
+						<form method="POST" th:action="@{${postLink}}" th:object="${shop}" class="forms-sample text-white">
 							<br />
 							<div class="form-group">
 								<label for="inputName">Name</label>

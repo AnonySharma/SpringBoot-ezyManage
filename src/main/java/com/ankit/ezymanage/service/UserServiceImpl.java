@@ -23,6 +23,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserDAO userDAO;
     private final ProfileService profileService;
 
+    @Autowired
+    public UserServiceImpl(UserDAO userDAO, ProfileService profileService) {
+        this.userDAO = userDAO;
+        this.profileService = profileService;
+    }
+
     public String findLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails instanceof UserDetails)
@@ -50,12 +56,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 authorities);
     }
 
-    @Autowired
-    public UserServiceImpl(UserDAO userDAO, ProfileService profileService) {
-        this.userDAO = userDAO;
-        this.profileService = profileService;
-    }
-
     @Override
     public void saveUser(User user) {
         userDAO.createUser(user);
@@ -69,7 +69,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<User> getUsers() {
+    public User getUserById(int id) {
+        return userDAO.getUserDataById(id);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
         return userDAO.getAllUsers();
     }
 

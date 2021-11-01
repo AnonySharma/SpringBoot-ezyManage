@@ -25,7 +25,7 @@ public class UserDAO {
 
 	public void createUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		final String sql = "INSERT INTO user(id, username, password, role, isadmin) VALUES(?, ?, ?, ?, ?)";
+		final String sql = "INSERT INTO users(id, username, password, role, isadmin) VALUES(?, ?, ?, ?, ?)";
 		jdbcTemplate.update(sql, user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isAdmin());
 
 	}
@@ -33,37 +33,38 @@ public class UserDAO {
 	private RowMapper<User> userRowMapper = new RowMapper<User>() {
 		@Override
 		public User mapRow(ResultSet row, int i) throws SQLException {
-			return new User(row.getString("id"), row.getString("username"), row.getString("password"),
-					row.getString("role"), Boolean.valueOf(row.getString("isadmin")));
+			User user = new User();
+			user.setId(row.getInt("id"));
+			user.setUsername(row.getString("username"));
+			user.setPassword(row.getString("password"));
+			user.setRole(row.getString("role"));
+			user.setAdmin(row.getBoolean("isadmin"));
+			return user;
 		}
 	};
 
 	public void updateUser(User user) {
-		// final String sql = "UPDATE USER SET firstname=?, middlename=?, lastname=?,
-		// phone=?, gender=?, dob=?, email=?, address=? aadhaar=?";
-		// jdbcTemplate.update(sql, user.getFirstName(), user.getMiddleName(),
-		// user.getLastName(), user.getPhoneNumber(),
-		// user.getGender(), user.getDateOfBirth(), user.getEmail(), user.getAddress(),
-		// user.getAadhaarNumber());
+		final String sql = "UPDATE users SET username = ?, password = ?, role = ?, isadmin = ? WHERE id = ?";
+		jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getRole(), user.isAdmin(), user.getId());
 	}
 
 	public User getUserDataByUsername(String username) {
-		final String sql = "SELECT * FROM user WHERE username=?";
+		final String sql = "SELECT * FROM users WHERE username=?";
 		return jdbcTemplate.queryForObject(sql, userRowMapper, username);
 	}
 
 	public void deleteUserByUsername(String username) {
-		final String sql = "DELETE FROM user WHERE username=?";
+		final String sql = "DELETE FROM users WHERE username=?";
 		jdbcTemplate.update(sql, username);
 	}
 
-	public User getUserDataById(Long id) {
-		final String sql = "SELECT * FROM user WHERE id=?";
+	public User getUserDataById(int id) {
+		final String sql = "SELECT * FROM users WHERE id=?";
 		return jdbcTemplate.queryForObject(sql, userRowMapper, id);
 	}
 
 	public List<User> getAllUsers() {
-		final String sql = "SELECT * FROM user";
+		final String sql = "SELECT * FROM users";
 		return jdbcTemplate.query(sql, userRowMapper);
 	}
 }

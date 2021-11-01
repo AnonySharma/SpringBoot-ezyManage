@@ -1,9 +1,7 @@
 package com.ankit.ezymanage.model;
 
-import java.util.UUID;
-
 public class User {
-	private String id;
+	private int id;
 	private String username;
 	private String password;
 	private String role;
@@ -12,7 +10,7 @@ public class User {
 	public User() {
 	}
 
-	public User(String id, String username, String password, String role, boolean isAdmin) {
+	public User(int id, String username, String password, String role, boolean isAdmin) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -21,15 +19,18 @@ public class User {
 	}
 
 	public User(String username, String password) {
-		this.id = UUID.randomUUID().toString();
 		this.username = username;
 		this.password = password;
 		this.role = "ROLE_USER";
 		this.isAdmin = false;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getUsername() {

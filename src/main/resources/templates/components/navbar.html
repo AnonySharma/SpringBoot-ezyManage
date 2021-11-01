@@ -10,8 +10,9 @@
 		ezyManage
 	</a>
 	<div class="ms-auto px-auto" th:if="${loggedIn != true}">
-		<a href="/login/" class="btn float-right login_btn">Login</a>
-		<a href="/admin/" class="btn float-right login_btn">Admin</a>
+		<a th:href="@{/register/}" class="btn float-right login_btn">Register</a>
+		<a th:href="@{/login/}" class="btn float-right login_btn">Login</a>
+		<a th:href="@{/admin/}" class="btn float-right login_btn">Admin</a>
 	</div>
 	<div th:if="${loggedIn == true}">
 		<div class="dropdown bg-dark profile">
@@ -23,6 +24,7 @@
 				<a class="dropdown-item" href="#">Settings</a>
 				<a class="dropdown-item" th:href="@{/admin/}">Admin</a>
 				<a class="dropdown-item" th:href="@{/myshops/}">Shops</a>
+				<a class="dropdown-item" th:href="@{/myshops/}">Products</a>
 				<div class="dropdown-divider"></div>
 				<a class="dropdown-item font-weight-bold text-danger" th:href="@{/logout/}">Logout</a>
 			</div>

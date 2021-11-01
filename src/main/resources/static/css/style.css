@@ -19,7 +19,7 @@ body {
 	padding: 20px;
 	margin-top: auto;
 	margin-bottom: auto;
-	width: 400px;
+	width: auto;
 	background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
@@ -88,4 +88,9 @@ input:focus {
 
 #inputDOBdiv:hover {
 	cursor: pointer;
+}
+
+td {
+	text-align: center !important;
+	vertical-align: middle !important;
 }

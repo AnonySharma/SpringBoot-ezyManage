@@ -1,26 +1,22 @@
 package com.ankit.ezymanage.model;
 
-import java.util.UUID;
-
 public class Role {
-    private String id;
+    private int id;
     private String name;
 
     public Role() {
     }
 
     public Role(String name) {
-        this.id = UUID.randomUUID().toString();
         this.name = name;
     }
 
-    public Role(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public String getId() {
+    public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

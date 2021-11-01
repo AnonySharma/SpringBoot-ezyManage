@@ -18,8 +18,9 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public void createShop(Shop shop) {
+    public boolean createShop(Shop shop) {
         shopDAO.createShop(shop);
+        return true;
     }
 
     @Override
@@ -31,5 +32,25 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public List<Shop> getAllShopsUnder(String owner) {
         return shopDAO.getAllShops();
+    }
+
+    @Override
+    public void addProductToShop(int shopId, int productId) {
+        shopDAO.addProductToShop(shopId, productId);
+    }
+
+    @Override
+    public Shop getShopById(int id) {
+        return shopDAO.getShopById(id);
+    }
+
+    @Override
+    public void removeProductFromShop(int shopId, int productId) {
+        shopDAO.removeProductFromShop(shopId, productId);
+    }
+
+    @Override
+    public void deleteShop(int id) {
+        shopDAO.deleteShop(id);
     }
 }

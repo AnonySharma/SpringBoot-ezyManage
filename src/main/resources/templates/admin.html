@@ -1,36 +1,116 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 	<head th:replace="components/head :: head"></head>
-	<body style="background-image: none !important">
+	<body>
 		<div th:replace="components/navbar :: navbar"></div>
 		<div class="container">
-			<h1 class="text-center">ALL USERS</h1>
-			<div th:if="${#lists.size(userList) eq 0}" class="text-center">
-				No users found! <br />
-				Register some
+			<div class="d-flex justify-content-center h-100">
+				<div class="card text-white text-center">
+					<h1>ALL USERS</h1>
+					<div th:if="${userList eq null or #lists.size(userList) eq 0}">
+						No users found! <br />
+						Register some
+					</div>
+					<table class="table table-bordered" th:if="${userList ne null and #lists.size(userList) ne 0}">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">id</th>
+								<th scope="col">Username</th>
+								<th scope="col">Role</th>
+								<th scope="col">isAdmin</th>
+								<th scope="col">Edit</th>
+								<th scope="col">Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="user:${userList}">
+								<td th:text="${user.id}"></td>
+								<td th:text="${user.username}"></td>
+								<td th:text="${user.role}"></td>
+								<td th:text="${user.isAdmin}"></td>
+								<td><a th:href="@{/admin/}" class="btn btn-primary">Edit</a></td>
+								<td>
+									<a th:href="@{/admin/users/delete/__${user.username}__/}" class="btn btn-danger">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr />
+					<h1>ALL SHOPS</h1>
+					<div th:if="${shopList eq null or #lists.size(shopList) eq 0}">
+						No shops found! <br />
+						Add some
+					</div>
+					<div class="text-center">
+						<a class="btn btn-primary btn-lg" th:href="@{/admin/shops/new/}"> Add Shop </a>
+					</div>
+					<br />
+					<table class="table table-bordered" th:if="${shopList ne null and #lists.size(shopList) ne 0}">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">id</th>
+								<th scope="col">Name</th>
+								<th scope="col">Owner</th>
+								<th scope="col">type</th>
+								<th scope="col">Edit</th>
+								<th scope="col">Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="shop:${shopList}">
+								<td th:text="${shop.id}"></td>
+								<td th:text="${shop.name}"></td>
+								<td th:text="${shop.owner}"></td>
+								<td th:text="${shop.type}"></td>
+								<td>
+									<a th:href="@{/admin/}" class="btn btn-primary">Edit</a>
+								</td>
+								<td>
+									<a th:href="@{/admin/shops/delete/__${shop.id}__/}" class="btn btn-danger">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr />
+					<h1>ALL PRODUCTS</h1>
+					<div th:if="${productList eq null or #lists.size(productList) eq 0}">
+						No products found! <br />
+						Add some
+					</div>
+					<div class="text-center">
+						<a class="btn btn-primary btn-lg" th:href="@{/admin/products/new/}"> Add Product </a>
+					</div>
+					<br />
+					<table class="table table-bordered" th:if="${productList ne null and #lists.size(productList) ne 0}">
+						<thead class="thead-dark">
+							<tr>
+								<th>Name</th>
+								<th>Image</th>
+								<th>Price</th>
+								<th>Description</th>
+								<th>Edit</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="product : ${productList}">
+								<td th:text="${product.name}"></td>
+								<td><img th:src="${product.image}" th:alt="${product.name}" width="100" height="100" /></td>
+								<td th:text="${'Rs. ' + product.price}"></td>
+								<td th:text="${product.description}"></td>
+								<td>
+									<a class="btn btn-primary" href="#">Edit</a>
+									<!-- <a class="btn btn-primary" th:href="@{/product/edit/}${product.id}">Edit</a> -->
+								</td>
+								<td>
+									<a class="btn btn-danger" href="#">Delete</a>
+									<!-- <a class="btn btn-danger" th:href="@{/product/delete/}${product.id}">Delete</a> -->
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
-			<table class="table table-bordered" th:if="${#lists.size(userList) ne 0}">
-				<thead class="thead-dark">
-					<tr>
-						<th scope="col">id</th>
-						<th scope="col">Username</th>
-						<th scope="col">Role</th>
-						<th scope="col">isAdmin</th>
-						<th scope="col">Edit</th>
-						<th scope="col">Delete</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="user:${userList}">
-						<td th:text="${user.id}"></td>
-						<td th:text="${user.username}"></td>
-						<td th:text="${user.role}"></td>
-						<td th:text="${user.isAdmin}"></td>
-						<td><a th:href="@{/admin/}" class="btn btn-primary">Edit</a></td>
-						<td><a th:href="@{/admin/delete/__${user.username}__/}" class="btn btn-danger">Delete</a></td>
-					</tr>
-				</tbody>
-			</table>
 		</div>
 		<script th:replace="components/toast :: toast"></script>
 	</body>

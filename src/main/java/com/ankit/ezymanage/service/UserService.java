@@ -15,7 +15,9 @@ public interface UserService {
 
 	User getUser(String username);
 
-	List<User> getUsers();
+	User getUserById(int id);
+
+	List<User> getAllUsers();
 
 	UserDetails loadUserByUsername(String username);
 

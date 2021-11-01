@@ -1,5 +1,6 @@
 package com.ankit.ezymanage.controller;
 
+import com.ankit.ezymanage.model.User;
 import com.ankit.ezymanage.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 @Controller
 public class RootController {
     private final UserService userService;
+    protected User user;
 
     @Autowired
     public RootController(UserService userService) {
@@ -18,6 +20,7 @@ public class RootController {
     public void makeChangesIfAuthenticated(Model model) {
         String username = userService.findLoggedInUsername();
         if (username != null) {
+            user = userService.getUser(username);
             model.addAttribute("username", username);
             model.addAttribute("loggedIn", true);
         } else {

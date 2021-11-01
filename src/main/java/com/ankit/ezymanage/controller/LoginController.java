@@ -6,21 +6,27 @@ import com.ankit.ezymanage.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LoginController extends RootController {
+    private final UserService userService;
+
     public LoginController(UserService userService) {
         super(userService);
+        this.userService = userService;
     }
 
     @GetMapping("/login/")
-    public ModelAndView loginGoto(Model model) {
+    public String loginGoto(Model model) {
+        if (userService.isLoggedIn()) {
+            return "redirect:/";
+        }
+
         System.out.println("go and login!!!!!!");
         makeChangesIfAuthenticated(model);
         model.addAttribute("user", new User());
-        return new ModelAndView("login");
+        return "login";
     }
 
     @GetMapping("/loggedin/")

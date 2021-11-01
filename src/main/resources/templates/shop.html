@@ -9,6 +9,36 @@
 					<div class="card-header">
 						<h4 class="text-white text-center">List of products:</h4>
 					</div>
+					<div class="card-body">
+						<!-- Centered text with a button -->
+						<div class="text-center">
+							<a class="btn btn-primary btn-lg" href="#"> Add Product </a>
+						</div>
+						<br />
+						<table class="table table-striped text-white">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Price</th>
+									<th>Description</th>
+									<th>Image</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="product : ${products}">
+									<td>${product.name}</td>
+									<td>${product.price}</td>
+									<td>${product.description}</td>
+									<td><img src="${product.image}" alt="${product.name}" width="100" height="100" /></td>
+									<td>
+										<a class="btn btn-primary" th:href="@{/product/edit/}${product.id}">Edit</a>
+										<a class="btn btn-danger" th:href="@{/product/delete/}${product.id}">Delete</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -1,7 +1,7 @@
 package com.ankit.ezymanage.model;
 
 public class Shop {
-    private int shopId;
+    private int id;
     private String name;
     private String owner;
     private String type;
@@ -12,8 +12,8 @@ public class Shop {
     public Shop() {
     }
 
-    public Shop(int shopId, String name, String owner, String type, Long phone, String email, String gSTIN) {
-        this.shopId = shopId;
+    public Shop(int id, String name, String owner, String type, Long phone, String email, String gSTIN) {
+        this.id = id;
         this.name = name;
         this.owner = owner;
         this.type = type;
@@ -22,12 +22,12 @@ public class Shop {
         GSTIN = gSTIN;
     }
 
-    public int getShopId() {
-        return shopId;
+    public int getId() {
+        return id;
     }
 
-    public void setShopId(int shopId) {
-        this.shopId = shopId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -81,7 +81,7 @@ public class Shop {
     @Override
     public String toString() {
         return "Shop [GSTIN=" + GSTIN + ", email=" + email + ", name=" + name + ", owner=" + owner + ", phone=" + phone
-                + ", shopId=" + shopId + ", type=" + type + "]";
+                + ", id=" + id + ", type=" + type + "]";
     }
 
 }

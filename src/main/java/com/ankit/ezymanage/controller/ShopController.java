@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ShopController extends RootController {
@@ -28,23 +27,24 @@ public class ShopController extends RootController {
     }
 
     @RequestMapping("/myshops/")
-    public ModelAndView myShops(Model model) {
+    public String myShops(Model model) {
         makeChangesIfAuthenticated(model);
         String owner = userService.findLoggedInUsername();
         List<Shop> shops = shopService.getAllShopsUnder(owner);
         model.addAttribute("shops", shops);
-        return new ModelAndView("my_shops");
+        return "my_shops";
     }
 
     @GetMapping("/newshop/")
-    public ModelAndView newShop(Model model) {
+    public String newShop(Model model) {
         makeChangesIfAuthenticated(model);
         String owner = userService.findLoggedInUsername();
         Shop shop = new Shop();
         shop.setOwner(owner);
         System.out.println("Initially " + shop.toString());
         model.addAttribute("shop", shop);
-        return new ModelAndView("new_shop");
+        model.addAttribute("postLink", "/newshop/");
+        return "new_shop";
     }
 
     @PostMapping("/newshop/")

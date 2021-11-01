@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class RegisterController extends RootController {
@@ -24,15 +23,23 @@ public class RegisterController extends RootController {
     }
 
     @RequestMapping("/register/")
-    public ModelAndView registerGoto(Model model) {
+    public String registerGoto(Model model) {
+        if (userService.isLoggedIn()) {
+            return "redirect:/";
+        }
+
         System.out.println("go and register!!!!!!");
         model.addAttribute("user", new User());
         makeChangesIfAuthenticated(model);
-        return new ModelAndView("register");
+        return "register";
     }
 
     @PostMapping("/register/")
     public String registerManager(@ModelAttribute("user") User user, Model model, HttpSession httpSession) {
+        if (userService.isLoggedIn()) {
+            return "redirect:/";
+        }
+
         System.out.println(model.toString());
         System.out.println(user.getUsername());
         System.out.println(user.getPassword());
