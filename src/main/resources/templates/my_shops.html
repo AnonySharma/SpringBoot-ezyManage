@@ -16,7 +16,7 @@
 						<br />
 						<span th:if="${shops eq null or #lists.size(shops) eq 0}" class="text-white">No shops found.</span>
 						<div th:if="${shops ne null and #lists.size(shops) ne 0}">
-							<table class="table table-bordered text-white">
+							<table class="table table-bordered text-white table-hover">
 								<thead class="thead-dark">
 									<tr>
 										<th scope="col">Id</th>

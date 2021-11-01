@@ -20,8 +20,8 @@ public class ShopDAO {
 
     public void createShop(Shop shop) {
         final String sql = "INSERT INTO shops(id, name, type, phone, email, gstin, owner) VALUES(?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, String.valueOf(shop.getShopId()), shop.getName(), shop.getType(), shop.getPhone(),
-                shop.getEmail(), shop.getGSTIN(), shop.getOwner());
+        jdbcTemplate.update(sql, null, shop.getName(), shop.getType(), shop.getPhone(), shop.getEmail(),
+                shop.getGSTIN(), shop.getOwner());
     }
 
     public List<Shop> getAllShops() {
