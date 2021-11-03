@@ -1,8 +1,11 @@
 package com.ankit.ezymanage.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Shop;
+import com.ankit.ezymanage.service.ProductService;
 import com.ankit.ezymanage.service.ShopService;
 import com.ankit.ezymanage.service.UserService;
 
@@ -17,14 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ShopController extends RootController {
-    private final ShopService shopService;
     private final UserService userService;
+    private final ShopService shopService;
+    private final ProductService productService;
 
     @Autowired
-    public ShopController(UserService userService, ShopService shopService) {
+    public ShopController(UserService userService, ShopService shopService, ProductService productService) {
         super(userService);
         this.shopService = shopService;
         this.userService = userService;
+        this.productService = productService;
     }
 
     @RequestMapping("/myshops/")
@@ -68,12 +73,38 @@ public class ShopController extends RootController {
         return "shop";
     }
 
-    @GetMapping("/shops/{shopId}/remove/{productId}")
+    @GetMapping("/shops/{shopId}/add/")
+    public String showAllProducts(@PathVariable("shopId") int shopId, Model model) {
+        makeChangesIfAuthenticated(model);
+        System.out.println("Listing all product!");
+
+        List<Integer> addedProducts = new ArrayList<>();
+        for (Product product : shopService.getProductsByShop(shopId)) {
+            addedProducts.add(product.getId());
+        }
+
+        model.addAttribute("productList", productService.getAllProducts());
+        model.addAttribute("addedProducts", addedProducts);
+        model.addAttribute("shopId", shopId);
+        return "allProducts";
+    }
+
+    @GetMapping("/shops/{shopId}/add/{productId}/")
+    public String addProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
+            Model model) {
+        makeChangesIfAuthenticated(model);
+        System.out.println("Listing a product!");
+        shopService.addProductToShop(shopId, productId);
+        return "redirect:/shops/" + shopId + "/add/";
+    }
+
+    @GetMapping("/shops/{shopId}/remove/{productId}/")
     public String unlistProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
         makeChangesIfAuthenticated(model);
         System.out.println("Unlisting a product!");
         shopService.removeProductFromShop(shopId, productId);
-        return "shop";
+        return "redirect:/shops/" + shopId + "/";
     }
+
 }
