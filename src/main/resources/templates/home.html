@@ -5,7 +5,7 @@
 		<div th:replace="components/navbar :: navbar"></div>
 		<div class="container">
 			<div class="d-flex justify-content-center h-100">
-				<div class="card">
+				<div class="card text-center">
 					<div class="card-header">
 						<div th:if="${loggedIn == true}">
 							<span class="text-white" th:text="${'Hello ' + username + '!'}"></span>
@@ -14,19 +14,19 @@
 						</div>
 					</div>
 					<br />
-					<h4 class="text-white text-center">Welcome to ezyManage!</h4>
+					<h4 class="text-white">Welcome to ezyManage!</h4>
 					<br />
 					<div class="mx-auto">
-						<a href="/login/" class="btn float-right login_btn">Login</a>
+						<a href="/login/" class="btn login_btn">Login</a>
 						<br />
 						<br />
-						<a href="/register/" class="btn float-right login_btn">Register</a>
+						<a href="/register/" class="btn login_btn">Register</a>
 						<br />
 						<br />
-						<a href="/admin/" class="btn float-right login_btn">Admin</a>
+						<a href="/admin/" class="btn login_btn">Admin</a>
 						<br />
 						<br />
-						<a href="/myshops/" class="btn float-right login_btn">Shops</a>
+						<a href="/myshops/" class="btn login_btn">Shops</a>
 					</div>
 				</div>
 			</div>

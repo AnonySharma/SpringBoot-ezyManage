@@ -28,10 +28,9 @@ public class ShopServiceImpl implements ShopService {
         return shopDAO.getAllShops();
     }
 
-    // TODO: Unimplemented
     @Override
     public List<Shop> getAllShopsUnder(String owner) {
-        return shopDAO.getAllShops();
+        return shopDAO.getAllShopsUnder(owner);
     }
 
     @Override

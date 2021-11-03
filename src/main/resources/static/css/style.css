@@ -70,7 +70,7 @@ input:focus {
 .login_btn {
 	color: black;
 	background-color: #ffc312;
-	width: 100px;
+	width: auto;
 }
 
 .login_btn:hover {
@@ -93,4 +93,8 @@ input:focus {
 td {
 	text-align: center !important;
 	vertical-align: middle !important;
+}
+
+.page-wrap {
+	min-height: 100vh;
 }

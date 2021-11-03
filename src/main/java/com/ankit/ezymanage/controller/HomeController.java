@@ -25,6 +25,6 @@ public class HomeController extends RootController {
     public String errorManager(Model model) {
         makeChangesIfAuthenticated(model);
         System.out.println("ERRRORRR !!!!!!");
-        return "redirect:/error";
+        return "error";
     }
 }

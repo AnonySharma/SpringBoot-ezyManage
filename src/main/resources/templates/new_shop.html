@@ -24,6 +24,7 @@
 									id="inputOwner"
 									th:field="*{owner}"
 									placeholder="Owner"
+									th:attr="disabled=${postLink == '/newshop/'}"
 								/>
 							</div>
 							<div class="form-group">

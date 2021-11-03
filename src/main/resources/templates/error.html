@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 	<head th:replace="components/head :: head"></head>
-	<body style="background-image: none !important">
+	<body>
 		<div th:replace="components/navbar :: navbar"></div>
-		<h1 class="text-center">Some ERROR occurred!</h1>
+		<div class="page-wrap d-flex flex-row align-items-center text-white">
+			<div class="container">
+				<div class="card row justify-content-center">
+					<div class="col-md-12 text-center">
+						<span class="display-1 d-block">404</span>
+						<div class="mb-4 lead">The page you are looking for was not found.</div>
+						<a th:href="@{/}" class="btn btn-info font-weight-bold">Back to Home</a>
+					</div>
+				</div>
+			</div>
+		</div>
 		<script th:replace="components/toast :: toast"></script>
 	</body>
 </html>
