@@ -7,12 +7,11 @@
 			<div class="d-flex justify-content-center h-100">
 				<div class="card">
 					<div class="card-header">
-						<h4 class="text-white text-center">List of products:</h4>
+						<h4 class="text-white text-center" th:text="${'Products listed under ' + shop.name}"></h4>
 					</div>
 					<div class="card-body">
-						<!-- Centered text with a button -->
 						<div class="text-center">
-							<a class="btn btn-primary btn-lg" href="#"> Add Product </a>
+							<a class="btn btn-primary btn-lg" th:href="@{/products/}"> Add Product </a>
 						</div>
 						<br />
 						<table class="table table-striped text-white">
@@ -27,13 +26,16 @@
 							</thead>
 							<tbody>
 								<tr th:each="product : ${products}">
-									<td>${product.name}</td>
-									<td>${product.price}</td>
-									<td>${product.description}</td>
-									<td><img src="${product.image}" alt="${product.name}" width="100" height="100" /></td>
+									<td th:text="${product.name}" />
+									<td th:text="${product.price}"></td>
+									<td th:text="${product.description}" />
+									<td><img th:src="${product.image}" th:alt="${product.name}" width="100" height="100" /></td>
 									<td>
-										<a class="btn btn-primary" th:href="@{/product/edit/}${product.id}">Edit</a>
-										<a class="btn btn-danger" th:href="@{/product/delete/}${product.id}">Delete</a>
+										<a class="btn btn-danger" th:href="@{/shops/__${shop.id}__/remove/__${product.id}__/}"
+											>Unlist</a
+										>
+										<!-- <a class="btn btn-primary" th:href="@{/products/edit/__${product.id}__/}">Edit</a> -->
+										<!-- <a class="btn btn-danger" th:href="@{/products/delete/__${product.id}__/}">Delete</a> -->
 									</td>
 								</tr>
 							</tbody>

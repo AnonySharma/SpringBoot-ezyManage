@@ -1,15 +1,10 @@
 package com.ankit.ezymanage.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import com.ankit.ezymanage.model.Profile;
+import com.ankit.ezymanage.utils.RowMappers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -35,7 +30,7 @@ public class ProfileDAO {
 
 	public Profile getProfileDataByUsername(String username) {
 		final String sql = "SELECT * FROM profile WHERE username=?";
-		return jdbcTemplate.queryForObject(sql, profileRowMapper, username);
+		return jdbcTemplate.queryForObject(sql, RowMappers.profileRowMapper, username);
 	}
 
 	public void deleteProfileByUsername(String username) {
@@ -43,63 +38,4 @@ public class ProfileDAO {
 		jdbcTemplate.update(sql, username);
 	}
 
-	private boolean isValid(String s) {
-		return ((s != null) && (s != ""));
-	}
-
-	private RowMapper<Profile> profileRowMapper = new RowMapper<Profile>() {
-		@Override
-		public Profile mapRow(ResultSet row, int i) throws SQLException {
-			Profile profile = new Profile();
-
-			if (isValid(row.getString("username"))) {
-				profile.setUsername(row.getString("username"));
-			}
-
-			if (isValid(row.getString("firstname"))) {
-				profile.setFirstName(row.getString("firstname"));
-			}
-
-			if (isValid(row.getString("middlename"))) {
-				profile.setMiddleName(row.getString("middlename"));
-			}
-
-			if (isValid(row.getString("lastname"))) {
-				profile.setLastName(row.getString("middlename"));
-			}
-
-			if (isValid(row.getString("phone"))) {
-				profile.setPhoneNumber(row.getString("phone") != null && row.getString("phone") != ""
-						? Long.parseLong(row.getString("phone"))
-						: null);
-			}
-
-			if (isValid(row.getString("gender"))) {
-				profile.setGender(row.getString("gender").charAt(0));
-			}
-
-			if (isValid(row.getString("dob"))) {
-				System.out.println(row.getString("dob"));
-				try {
-					profile.setDateOfBirth(new SimpleDateFormat("dd/MM/yyyy").parse(row.getString("dob")));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (isValid(row.getString("email"))) {
-				profile.setEmail(row.getString("email"));
-			}
-
-			if (isValid(row.getString("address"))) {
-				profile.setAddress(row.getString("address"));
-			}
-
-			if (isValid(row.getString("aadhaar"))) {
-				profile.setAadhaarNumber(Long.parseLong(row.getString("aadhaar")));
-			}
-
-			return profile;
-		}
-	};
 }

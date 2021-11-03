@@ -13,5 +13,4 @@ public interface ProductService {
 
     public List<Product> getAllProducts();
 
-    public List<Product> getProductsByShop(int id);
 }

@@ -1,13 +1,12 @@
 package com.ankit.ezymanage.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
+import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Shop;
+import com.ankit.ezymanage.utils.RowMappers;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -26,22 +25,22 @@ public class ShopDAO {
 
     public Shop getShopById(int id) {
         final String sql = "SELECT * FROM shops WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, shopRowMapper, id);
+        return jdbcTemplate.queryForObject(sql, RowMappers.shopRowMapper, id);
     }
 
     public List<Shop> getAllShops() {
         final String sql = "SELECT * FROM shops";
-        return jdbcTemplate.query(sql, shopRowMapper);
+        return jdbcTemplate.query(sql, RowMappers.shopRowMapper);
     }
 
     public List<Shop> getAllShopsUnder(String username) {
         final String sql = "SELECT * FROM shops where owner=?";
-        return jdbcTemplate.query(sql, shopRowMapper, username);
+        return jdbcTemplate.query(sql, RowMappers.shopRowMapper, username);
     }
 
     public Shop getShop(int id) {
         final String sql = "SELECT * FROM shops WHERE id=?";
-        return jdbcTemplate.queryForObject(sql, shopRowMapper, id);
+        return jdbcTemplate.queryForObject(sql, RowMappers.shopRowMapper, id);
     }
 
     public void updateShop(Shop shop) {
@@ -55,6 +54,11 @@ public class ShopDAO {
         jdbcTemplate.update(sql, id);
     }
 
+    public List<Product> getProductsByShop(int shopId) {
+        String sql = "SELECT * FROM products WHERE id IN (SELECT product_id FROM shop_products WHERE shop_id = ?)";
+        return jdbcTemplate.query(sql, RowMappers.productRowMapper, shopId);
+    }
+
     public void addProductToShop(int shopId, int productId) {
         final String sql = "INSERT INTO shop_products(shop_id, product_id) VALUES(?, ?)";
         jdbcTemplate.update(sql, shopId, productId);
@@ -64,21 +68,5 @@ public class ShopDAO {
         final String sql = "DELETE FROM shop_products WHERE shop_id=? AND product_id=?";
         jdbcTemplate.update(sql, shopId, productId);
     }
-
-    // TODO: Fix phone
-    private RowMapper<Shop> shopRowMapper = new RowMapper<Shop>() {
-        @Override
-        public Shop mapRow(ResultSet row, int i) throws SQLException {
-            Shop shop = new Shop();
-            shop.setId(row.getInt("id"));
-            shop.setName(row.getString("name"));
-            shop.setType(row.getString("type"));
-            shop.setPhone(null);
-            shop.setEmail(row.getString("email"));
-            shop.setGSTIN(row.getString("gstin"));
-            shop.setOwner(row.getString("owner"));
-            return shop;
-        }
-    };
 
 }

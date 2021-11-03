@@ -34,11 +34,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProductsByShop(int id) {
-        return productDAO.getProductsByShop(id);
-    }
-
-    @Override
     public void deleteProduct(int id) {
         productDAO.deleteProduct(id);
     }

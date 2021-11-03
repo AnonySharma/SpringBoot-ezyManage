@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -57,10 +58,20 @@ public class ShopController extends RootController {
     }
 
     @GetMapping("/shops/{id}/")
-    public String currentShop(Model model) {
+    public String currentShop(@PathVariable("id") int id, Model model) {
         makeChangesIfAuthenticated(model);
         System.out.println("Opened shop!");
-        // model.
+        model.addAttribute("shop", shopService.getShopById(id));
+        model.addAttribute("products", shopService.getProductsByShop(id));
+        return "shop";
+    }
+
+    @GetMapping("/shops/{shopId}/remove/{productId}")
+    public String unlistProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
+            Model model) {
+        makeChangesIfAuthenticated(model);
+        System.out.println("Unlisting a product!");
+        shopService.removeProductFromShop(shopId, productId);
         return "shop";
     }
 }
