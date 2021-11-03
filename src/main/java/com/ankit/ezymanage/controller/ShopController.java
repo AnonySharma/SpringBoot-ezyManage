@@ -31,6 +31,7 @@ public class ShopController extends RootController {
     public String myShops(Model model) {
         makeChangesIfAuthenticated(model);
         String owner = userService.findLoggedInUsername();
+        System.out.println("user: " + user);
         List<Shop> shops = shopService.getAllShopsUnder(owner);
         model.addAttribute("shops", shops);
         return "my_shops";
@@ -44,6 +45,7 @@ public class ShopController extends RootController {
         shop.setOwner(owner);
         System.out.println("Initially " + shop.toString());
         model.addAttribute("shop", shop);
+        model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("postLink", "/newshop/");
         return "new_shop";
     }

@@ -22,6 +22,7 @@ public class RootController {
         if (username != null) {
             user = userService.getUser(username);
             model.addAttribute("username", username);
+            model.addAttribute("role", user.getRole());
             model.addAttribute("loggedIn", true);
         } else {
             model.addAttribute("loggedIn", false);

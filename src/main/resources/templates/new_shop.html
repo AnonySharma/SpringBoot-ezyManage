@@ -24,8 +24,18 @@
 									id="inputOwner"
 									th:field="*{owner}"
 									placeholder="Owner"
-									th:attr="disabled=${postLink == '/newshop/'}"
+									disabled
+									th:if="${postLink == '/newshop/'}"
 								/>
+								<select
+									class="form-control"
+									id="inputOwner"
+									th:field="*{owner}"
+									th:each="user:${users}"
+									th:if="${postLink != '/newshop/'}"
+								>
+									<option th:value="${user.username}" th:text="${user.username}"></option>
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="inputType">Type</label>
