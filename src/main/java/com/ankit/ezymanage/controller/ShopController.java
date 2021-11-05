@@ -64,16 +64,26 @@ public class ShopController extends RootController {
         return "redirect:/myshops/";
     }
 
-    @GetMapping("/shops/{id}/")
-    public String currentShop(@PathVariable("id") int id, Model model) {
+    @GetMapping("/shops/{shopId}/")
+    public String dashboard(@PathVariable("shopId") int shopId, Model model) {
         makeChangesIfAuthenticated(model);
         System.out.println("Opened shop!");
-        model.addAttribute("shop", shopService.getShopById(id));
-        model.addAttribute("products", shopService.getProductsByShop(id));
-        return "shop";
+        model.addAttribute("shop", shopService.getShopById(shopId));
+        model.addAttribute("shopId", shopId);
+        return "dashboard";
     }
 
-    @GetMapping("/shops/{shopId}/add/")
+    @GetMapping("/shops/{shopId}/products/")
+    public String productsPerShop(@PathVariable("shopId") int shopId, Model model) {
+        makeChangesIfAuthenticated(model);
+        System.out.println("Opened products under shop!");
+        model.addAttribute("shop", shopService.getShopById(shopId));
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("products", shopService.getProductsByShop(shopId));
+        return "products_per_shop";
+    }
+
+    @GetMapping("/shops/{shopId}/products/add/")
     public String showAllProducts(@PathVariable("shopId") int shopId, Model model) {
         makeChangesIfAuthenticated(model);
         System.out.println("Listing all product!");
@@ -89,22 +99,22 @@ public class ShopController extends RootController {
         return "allProducts";
     }
 
-    @GetMapping("/shops/{shopId}/add/{productId}/")
+    @GetMapping("/shops/{shopId}/products/add/{productId}/")
     public String addProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
         makeChangesIfAuthenticated(model);
         System.out.println("Listing a product!");
         shopService.addProductToShop(shopId, productId);
-        return "redirect:/shops/" + shopId + "/add/";
+        return "redirect:/shops/" + shopId + "/products/add/";
     }
 
-    @GetMapping("/shops/{shopId}/remove/{productId}/")
+    @GetMapping("/shops/{shopId}/products/remove/{productId}/")
     public String unlistProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
         makeChangesIfAuthenticated(model);
         System.out.println("Unlisting a product!");
         shopService.removeProductFromShop(shopId, productId);
-        return "redirect:/shops/" + shopId + "/";
+        return "redirect:/shops/" + shopId + "/products/";
     }
 
 }

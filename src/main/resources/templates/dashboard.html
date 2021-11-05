@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card text-center">
+					<h4 class="text-white" th:text="${'Dashboard of ' + shop.name}"></h4>
+					<br />
+					<div class="mx-auto">
+						<a th:href="@{/shops/__${shopId}__/cart/}" class="btn btn-success">New Order</a>
+						<br />
+						<br />
+						<a th:href="@{/payments/}" class="btn btn-danger">Payments</a>
+						<br />
+						<br />
+						<a th:href="@{/shops/__${shopId}__/products/}" class="btn btn-info">Products</a>
+						<br />
+						<br />
+						<a th:href="@{/orders/}" class="btn btn-warning">Recent Orders</a>
+						<br />
+						<br />
+						<a th:href="@{/customers/}" class="btn btn-primary">Customers</a>
+						<br />
+						<br />
+						<a href="#" class="btn btn-secondary">Mass mailing</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+	</body>
+</html>

@@ -54,3 +54,23 @@ CREATE TABLE IF NOT EXISTS shop_products
 	product_id VARCHAR(255) NOT NULL,
 	PRIMARY KEY (shop_id, product_id)
 );
+
+CREATE TABLE IF NOT EXISTS cart
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	date VARCHAR(100),
+	shop_id VARCHAR(255) NOT NULL,
+	customer_id VARCHAR(255) NOT NULL,
+	total INT,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS cart_items
+(
+	cart_id INT NOT NULL,
+	product_id INT NOT NULL,
+	quantity INT NOT NULL,
+	PRIMARY KEY (cart_id, product_id)
+	-- FOREIGN KEY (cart_id) REFERENCES cart(id) ON DELETE CASCADE
+	-- FOREIGN KEY (product_id) REFERENCES products(id)
+);

@@ -29,5 +29,6 @@ _Note:_
 Posssible combinations:
 
 -   ROLE_USER, ROLE_ADMIN
+-   ROLE_USER, ROLE_OWNER, ROLE_ADMIN
 -   ROLE_USER, ROLE_OWNER
 -   ROLE_USER, ROLE_STAFF

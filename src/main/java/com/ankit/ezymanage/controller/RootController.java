@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 
 @Controller
 public class RootController {
-    private final UserService userService;
+    protected final UserService userService;
     protected User user;
 
     @Autowired

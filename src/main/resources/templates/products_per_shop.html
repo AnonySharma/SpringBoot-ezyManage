@@ -7,11 +7,16 @@
 			<div class="d-flex justify-content-center h-100">
 				<div class="card">
 					<div class="card-header">
+						<div style="width: 50px">
+							<a th:href="@{/shops/__${shopId}__/}" class="btn btn-primary"
+								><i class="fas fa-arrow-circle-left"></i
+							></a>
+						</div>
 						<h4 class="text-white text-center" th:text="${'Products listed under ' + shop.name}"></h4>
 					</div>
 					<div class="card-body">
 						<div class="text-center">
-							<a class="btn btn-primary btn-lg" th:href="@{/shops/__${shop.id}__/add/}"> Add Product </a>
+							<a class="btn btn-primary btn-lg" th:href="@{/shops/__${shop.id}__/products/add/}"> Add Product </a>
 						</div>
 						<br />
 						<table class="table table-striped text-white">

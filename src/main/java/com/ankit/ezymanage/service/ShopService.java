@@ -6,19 +6,19 @@ import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Shop;
 
 public interface ShopService {
-    public boolean createShop(Shop shop);
+    boolean createShop(Shop shop);
 
-    public List<Shop> getAllShops();
+    List<Shop> getAllShops();
 
-    public List<Shop> getAllShopsUnder(String ownerUsername);
+    List<Shop> getAllShopsUnder(String ownerUsername);
 
-    public Shop getShopById(int id);
+    Shop getShopById(int id);
 
-    public List<Product> getProductsByShop(int shopId);
+    List<Product> getProductsByShop(int shopId);
 
-    public void addProductToShop(int shopId, int productId);
+    void addProductToShop(int shopId, int productId);
 
-    public void removeProductFromShop(int shopId, int productId);
+    void removeProductFromShop(int shopId, int productId);
 
-    public void deleteShop(int id);
+    void deleteShop(int id);
 }

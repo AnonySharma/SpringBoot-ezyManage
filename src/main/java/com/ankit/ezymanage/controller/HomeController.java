@@ -5,10 +5,12 @@ import com.ankit.ezymanage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController extends RootController {
+
     @Autowired
     public HomeController(UserService userService) {
         super(userService);
@@ -26,5 +28,23 @@ public class HomeController extends RootController {
         makeChangesIfAuthenticated(model);
         System.out.println("ERRRORRR !!!!!!");
         return "error";
+    }
+
+    @GetMapping("/payments/")
+    public String payments(Model model) {
+        makeChangesIfAuthenticated(model);
+        return "payments";
+    }
+
+    @GetMapping("/orders/")
+    public String pastOrders(Model model) {
+        makeChangesIfAuthenticated(model);
+        return "past_orders";
+    }
+
+    @GetMapping("/customers/")
+    public String customers(Model model) {
+        makeChangesIfAuthenticated(model);
+        return "customers";
     }
 }
