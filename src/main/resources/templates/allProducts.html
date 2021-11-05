@@ -36,7 +36,7 @@
 								<td>
 									<a
 										class="btn btn-success"
-										th:href="@{/shops/__${shopId}__/add/__${product.id}__/}"
+										th:href="@{/shops/__${shopId}__/products/add/__${product.id}__/}"
 										th:if="${#lists.contains(addedProducts, __${product.id}__) eq false}"
 										>Add to shop</a
 									>

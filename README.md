@@ -32,3 +32,13 @@ Posssible combinations:
 -   ROLE_USER, ROLE_OWNER, ROLE_ADMIN
 -   ROLE_USER, ROLE_OWNER
 -   ROLE_USER, ROLE_STAFF
+
+# Commands:
+
+-   git init
+-   git add .
+-   git commit -m "test"
+-   heroku create
+-   heroku git:remote -a ezy-manage
+-   git push heroku master
+-   heroku logs --tail

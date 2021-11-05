@@ -38,6 +38,7 @@ public class ShopController extends RootController {
         String owner = userService.findLoggedInUsername();
         System.out.println("user: " + user);
         List<Shop> shops = shopService.getAllShopsUnder(owner);
+        model.addAttribute("owner", owner);
         model.addAttribute("shops", shops);
         return "my_shops";
     }
@@ -60,6 +61,10 @@ public class ShopController extends RootController {
         makeChangesIfAuthenticated(model);
         System.out.println("Creating shop!");
         System.out.println(shop.toString());
+
+        // TODO: no need to set again
+        String owner = userService.findLoggedInUsername();
+        shop.setOwner(owner);
         shopService.createShop(shop);
         return "redirect:/myshops/";
     }

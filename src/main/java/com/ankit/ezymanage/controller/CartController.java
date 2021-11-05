@@ -41,8 +41,7 @@ public class CartController extends RootController {
     public String afterUsername(@PathVariable("shopId") int shopId, @ModelAttribute("cart") Cart cart, Model model,
             RedirectAttributes redirectAttributes) {
         int customerId = cart.getCustomerId();
-        System.out.println(cart);
-        if (cartService.cartExistsForUserId(customerId, shopId)) {
+        if (cartService.cartExistsForUserId(shopId, customerId)) {
             redirectAttributes.addFlashAttribute("infoMsg", "User already has an opened cart!");
         } else {
             cartService.addNewCart(cart);

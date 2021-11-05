@@ -16,7 +16,7 @@
 								<label for="inputName">Name</label>
 								<input type="text" class="form-control" id="inputName" th:field="*{name}" placeholder="Name" />
 							</div>
-							<div class="form-group">
+							<div class="form-group" th:if="${postLink == '/newshop/'}">
 								<label for="inputOwner">Owner</label>
 								<input
 									type="text"
@@ -25,15 +25,11 @@
 									th:field="*{owner}"
 									placeholder="Owner"
 									disabled
-									th:if="${postLink == '/newshop/'}"
 								/>
-								<select
-									class="form-control"
-									id="inputOwner"
-									th:field="*{owner}"
-									th:each="user:${users}"
-									th:if="${postLink != '/newshop/'}"
-								>
+							</div>
+
+							<div class="form-group" th:if="${postLink != '/newshop/'}">
+								<select class="form-control" id="inputOwner" th:field="*{owner}" th:each="user:${users}">
 									<option th:value="${user.username}" th:text="${user.username}"></option>
 								</select>
 							</div>
