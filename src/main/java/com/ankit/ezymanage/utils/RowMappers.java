@@ -129,4 +129,14 @@ public final class RowMappers {
         }
     };
 
+    public static RowMapper<Pair<Integer, Integer>> cartItemRowMapper = new RowMapper<Pair<Integer, Integer>>() {
+        @Override
+        public Pair<Integer, Integer> mapRow(ResultSet row, int i) throws SQLException {
+            Pair<Integer, Integer> pair = new Pair<Integer, Integer>();
+            pair.setFirst(row.getInt("product_id"));
+            pair.setSecond(row.getInt("quantity"));
+            return pair;
+        }
+    };
+
 }

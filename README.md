@@ -33,7 +33,7 @@ Posssible combinations:
 -   ROLE_USER, ROLE_OWNER
 -   ROLE_USER, ROLE_STAFF
 
-# Commands:
+# Initial Commands:
 
 -   git init
 -   git add .
@@ -41,4 +41,15 @@ Posssible combinations:
 -   heroku create
 -   heroku git:remote -a ezy-manage
 -   git push heroku master
+-   git push origin master
 -   heroku logs --tail
+
+# Testing Commands:
+
+-   git add .
+-   git commit -m "test"
+-   git push heroku master
+-   git push origin master
+-   heroku logs --tail
+
+_**Note:** Link to MySQL Server - https://www.freemysqlhosting.net/account/_

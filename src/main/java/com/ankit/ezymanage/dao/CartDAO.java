@@ -1,6 +1,9 @@
 package com.ankit.ezymanage.dao;
 
+import java.util.List;
+
 import com.ankit.ezymanage.model.Cart;
+import com.ankit.ezymanage.utils.Pair;
 import com.ankit.ezymanage.utils.RowMappers;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,7 +34,12 @@ public class CartDAO {
 
     public Cart getCartByUserId(int userId) {
         String sql = "SELECT * FROM cart WHERE customer_id = ?";
-        return jdbcTemplate.queryForObject(sql, RowMappers.cartRowMapper, userId);
+        Cart cart = jdbcTemplate.queryForObject(sql, RowMappers.cartRowMapper, userId);
+
+        sql = "SELECT * FROM cart_items WHERE cart_id = ?";
+        List<Pair<Integer, Integer>> products = jdbcTemplate.query(sql, RowMappers.cartItemRowMapper, cart.getId());
+        cart.setProducts(products);
+        return cart;
     }
 
     public void deleteCartByUserId(int userId) {
@@ -43,4 +51,40 @@ public class CartDAO {
         String sql = "SELECT COUNT(*) FROM cart WHERE shop_id = ? AND customer_id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, shopId, userId) != 0;
     }
+
+    public boolean productExistsInCart(int cartId, int productId) {
+        String sql = "SELECT COUNT(*) FROM cart_items WHERE cart_id = ? AND product_id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, cartId, productId) != 0;
+    }
+
+    public void addProductToCart(int cartId, int productId, int quantity) {
+        String sql = "INSERT INTO cart_items (product_id, quantity, cart_id) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, productId, quantity, cartId);
+    }
+
+    public void updateProductInCart(int cartId, int productId, int quantity) {
+        if (productExistsInCart(cartId, productId)) {
+            if (quantity == 0) {
+                deleteProductFromCart(cartId, productId);
+            } else {
+                String sql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND product_id = ?";
+                jdbcTemplate.update(sql, quantity, cartId, productId);
+            }
+        } else {
+            if (quantity != 0) {
+                addProductToCart(cartId, productId, quantity);
+            }
+        }
+    }
+
+    public void deleteProductFromCart(int cartId, int productId) {
+        String sql = "DELETE FROM cart_items WHERE product_id = ? AND cart_id = ?";
+        jdbcTemplate.update(sql, productId, cartId);
+    }
+
+    public int getProductQuantityInCart(int cartId, int productId) {
+        String sql = "SELECT quantity FROM cart_items WHERE product_id = ? AND cart_id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, productId, cartId);
+    }
+
 }

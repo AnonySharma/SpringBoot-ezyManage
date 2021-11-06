@@ -10,6 +10,14 @@ public interface CartService {
 
     boolean cartExistsForUserId(int shopId, int userId);
 
+    void updateProductInCart(int cartId, int productId, int quantity);
+
+    void decrementProductInCart(int cartId, int productId);
+
+    void incrementProductInCart(int cartId, int productId);
+
+    // int getQuantityOfProductInCart(int cartId, int productId);
+
     // public void addToCart(int userId, int productId);
 
     // public void removeFromCart(int userId, int productId);

@@ -28,4 +28,21 @@ public class CartServiceImpl implements CartService {
         return cartDAO.getCartByUserId(userId);
     }
 
+    @Override
+    public void updateProductInCart(int cartId, int productId, int quantity) {
+        cartDAO.updateProductInCart(cartId, productId, quantity);
+    }
+
+    @Override
+    public void decrementProductInCart(int cartId, int productId) {
+        int quantity = cartDAO.getProductQuantityInCart(cartId, productId);
+        cartDAO.updateProductInCart(cartId, productId, quantity - 1);
+    }
+
+    @Override
+    public void incrementProductInCart(int cartId, int productId) {
+        int quantity = cartDAO.getProductQuantityInCart(cartId, productId);
+        cartDAO.updateProductInCart(cartId, productId, quantity + 1);
+    }
+
 }

@@ -26,6 +26,17 @@ public class Cart {
         this.products.add(new Pair<Integer, Integer>(productId, count));
     }
 
+    public boolean updateProduct(int productId, int count) {
+        for (Pair<Integer, Integer> product : this.products) {
+            if (product.getFirst() == productId) {
+                product.setSecond(count);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void removeProduct(int productId) {
         for (Pair<Integer, Integer> product : this.products) {
             if (product.getFirst() == productId) {
