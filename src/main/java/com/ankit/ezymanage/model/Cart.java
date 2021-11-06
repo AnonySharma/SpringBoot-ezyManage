@@ -12,30 +12,30 @@ public class Cart {
     private List<Pair<Integer, Integer>> products;
     private int total;
 
-    public boolean checkProduct(int productId) {
-        for (Pair<Integer, Integer> product : this.products) {
-            if (product.getFirst() == productId) {
-                return true;
-            }
-        }
+    // public boolean checkProduct(int productId) {
+    // for (Pair<Integer, Integer> product : this.products) {
+    // if (product.getFirst() == productId) {
+    // return true;
+    // }
+    // }
 
-        return false;
-    }
+    // return false;
+    // }
 
-    public void addProduct(int productId, int count) {
-        this.products.add(new Pair<Integer, Integer>(productId, count));
-    }
+    // public void addProduct(int productId, int count) {
+    // this.products.add(new Pair<Integer, Integer>(productId, count));
+    // }
 
-    public boolean updateProduct(int productId, int count) {
-        for (Pair<Integer, Integer> product : this.products) {
-            if (product.getFirst() == productId) {
-                product.setSecond(count);
-                return true;
-            }
-        }
+    // public boolean updateProduct(int productId, int count) {
+    // for (Pair<Integer, Integer> product : this.products) {
+    // if (product.getFirst() == productId) {
+    // product.setSecond(count);
+    // return true;
+    // }
+    // }
 
-        return false;
-    }
+    // return false;
+    // }
 
     public void removeProduct(int productId) {
         for (Pair<Integer, Integer> product : this.products) {

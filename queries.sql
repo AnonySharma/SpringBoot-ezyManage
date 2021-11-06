@@ -74,3 +74,26 @@ CREATE TABLE IF NOT EXISTS cart_items
 	-- FOREIGN KEY (cart_id) REFERENCES cart(id) ON DELETE CASCADE
 	-- FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+CREATE TABLE IF NOT EXISTS orders
+(
+	order_id INT NOT NULL AUTO_INCREMENT,
+	shop_id INT NOT NULL,
+	staff_id INT NOT NULL,
+	customer_id INT NOT NULL,
+	order_date VARCHAR(100),
+	total INT,
+	mode VARCHAR(255),
+	status VARCHAR(255),
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS order_items
+(
+	order_id INT NOT NULL,
+	product_id INT NOT NULL,
+	quantity INT NOT NULL,
+	PRIMARY KEY (order_id, product_id)
+	-- FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
+	-- FOREIGN KEY (product_id) REFERENCES products(id)
+);

@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import com.ankit.ezymanage.model.Cart;
+import com.ankit.ezymanage.model.Order;
 import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Profile;
 import com.ankit.ezymanage.model.Shop;
@@ -139,4 +140,28 @@ public final class RowMappers {
         }
     };
 
+    public static RowMapper<Order> orderRowMapper = new RowMapper<Order>() {
+        @Override
+        public Order mapRow(ResultSet row, int i) throws SQLException {
+            Order order = new Order();
+            order.setOrderId(row.getInt("order_id"));
+            order.setShopId(row.getInt("shop_id"));
+            order.setStaffId(row.getInt("staff_id"));
+            order.setCustomerId(row.getInt("customer_id"));
+            order.setDate(row.getString("order_date"));
+            order.setMode(row.getString("mode"));
+            order.setStatus(row.getString("status"));
+            return order;
+        }
+    };
+
+    public static RowMapper<Pair<Integer, Integer>> orderItemRowMapper = new RowMapper<Pair<Integer, Integer>>() {
+        @Override
+        public Pair<Integer, Integer> mapRow(ResultSet row, int i) throws SQLException {
+            Pair<Integer, Integer> pair = new Pair<Integer, Integer>();
+            pair.setFirst(row.getInt("product_id"));
+            pair.setSecond(row.getInt("quantity"));
+            return pair;
+        }
+    };
 }

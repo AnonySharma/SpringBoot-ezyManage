@@ -8,9 +8,9 @@ public interface CartService {
 
     void clearCart(int cartId);
 
-    Cart getCartByUserId(int userId);
+    Cart getCartByUserIdAndShopId(int userId, int shopId);
 
-    boolean cartExistsForUserId(int shopId, int userId);
+    boolean cartExistsForUserId(int userId, int shopId);
 
     void updateProductInCart(int cartId, int productId, int quantity);
 
