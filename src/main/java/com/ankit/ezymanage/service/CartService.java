@@ -6,6 +6,8 @@ public interface CartService {
 
     void addNewCart(Cart cart);
 
+    void clearCart(int cartId);
+
     Cart getCartByUserId(int userId);
 
     boolean cartExistsForUserId(int shopId, int userId);

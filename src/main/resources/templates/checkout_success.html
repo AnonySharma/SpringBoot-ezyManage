@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card text-center text-white">
+					<div class="card-header">
+						<div style="width: 50px">
+							<a th:href="@{/shops/__${shopId}__/}" class="btn btn-primary"
+								><i class="fas fa-home"></i
+							></a>
+						</div>
+						<h5 class="card-title text-success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Success!</span>
+                        </h5>
+					</div>
+                    <div class="card-body">
+                        
+                        <p class="card-text">
+                            <span>
+                                Your order has been successfully placed. You will receive an email with your
+                                order details.
+                            </span>
+                        </p>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+
+		<!-- Custom scripts -->
+		<script src="/js/script.js"></script>
+	</body>
+</html>

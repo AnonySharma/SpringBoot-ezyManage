@@ -19,6 +19,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void clearCart(int cartId) {
+        cartDAO.clearCart(cartId);
+    }
+
+    @Override
     public boolean cartExistsForUserId(int shopId, int userId) {
         return cartDAO.cartExistsForUserId(shopId, userId);
     }

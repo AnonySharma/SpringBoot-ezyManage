@@ -98,3 +98,28 @@ td {
 .page-wrap {
 	min-height: 100vh;
 }
+
+/* .two-screen {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+} */
+.hide {
+	display: none;
+}
+
+input[type="radio"] + .fa,
+input[type="radio"] + label > .fa {
+	cursor: pointer;
+}
+
+input[type="radio"] + .fa-check-circle:before,
+input[type="radio"] + label > .fa-check-circle:before {
+	content: "\f111";
+} /* .fa-circle */
+
+input[type="radio"]:checked + .fa-check-circle:before,
+input[type="radio"]:checked + label > .fa-check-circle:before {
+	content: "\f058";
+}

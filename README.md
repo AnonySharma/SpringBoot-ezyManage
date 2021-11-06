@@ -7,6 +7,9 @@ Run SQL queries using running this command inside MySQL Command Line
 -   Fix static links make it th:href instead of href.
 -   Fix the links in the README.md file.
 -   Write dummy data for the database in queries.sql.
+-   Implement the payment system
+-   Add payments to payments' table
+-   Implement the order and past-order system
 
 ## Roles we have
 

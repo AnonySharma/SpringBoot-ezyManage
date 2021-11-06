@@ -67,11 +67,12 @@ public class CartController extends RootController {
         model.addAttribute("customerName", userService.getUserById(customerId).getUsername());
         model.addAttribute("shopId", shopId);
         model.addAttribute("customerId", customerId);
+
         System.out.println("Opened cart!");
 
         cart = cartService.getCartByUserId(customerId);
-        List<Pair<Product, Integer>> cartItems = new ArrayList<>();
         List<Integer> cartItemsIds = new ArrayList<>();
+        List<Pair<Product, Integer>> cartItems = new ArrayList<>();
 
         for (Pair<Integer, Integer> product : cart.getProducts()) {
             Product prod = productService.getProduct(product.getFirst().intValue());
@@ -101,9 +102,60 @@ public class CartController extends RootController {
     public String removeProductFromCart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
             @PathVariable("productId") int productId, Model model, RedirectAttributes redirectAttributes) {
         makeChangesIfAuthenticated(model);
+        System.out.println("Removing product from cart!");
+
         Cart cart = cartService.getCartByUserId(customerId);
         cartService.updateProductInCart(cart.getId(), productId, 0);
+
         redirectAttributes.addFlashAttribute("infoMsg", "Product removed from cart!");
+        return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";
+    }
+
+    @GetMapping("/shops/{shopId}/cart/{customerId}/checkout/")
+    public String checkout(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId, Model model,
+            RedirectAttributes redirectAttributes) {
+        makeChangesIfAuthenticated(model);
+        System.out.println("Checking out!");
+
+        Cart cart = cartService.getCartByUserId(customerId);
+        model.addAttribute("cart", cart);
+        List<Pair<Product, Integer>> cartItems = new ArrayList<>();
+
+        for (Pair<Integer, Integer> product : cart.getProducts()) {
+            Product prod = productService.getProduct(product.getFirst().intValue());
+            cartItems.add(new Pair<Product, Integer>(prod, product.getSecond()));
+        }
+
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("customerId", customerId);
+
+        redirectAttributes.addFlashAttribute("infoMsg", "Cart checked out!");
+        return "checkout";
+    }
+
+    @GetMapping("/shops/{shopId}/cart/{customerId}/checkout/done/")
+    public String checkoutComplete(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
+            Model model, RedirectAttributes redirectAttributes) {
+        makeChangesIfAuthenticated(model);
+        System.out.println("Checked out!");
+
+        Cart cart = cartService.getCartByUserId(customerId);
+        model.addAttribute("cart", cart);
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("customerId", customerId);
+
+        redirectAttributes.addFlashAttribute("successMsg", "Order placed successfully!");
+        return "checkout_success";
+    }
+
+    @GetMapping("/shops/{shopId}/cart/{customerId}/clear/")
+    public String clearCart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId, Model model,
+            RedirectAttributes redirectAttributes) {
+        makeChangesIfAuthenticated(model);
+        Cart cart = cartService.getCartByUserId(customerId);
+        cartService.clearCart(cart.getId());
+        redirectAttributes.addFlashAttribute("infoMsg", "Cart cleared!");
         return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";
     }
 

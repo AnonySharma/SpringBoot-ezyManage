@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card text-center text-white">
+					<div class="card-header">
+						<div style="width: 50px">
+							<a th:href="@{/shops/__${shopId}__/cart/__${customerId}__/}" class="btn btn-primary"
+								><i class="fas fa-arrow-circle-left"></i
+							></a>
+						</div>
+						<h4 class="text-white">Checkout!</h4>
+					</div>
+					<br />
+					<br />
+					<h4 class="text-white">Order Summary</h4>
+					<br />
+					<table class="table table-bordered">
+						<br />
+						<thead class="thead-dark">
+							<tr>
+								<th>Name</th>
+								<th>Image</th>
+								<th>Price</th>
+								<th>Quantity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item : ${cartItems}" th:with="product=${item.getFirst()}">
+								<td th:text="${product.name}"></td>
+								<td>
+									<img th:src="${product.image}" th:alt="${product.name}" width="100" height="100" />
+								</td>
+								<td th:text="${'Rs. ' + product.price}"></td>
+								<td th:text="${item.getSecond()}"></td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="form-check">
+						<input
+							class="form-check-input"
+							type="radio"
+							name="cashRadio"
+							id="cashRadio"
+							onclick="cashHandler()"
+							checked
+						/>
+						<label class="form-check-label" for="cashRadio"> Pay with Cash </label>
+					</div>
+					<div class="form-check">
+						<input
+							class="form-check-input"
+							type="radio"
+							name="otherRadio"
+							id="otherRadio"
+							onclick="otherHandler()"
+						/>
+						<label class="form-check-label" for="otherRadio"> Pay with UPI, Debit Cards, etc. </label>
+					</div>
+					<!-- <div class="card-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h4>
+									<span class="text-success">
+										<i class="fas fa-check-circle"></i>
+									</span>
+									<span class="text-danger">
+										<i class="fas fa-times-circle"></i>
+									</span>
+									<span class="text-warning">
+										<i class="fas fa-exclamation-circle"></i>
+									</span>
+								</h4>
+								<h5>
+									<span class="text-success">
+										<i class="fas fa-check-circle"></i>
+									</span>
+									<span class="text-danger">
+										<i class="fas fa-times-circle"></i>
+									</span>
+									<span class="text-warning">
+										<i class="fas fa-circle"></i>
+									</span>
+								</h5>
+							</div>
+						</div>
+					</div> -->
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-md-6">
+							<a class="btn btn-danger" th:href="@{/shops/__${shopId}__/cart/__${customerId}__/}"
+								>Cancel Payment</a
+							>
+						</div>
+						<div class="col-md-6">
+							<a
+								class="btn btn-success"
+								id="nextButtonCash"
+								th:href="@{/shops/__${shopId}__/cart/__${customerId}__/checkout/done/}"
+								>Confirm Payment</a
+							>
+							<a
+								class="btn btn-success hide"
+								id="nextButtonOther"
+								th:href="@{/shops/__${shopId}__/cart/__${customerId}__/checkout/process/}"
+								>Continue</a
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+
+		<!-- Custom scripts -->
+		<script src="/js/script.js"></script>
+	</body>
+</html>

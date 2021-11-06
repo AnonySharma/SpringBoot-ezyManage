@@ -27,11 +27,6 @@ public class CartDAO {
         jdbcTemplate.update(sql, cart.getShopId(), cart.getDate(), cart.getTotal(), cart.getId());
     }
 
-    public void deleteCart(Cart cart) {
-        String sql = "DELETE FROM cart WHERE id = ?";
-        jdbcTemplate.update(sql, cart.getId());
-    }
-
     public Cart getCartByUserId(int userId) {
         String sql = "SELECT * FROM cart WHERE customer_id = ?";
         Cart cart = jdbcTemplate.queryForObject(sql, RowMappers.cartRowMapper, userId);
@@ -43,6 +38,10 @@ public class CartDAO {
     }
 
     public void deleteCartByUserId(int userId) {
+        Cart cart = getCartByUserId(userId);
+        if (cart != null)
+            clearCart(cart.getId());
+
         String sql = "DELETE FROM cart WHERE customer_id = ?";
         jdbcTemplate.update(sql, userId);
     }
@@ -52,14 +51,25 @@ public class CartDAO {
         return jdbcTemplate.queryForObject(sql, Integer.class, shopId, userId) != 0;
     }
 
-    public boolean productExistsInCart(int cartId, int productId) {
+    private boolean productExistsInCart(int cartId, int productId) {
         String sql = "SELECT COUNT(*) FROM cart_items WHERE cart_id = ? AND product_id = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, cartId, productId) != 0;
+        boolean exists = jdbcTemplate.queryForObject(sql, Integer.class, cartId, productId) != 0;
+        return exists;
     }
 
-    public void addProductToCart(int cartId, int productId, int quantity) {
+    private void addProductToCart(int cartId, int productId, int quantity) {
         String sql = "INSERT INTO cart_items (product_id, quantity, cart_id) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, productId, quantity, cartId);
+    }
+
+    private void changeProductQuantityInCart(int cartId, int productId, int quantity) {
+        String sql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND product_id = ?";
+        jdbcTemplate.update(sql, quantity, cartId, productId);
+    }
+
+    private void deleteProductFromCart(int cartId, int productId) {
+        String sql = "DELETE FROM cart_items WHERE product_id = ? AND cart_id = ?";
+        jdbcTemplate.update(sql, productId, cartId);
     }
 
     public void updateProductInCart(int cartId, int productId, int quantity) {
@@ -67,24 +77,43 @@ public class CartDAO {
             if (quantity == 0) {
                 deleteProductFromCart(cartId, productId);
             } else {
-                String sql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND product_id = ?";
-                jdbcTemplate.update(sql, quantity, cartId, productId);
+                changeProductQuantityInCart(cartId, productId, quantity);
             }
         } else {
             if (quantity != 0) {
                 addProductToCart(cartId, productId, quantity);
             }
         }
-    }
-
-    public void deleteProductFromCart(int cartId, int productId) {
-        String sql = "DELETE FROM cart_items WHERE product_id = ? AND cart_id = ?";
-        jdbcTemplate.update(sql, productId, cartId);
+        updateCartTotal(cartId);
     }
 
     public int getProductQuantityInCart(int cartId, int productId) {
         String sql = "SELECT quantity FROM cart_items WHERE product_id = ? AND cart_id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, productId, cartId);
+    }
+
+    public void clearCart(int cartId) {
+        String sql = "DELETE FROM cart_items WHERE cart_id = ?";
+        jdbcTemplate.update(sql, cartId);
+        updateCartTotal(cartId);
+    }
+
+    private boolean isCartEmpty(int cartId) {
+        String sql = "SELECT COUNT(*) FROM cart_items WHERE cart_id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, cartId) == 0;
+    }
+
+    public void updateCartTotal(int cartId) {
+        if (isCartEmpty(cartId)) {
+            String sql = "UPDATE cart SET total = 0 WHERE id = ?";
+            jdbcTemplate.update(sql, cartId);
+            return;
+        }
+
+        String sql = "SELECT SUM(cart_items.quantity * products.price) FROM cart_items INNER JOIN products ON cart_items.product_id = products.id WHERE cart_items.cart_id = ?";
+        int total = jdbcTemplate.queryForObject(sql, Integer.class, cartId);
+        sql = "UPDATE cart SET total = ? WHERE id = ?";
+        jdbcTemplate.update(sql, total, cartId);
     }
 
 }
