@@ -27,9 +27,14 @@ public class CartDAO {
         jdbcTemplate.update(sql, cart.getShopId(), cart.getDate(), cart.getTotal(), cart.getId());
     }
 
-    public Cart getCartByUserId(int userId) {
+    public List<Cart> getCartsByUserId(int userId) {
         String sql = "SELECT * FROM cart WHERE customer_id = ?";
-        Cart cart = jdbcTemplate.queryForObject(sql, RowMappers.cartRowMapper, userId);
+        return jdbcTemplate.query(sql, RowMappers.cartRowMapper, userId);
+    }
+
+    public Cart getCartByUserIdAndShopID(int userId, int shopId) {
+        String sql = "SELECT * FROM cart WHERE customer_id = ? AND shop_id = ?";
+        Cart cart = jdbcTemplate.queryForObject(sql, RowMappers.cartRowMapper, userId, shopId);
 
         sql = "SELECT * FROM cart_items WHERE cart_id = ?";
         List<Pair<Integer, Integer>> products = jdbcTemplate.query(sql, RowMappers.cartItemRowMapper, cart.getId());
@@ -37,24 +42,23 @@ public class CartDAO {
         return cart;
     }
 
-    public void deleteCartByUserId(int userId) {
-        Cart cart = getCartByUserId(userId);
+    public void deleteCartByUserIdAndShopId(int userId, int shopId) {
+        Cart cart = getCartByUserIdAndShopID(userId, shopId);
         if (cart != null)
             clearCart(cart.getId());
 
-        String sql = "DELETE FROM cart WHERE customer_id = ?";
-        jdbcTemplate.update(sql, userId);
+        String sql = "DELETE FROM cart WHERE customer_id = ? AND shop_id = ?";
+        jdbcTemplate.update(sql, userId, shopId);
     }
 
-    public boolean cartExistsForUserId(int shopId, int userId) {
+    public boolean cartExistsForUserId(int userId, int shopId) {
         String sql = "SELECT COUNT(*) FROM cart WHERE shop_id = ? AND customer_id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, shopId, userId) != 0;
     }
 
     private boolean productExistsInCart(int cartId, int productId) {
         String sql = "SELECT COUNT(*) FROM cart_items WHERE cart_id = ? AND product_id = ?";
-        boolean exists = jdbcTemplate.queryForObject(sql, Integer.class, cartId, productId) != 0;
-        return exists;
+        return jdbcTemplate.queryForObject(sql, Integer.class, cartId, productId) != 0;
     }
 
     private void addProductToCart(int cartId, int productId, int quantity) {

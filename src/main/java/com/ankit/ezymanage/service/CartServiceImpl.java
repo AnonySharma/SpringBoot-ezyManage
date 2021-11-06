@@ -24,13 +24,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public boolean cartExistsForUserId(int shopId, int userId) {
-        return cartDAO.cartExistsForUserId(shopId, userId);
+    public boolean cartExistsForUserId(int userId, int shopId) {
+        return cartDAO.cartExistsForUserId(userId, shopId);
     }
 
     @Override
-    public Cart getCartByUserId(int userId) {
-        return cartDAO.getCartByUserId(userId);
+    public Cart getCartByUserIdAndShopId(int userId, int shopId) {
+        return cartDAO.getCartByUserIdAndShopID(userId, shopId);
     }
 
     @Override
