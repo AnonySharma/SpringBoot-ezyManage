@@ -120,4 +120,11 @@ public class CartDAO {
         jdbcTemplate.update(sql, total, cartId);
     }
 
+    public void deleteCartByCartId(int cartId) {
+        String sql = "DELETE FROM cart_items WHERE cart_id = ?";
+        jdbcTemplate.update(sql, cartId);
+        sql = "DELETE FROM cart WHERE id = ?";
+        jdbcTemplate.update(sql, cartId);
+    }
+
 }

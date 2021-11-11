@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS cart_items
 CREATE TABLE IF NOT EXISTS orders
 (
 	order_id INT NOT NULL AUTO_INCREMENT,
+	token VARCHAR(255) UNIQUE NOT NULL,
 	shop_id INT NOT NULL,
 	staff_id INT NOT NULL,
 	customer_id INT NOT NULL,
@@ -85,7 +86,7 @@ CREATE TABLE IF NOT EXISTS orders
 	total INT,
 	mode VARCHAR(255),
 	status VARCHAR(255),
-	PRIMARY KEY (id)
+	PRIMARY KEY (order_id)
 );
 
 CREATE TABLE IF NOT EXISTS order_items

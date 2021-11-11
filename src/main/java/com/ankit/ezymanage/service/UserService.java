@@ -23,5 +23,4 @@ public interface UserService {
 
 	String findLoggedInUsername();
 
-	boolean isLoggedIn();
 }

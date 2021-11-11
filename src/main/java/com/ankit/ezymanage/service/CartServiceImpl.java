@@ -34,6 +34,16 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void deleteCartByUserIdAndShopId(int userId, int shopId) {
+        cartDAO.deleteCartByUserIdAndShopId(userId, shopId);
+    }
+
+    @Override
+    public void deleteCartByCartId(int id) {
+        cartDAO.deleteCartByCartId(id);
+    }
+
+    @Override
     public void updateProductInCart(int cartId, int productId, int quantity) {
         cartDAO.updateProductInCart(cartId, productId, quantity);
     }

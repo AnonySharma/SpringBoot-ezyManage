@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card text-center text-white">
+					<div class="card-header">
+						<div style="width: 50px">
+							<a th:href="@{/shops/__${shopId}__/orders/}" class="btn btn-primary"
+								><i class="fas fa-arrow-circle-left"></i
+							></a>
+						</div>
+						<h3 th:text="${'Order #' + order.orderId}"></h3>
+					</div>
+					<br />
+					<div class="cart-content">
+						<h5 th:utext="${'<b>Shop:</b> ' + shopName}"></h5>
+						<h5 th:utext="${'<b>Staff:</b> ' + staffName}"></h5>
+						<h5 th:utext="${'<b>Customer:</b> ' + customerName}"></h5>
+						<br />
+						<h5 th:utext="${'<b>Date:</b> ' + order.date}"></h5>
+
+						<hr />
+						<h3>Ordered Items</h3>
+						<div th:if="${orderedItems eq null or #lists.size(orderedItems) eq 0}">List is empty!</div>
+						<div th:if="${orderedItems ne null and #lists.size(orderedItems) ne 0}">
+							<table class="table table-bordered">
+								<br />
+								<thead class="thead-dark">
+									<tr>
+										<th>Name</th>
+										<th>Image</th>
+										<th>Price</th>
+										<th>Quantity</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="item : ${orderedItems}" th:with="product=${item.getFirst()}">
+										<td th:text="${product.name}"></td>
+										<td>
+											<img th:src="${product.image}" th:alt="${product.name}" width="100" height="100" />
+										</td>
+										<td th:text="${'Rs. ' + product.price}"></td>
+										<td th:text="${item.getSecond()}"></td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="row">
+								<div class="col-md-6"></div>
+								<div class="col-md-6">
+									<h6>
+										<span th:utext="${'<b>Total Price:</b> Rs. ' + order.total}"></span>
+									</h6>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+	</body>
+</html>

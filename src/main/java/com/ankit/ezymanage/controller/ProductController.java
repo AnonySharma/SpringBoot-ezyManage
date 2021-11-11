@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class ProductController extends RootController {
+public class ProductController extends BaseController {
     private final ProductService productService;
 
     @Autowired
@@ -20,7 +20,7 @@ public class ProductController extends RootController {
 
     @GetMapping("/products/")
     public String getProducts(Model model) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         model.addAttribute("products", productService.getAllProducts());
         return "products";
     }

@@ -6,45 +6,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class HomeController extends RootController {
+public class HomeController extends BaseController {
 
     @Autowired
     public HomeController(UserService userService) {
         super(userService);
     }
 
-    @RequestMapping({ "/", "", "/home" })
+    @GetMapping({ "/", "" })
     public String home(Model model) {
+        isAuthorized(model, "ROLE_USER");
         System.out.println("Hiiiii");
-        makeChangesIfAuthenticated(model);
         return "home";
     }
 
-    @RequestMapping("/error/")
+    @GetMapping("/error/")
     public String errorManager(Model model) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         System.out.println("ERRRORRR !!!!!!");
-        return "error";
+        return "errors/404";
+    }
+
+    @GetMapping("/401/")
+    public String unauthorizedManager(Model model) {
+        System.out.println("UNAUTHORIZED");
+        return "errors/401";
     }
 
     @GetMapping("/payments/")
     public String payments(Model model) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         return "payments";
-    }
-
-    @GetMapping("/orders/")
-    public String pastOrders(Model model) {
-        makeChangesIfAuthenticated(model);
-        return "past_orders";
     }
 
     @GetMapping("/customers/")
     public String customers(Model model) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         return "customers";
     }
 }

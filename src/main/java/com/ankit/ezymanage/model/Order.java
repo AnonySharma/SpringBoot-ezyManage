@@ -1,11 +1,13 @@
 package com.ankit.ezymanage.model;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.ankit.ezymanage.utils.Pair;
 
 public class Order {
     private int orderId;
+    private String token;
     private int shopId;
     private int staffId;
     private int customerId;
@@ -20,11 +22,13 @@ public class Order {
     }
 
     public Order() {
+        this.token = UUID.randomUUID().toString();
     }
 
-    public Order(int orderId, int shopId, int staffId, int customerId, String date, List<Pair<Integer, Integer>> items,
-            int total, String mode, String status) {
+    public Order(int orderId, String token, int shopId, int staffId, int customerId, String date,
+            List<Pair<Integer, Integer>> items, int total, String mode, String status) {
         this.orderId = orderId;
+        this.token = token;
         this.shopId = shopId;
         this.staffId = staffId;
         this.customerId = customerId;
@@ -41,6 +45,14 @@ public class Order {
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public int getShopId() {

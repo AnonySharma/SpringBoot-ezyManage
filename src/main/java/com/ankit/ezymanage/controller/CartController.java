@@ -6,6 +6,7 @@ import java.util.List;
 import com.ankit.ezymanage.model.Cart;
 import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.service.CartService;
+import com.ankit.ezymanage.service.OrderService;
 import com.ankit.ezymanage.service.ProductService;
 import com.ankit.ezymanage.service.ShopService;
 import com.ankit.ezymanage.service.UserService;
@@ -21,23 +22,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class CartController extends RootController {
+public class CartController extends BaseController {
     private final ShopService shopService;
     private final ProductService productService;
     private final CartService cartService;
+    private final OrderService orderService;
 
     @Autowired
     public CartController(UserService userService, ShopService shopService, CartService cartService,
-            ProductService productService) {
+            ProductService productService, OrderService orderService) {
         super(userService);
         this.shopService = shopService;
         this.productService = productService;
         this.cartService = cartService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/shops/{shopId}/cart/")
     public String cart(@PathVariable("shopId") int shopId, Model model) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         Cart newCart = new Cart();
         newCart.setShopId(shopId);
         model.addAttribute("cart", newCart);
@@ -61,7 +64,7 @@ public class CartController extends RootController {
 
     @GetMapping("/shops/{shopId}/cart/{customerId}/")
     public String cart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId, Model model) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         model.addAttribute("cart", cart);
         model.addAttribute("customerName", userService.getUserById(customerId).getUsername());
@@ -89,7 +92,7 @@ public class CartController extends RootController {
     @GetMapping("/shops/{shopId}/cart/{customerId}/add/{productId}/")
     public String addProductToCart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
             @PathVariable("productId") int productId, Model model, RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.updateProductInCart(cart.getId(), productId, 1);
 
@@ -101,7 +104,7 @@ public class CartController extends RootController {
     @GetMapping("/shops/{shopId}/cart/{customerId}/remove/{productId}/")
     public String removeProductFromCart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
             @PathVariable("productId") int productId, Model model, RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         System.out.println("Removing product from cart!");
 
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
@@ -114,7 +117,7 @@ public class CartController extends RootController {
     @GetMapping("/shops/{shopId}/cart/{customerId}/checkout/")
     public String checkout(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId, Model model,
             RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         System.out.println("Checking out!");
 
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
@@ -137,22 +140,28 @@ public class CartController extends RootController {
     @GetMapping("/shops/{shopId}/cart/{customerId}/checkout/done/")
     public String checkoutComplete(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
             Model model, RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
+        Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
+        int staffId = userService.getUser(userService.findLoggedInUsername()).getId();
+        if (orderService.checkoutCart(cart, staffId)) {
+            redirectAttributes.addFlashAttribute("successMsg", "Order placed successfully!");
+            cartService.deleteCartByCartId(cart.getId());
+        } else {
+            redirectAttributes.addFlashAttribute("errrorMsg", "Cart checkout failed!");
+        }
         System.out.println("Checked out!");
 
-        Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         model.addAttribute("cart", cart);
         model.addAttribute("shopId", shopId);
         model.addAttribute("customerId", customerId);
 
-        redirectAttributes.addFlashAttribute("successMsg", "Order placed successfully!");
         return "checkout_success";
     }
 
     @GetMapping("/shops/{shopId}/cart/{customerId}/clear/")
     public String clearCart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId, Model model,
             RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.clearCart(cart.getId());
         redirectAttributes.addFlashAttribute("infoMsg", "Cart cleared!");
@@ -163,7 +172,7 @@ public class CartController extends RootController {
     public String incrementProductFromCart(@PathVariable("shopId") int shopId,
             @PathVariable("customerId") int customerId, @PathVariable("productId") int productId, Model model,
             RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.incrementProductInCart(cart.getId(), productId);
         return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";
@@ -173,7 +182,7 @@ public class CartController extends RootController {
     public String decrementProductFromCart(@PathVariable("shopId") int shopId,
             @PathVariable("customerId") int customerId, @PathVariable("productId") int productId, Model model,
             RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.decrementProductInCart(cart.getId(), productId);
         return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";

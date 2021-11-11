@@ -10,6 +10,10 @@ public interface CartService {
 
     Cart getCartByUserIdAndShopId(int userId, int shopId);
 
+    void deleteCartByUserIdAndShopId(int userId, int shopId);
+
+    void deleteCartByCartId(int id);
+
     boolean cartExistsForUserId(int userId, int shopId);
 
     void updateProductInCart(int cartId, int productId, int quantity);
@@ -17,15 +21,5 @@ public interface CartService {
     void decrementProductInCart(int cartId, int productId);
 
     void incrementProductInCart(int cartId, int productId);
-
-    // int getQuantityOfProductInCart(int cartId, int productId);
-
-    // public void addToCart(int userId, int productId);
-
-    // public void removeFromCart(int userId, int productId);
-
-    // public void updateCart(int userId, int productId, int quantity);
-
-    // public void clearCart(int userId);
 
 }

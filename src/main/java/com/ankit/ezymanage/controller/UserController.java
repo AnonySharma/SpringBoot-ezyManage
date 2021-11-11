@@ -15,10 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class UserController extends RootController {
+public class UserController extends BaseController {
 	private final UserService userService;
 	private final ProfileService profileService;
 
@@ -29,12 +28,12 @@ public class UserController extends RootController {
 		this.profileService = profileService;
 	}
 
-	@RequestMapping("/profile/")
+	@GetMapping("/profile/")
 	public String profileManager(Model model) {
-		if (!userService.isLoggedIn())
+		if (!isLoggedIn())
 			return "redirect:/login/";
 
-		makeChangesIfAuthenticated(model);
+		isAuthorized(model, "ROLE_USER");
 		System.out.println("Profile page !!!!!!");
 		String username = userService.findLoggedInUsername();
 		Profile profile = profileService.getProfile(username);
@@ -47,10 +46,10 @@ public class UserController extends RootController {
 
 	@GetMapping("/profile/edit/")
 	public String profileEditManager(Model model) {
-		if (!userService.isLoggedIn())
+		if (!isLoggedIn())
 			return "redirect:/login/";
 
-		makeChangesIfAuthenticated(model);
+		isAuthorized(model, "ROLE_USER");
 		System.out.println("Profile edit page !!!!!!");
 		String username = userService.findLoggedInUsername();
 		Profile profile = profileService.getProfile(username);
@@ -65,7 +64,7 @@ public class UserController extends RootController {
 	@PostMapping("/profile/edit/")
 	public String profileEditRequestManager(@ModelAttribute("profile") Profile profile, Model model)
 			throws ParseException {
-		makeChangesIfAuthenticated(model);
+		isAuthorized(model, "ROLE_USER");
 		System.out.println("Profile edit request page !!!!!!");
 		String username = userService.findLoggedInUsername();
 

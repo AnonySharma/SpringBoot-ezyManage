@@ -1,4 +1,6 @@
 {
 	"java.configuration.updateBuildConfiguration": "interactive",
-	"html.validate.scripts": false
+	"html.validate.scripts": false,
+	"parameterHints.enabled": true,
+	"javascript.inlayHints.parameterNames.enabled": "all"
 }

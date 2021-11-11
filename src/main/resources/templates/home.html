@@ -6,7 +6,7 @@
 		<div class="container">
 			<div class="d-flex justify-content-center h-100">
 				<div class="card text-center">
-					<div class="card-header" th:if="${loggedIn == true}">
+					<div class="card-header" th:if="${loggedIn ne null}">
 						<span class="text-white" th:text="${'Hello ' + username + '!'}"></span>
 						<a th:href="@{/logout/}" class="float-right"><span class="badge badge-danger">Logout</span></a>
 						<br />

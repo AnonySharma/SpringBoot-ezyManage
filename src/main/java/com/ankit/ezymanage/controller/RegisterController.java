@@ -10,10 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class RegisterController extends RootController {
+public class RegisterController extends BaseController {
     private final UserService userService;
 
     @Autowired
@@ -22,21 +22,21 @@ public class RegisterController extends RootController {
         this.userService = userService;
     }
 
-    @RequestMapping("/register/")
+    @GetMapping("/register/")
     public String registerGoto(Model model) {
-        if (userService.isLoggedIn()) {
+        if (isLoggedIn()) {
             return "redirect:/";
         }
 
         System.out.println("go and register!!!!!!");
         model.addAttribute("user", new User());
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         return "register";
     }
 
     @PostMapping("/register/")
     public String registerManager(@ModelAttribute("user") User user, Model model, HttpSession httpSession) {
-        if (userService.isLoggedIn()) {
+        if (isLoggedIn()) {
             return "redirect:/";
         }
 
@@ -48,7 +48,7 @@ public class RegisterController extends RootController {
         System.out.println(userToSave.toString());
         userService.saveUser(userToSave);
 
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         System.out.println("just registered!!!!!!");
         return "redirect:/";
     }

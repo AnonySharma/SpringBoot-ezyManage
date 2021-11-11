@@ -37,10 +37,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return null;
     }
 
-    public boolean isLoggedIn() {
-        return findLoggedInUsername() != null;
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDAO.getUserDataByUsername(username);

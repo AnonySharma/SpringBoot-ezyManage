@@ -99,6 +99,15 @@ td {
 	min-height: 100vh;
 }
 
+.dropdown-item-logout {
+	color: #dc3545 !important;
+}
+
+.dropdown-item-logout:active {
+	background-color: #dc3545 !important;
+	color: white !important;
+}
+
 /* .two-screen {
 	display: flex;
 	flex-direction: row;

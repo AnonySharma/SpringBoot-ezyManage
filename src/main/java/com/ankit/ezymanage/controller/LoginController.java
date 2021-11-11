@@ -9,22 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class LoginController extends RootController {
-    private final UserService userService;
-
+public class LoginController extends BaseController {
     public LoginController(UserService userService) {
         super(userService);
-        this.userService = userService;
     }
 
     @GetMapping("/login/")
     public String loginGoto(Model model) {
-        if (userService.isLoggedIn()) {
+        if (isLoggedIn()) {
             return "redirect:/";
         }
 
         System.out.println("go and login!!!!!!");
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         model.addAttribute("user", new User());
         return "login";
     }

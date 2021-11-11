@@ -15,11 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class AdminController extends RootController {
+public class AdminController extends BaseController {
     private final UserService userService;
     private final ShopService shopService;
     private final ProductService productService;
@@ -32,7 +32,7 @@ public class AdminController extends RootController {
         this.productService = productService;
     }
 
-    @RequestMapping("/admin/")
+    @GetMapping("/admin/")
     public String adminHome(Model model) {
         List<User> userList = userService.getAllUsers();
         List<Shop> shopList = shopService.getAllShops();
@@ -40,17 +40,17 @@ public class AdminController extends RootController {
 
         System.out.println(shopList.toString());
         System.out.println("Opened Admin panel!");
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         model.addAttribute("userList", userList);
         model.addAttribute("shopList", shopList);
         model.addAttribute("productList", productList);
         return "admin";
     }
 
-    @RequestMapping("/admin/users/delete/{username}/")
+    @GetMapping("/admin/users/delete/{username}/")
     public String deleteUser(@PathVariable(value = "username") String username, Model model,
             RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         System.out.println(userService.findLoggedInUsername() + " deleting " + username);
         if (userService.findLoggedInUsername().equals(username)) {
             System.out.println("Cant delete yourself. Lol!");
@@ -65,9 +65,9 @@ public class AdminController extends RootController {
         return "redirect:/admin/";
     }
 
-    @RequestMapping("/admin/shops/new/")
+    @GetMapping("/admin/shops/new/")
     public String addShop(Model model) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         model.addAttribute("shop", new Shop());
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("postLink", "/admin/shops/new/");
@@ -76,7 +76,7 @@ public class AdminController extends RootController {
 
     @PostMapping("/admin/shops/new/")
     public String addShop(@ModelAttribute("shop") Shop shop, Model model, RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         System.out.println("Adding new shop!");
         if (shopService.createShop(shop)) {
             System.out.println("Added new shop!");
@@ -89,9 +89,9 @@ public class AdminController extends RootController {
         }
     }
 
-    @RequestMapping("/admin/products/new/")
+    @GetMapping("/admin/products/new/")
     public String addProduct(Model model) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         model.addAttribute("product", new Product());
         model.addAttribute("shops", shopService.getAllShops());
         model.addAttribute("postLink", "/admin/products/new/");
@@ -101,7 +101,7 @@ public class AdminController extends RootController {
     @PostMapping("/admin/products/new/")
     public String addProduct(@ModelAttribute("product") Product product, Model model,
             RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         System.out.println("Adding new product!");
         if (productService.addProduct(product)) {
             System.out.println("Added new product!");
@@ -114,9 +114,9 @@ public class AdminController extends RootController {
         }
     }
 
-    @RequestMapping("/admin/shops/delete/{id}/")
+    @GetMapping("/admin/shops/delete/{id}/")
     public String deleteShop(@PathVariable(value = "id") int id, Model model, RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         System.out.println(userService.findLoggedInUsername() + " deleting " + id);
 
         System.out.println("Deleting shop!");
@@ -126,10 +126,10 @@ public class AdminController extends RootController {
         return "redirect:/admin/";
     }
 
-    @RequestMapping("/admin/products/delete/{id}/")
+    @GetMapping("/admin/products/delete/{id}/")
     public String deleteProduct(@PathVariable(value = "id") int id, Model model,
             RedirectAttributes redirectAttributes) {
-        makeChangesIfAuthenticated(model);
+        isAuthorized(model, "ROLE_USER");
         System.out.println(userService.findLoggedInUsername() + " deleting " + id);
 
         System.out.println("Deleting product!");

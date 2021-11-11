@@ -20,13 +20,14 @@ public class OrderDAO {
     }
 
     public void insertOrder(Order order) {
-        String sql = "INSERT INTO orders (order_id, shop_id, staff_id, customer_id, order_date, mode, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, order.getOrderId(), order.getShopId(), order.getStaffId(), order.getCustomerId(),
-                order.getDate(), order.getMode(), order.getStatus());
+        String sql = "INSERT INTO orders (order_id, token, shop_id, staff_id, customer_id, order_date, mode, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, order.getOrderId(), order.getToken(), order.getShopId(), order.getStaffId(),
+                order.getCustomerId(), order.getDate(), order.getMode(), order.getStatus());
 
+        int orderId = getOrderByToken(order.getToken()).getOrderId();
         sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)";
         for (Pair<Integer, Integer> item : order.getItems()) {
-            jdbcTemplate.update(sql, order.getOrderId(), item.getFirst(), item.getSecond());
+            jdbcTemplate.update(sql, orderId, item.getFirst(), item.getSecond());
         }
     }
 
@@ -43,6 +44,15 @@ public class OrderDAO {
         Order order = jdbcTemplate.queryForObject(sql, RowMappers.orderRowMapper, orderId);
 
         List<Pair<Integer, Integer>> items = getOrderItemsByOrderId(orderId);
+        order.setItems(items);
+        return order;
+    }
+
+    public Order getOrderByToken(String token) {
+        String sql = "SELECT * FROM orders WHERE token = ?";
+        Order order = jdbcTemplate.queryForObject(sql, RowMappers.orderRowMapper, token);
+
+        List<Pair<Integer, Integer>> items = getOrderItemsByOrderId(order.getOrderId());
         order.setItems(items);
         return order;
     }
