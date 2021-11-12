@@ -3,29 +3,47 @@ package com.ankit.ezymanage.controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import com.ankit.ezymanage.model.Order;
+import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Profile;
+import com.ankit.ezymanage.service.OrderService;
+import com.ankit.ezymanage.service.ProductService;
 import com.ankit.ezymanage.service.ProfileService;
+import com.ankit.ezymanage.service.ShopService;
 import com.ankit.ezymanage.service.UserService;
+import com.ankit.ezymanage.utils.Pair;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class UserController extends BaseController {
 	private final UserService userService;
 	private final ProfileService profileService;
+	private final ShopService shopService;
+	private final ProductService productService;
+	private final OrderService orderService;
 
 	@Autowired
-	public UserController(UserService userService, ProfileService profileService) {
+	public UserController(UserService userService, ProfileService profileService, ShopService shopService,
+			ProductService productService, OrderService orderService) {
 		super(userService);
 		this.userService = userService;
 		this.profileService = profileService;
+		this.shopService = shopService;
+		this.productService = productService;
+		this.orderService = orderService;
 	}
 
 	@GetMapping("/profile/")
