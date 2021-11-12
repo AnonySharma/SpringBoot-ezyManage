@@ -20,7 +20,7 @@ public class CartDAO {
 
     public void createCart(Cart cart) {
         Timestamp currentTime = new java.sql.Timestamp(new java.util.Date().getTime());
-        String sql = "INSERT INTO cart (id, shop_id, customer_id, total, date) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO cart (id, shop_id, customer_id, total, date) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, cart.getId(), cart.getShopId(), cart.getCustomerId(), cart.getTotal(), currentTime);
     }
 
