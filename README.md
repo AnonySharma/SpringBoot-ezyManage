@@ -4,13 +4,13 @@ Run SQL queries using running this command inside MySQL Command Line
 
 # TODO:
 
--   Fix static links make it th:href instead of href.
+-   ~~Fix static links make it th:href instead of href.~~
 -   Fix the links in the README.md file.
 -   Write dummy data for the database in queries.sql.
 -   Implement the payment system
 -   Add payments to payments' table
--   _Implement the order and past-order system (Partial done)_
--   Implement cart and cart-item sync system, implement in DAO
+-   ~~Implement the order and past-order system (Partial done)~~
+-   ~~Implement cart and cart-item sync system, implement in DAO~~
 
 ## Roles we have
 
