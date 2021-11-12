@@ -80,7 +80,7 @@ public class ShopController extends BaseController {
     @GetMapping("/newshop/")
     public String newShop(Model model) {
         if (!isAuthorized(model, "ROLE_OWNER"))
-            return "error/401";
+            return FORBIDDEN_ERROR_PAGE;
         String owner = userService.findLoggedInUsername();
         Shop shop = new Shop();
         shop.setOwner(owner);
@@ -94,7 +94,7 @@ public class ShopController extends BaseController {
     @PostMapping("/newshop/")
     public String newShopPost(@ModelAttribute("shop") Shop shop, Model model) {
         if (!isAuthorized(model, "ROLE_OWNER"))
-            return "error/401";
+            return FORBIDDEN_ERROR_PAGE;
         System.out.println("Creating shop!");
         System.out.println(shop.toString());
 
@@ -108,7 +108,7 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/")
     public String dashboard(@PathVariable("shopId") int shopId, Model model) {
         if (!isAuthorized(model, "ROLE_OWNER"))
-            return "error/401";
+            return FORBIDDEN_ERROR_PAGE;
         System.out.println("Opened shop!");
         model.addAttribute("shop", shopService.getShopById(shopId));
         model.addAttribute("shopId", shopId);
@@ -118,7 +118,7 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/products/")
     public String productsPerShop(@PathVariable("shopId") int shopId, Model model) {
         if (!isAuthorized(model, "ROLE_OWNER"))
-            return "error/401";
+            return FORBIDDEN_ERROR_PAGE;
         System.out.println("Opened products under shop!");
         model.addAttribute("shop", shopService.getShopById(shopId));
         model.addAttribute("shopId", shopId);
@@ -129,7 +129,7 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/products/add/")
     public String showAllProducts(@PathVariable("shopId") int shopId, Model model) {
         if (!isAuthorized(model, "ROLE_OWNER"))
-            return "error/401";
+            return FORBIDDEN_ERROR_PAGE;
         System.out.println("Listing all product!");
 
         List<Integer> addedProducts = new ArrayList<>();
@@ -147,7 +147,7 @@ public class ShopController extends BaseController {
     public String addProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
         if (!isAuthorized(model, "ROLE_OWNER"))
-            return "error/401";
+            return FORBIDDEN_ERROR_PAGE;
         System.out.println("Listing a product!");
         shopService.addProductToShop(shopId, productId);
         return "redirect:/shops/" + shopId + "/products/add/";
@@ -157,7 +157,7 @@ public class ShopController extends BaseController {
     public String unlistProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
         if (!isAuthorized(model, "ROLE_OWNER"))
-            return "error/401";
+            return FORBIDDEN_ERROR_PAGE;
         System.out.println("Unlisting a product!");
         shopService.removeProductFromShop(shopId, productId);
         return "redirect:/shops/" + shopId + "/products/";
@@ -167,7 +167,7 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/orders/")
     public String pastOrders(@PathVariable("shopId") int shopId, Model model) {
         if (!isAuthorized(model, "ROLE_OWNER"))
-            return "error/401";
+            return FORBIDDEN_ERROR_PAGE;
         model.addAttribute("shopId", shopId);
         List<Order> orders = orderService.getOrdersByShopId(shopId);
         List<Pair<Order, String>> myOrderList = new ArrayList<>();
@@ -194,7 +194,7 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/orders/{orderId}/")
     public String pastOrderItem(@PathVariable("shopId") int shopId, @PathVariable("orderId") int orderId, Model model) {
         if (!isAuthorized(model, "ROLE_OWNER"))
-            return "error/401";
+            return FORBIDDEN_ERROR_PAGE;
         Order order = orderService.getOrderByOrderId(orderId);
         model.addAttribute("shopId", shopId);
         model.addAttribute("orderId", orderId);

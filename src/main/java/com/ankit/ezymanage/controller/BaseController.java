@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 public class BaseController {
     protected final UserService userService;
     protected User user;
+    protected String FORBIDDEN_ERROR_PAGE = "error/403";
 
     @Autowired
     public BaseController(UserService userService) {

@@ -6,7 +6,9 @@ import com.ankit.ezymanage.model.User;
 import com.ankit.ezymanage.utils.RowMappers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +26,12 @@ public class UserDAO {
 	public void createUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		final String sql = "INSERT INTO users(id, username, password, role, isadmin) VALUES(?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isAdmin());
+		try {
+			jdbcTemplate.update(sql, user.getId(), user.getUsername(), user.getPassword(), user.getRole(),
+					user.isAdmin());
+		} catch (Exception e) {
+			throw new DuplicateKeyException("Username not available!");
+		}
 
 	}
 
@@ -35,7 +42,11 @@ public class UserDAO {
 
 	public User getUserDataByUsername(String username) {
 		final String sql = "SELECT * FROM users WHERE username=?";
-		return jdbcTemplate.queryForObject(sql, RowMappers.userRowMapper, username);
+		try {
+			return jdbcTemplate.queryForObject(sql, RowMappers.userRowMapper, username);
+		} catch (Exception e) {
+			throw new UsernameNotFoundException("User not found");
+		}
 	}
 
 	public void deleteUserByUsername(String username) {

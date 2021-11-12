@@ -6,10 +6,13 @@ import com.ankit.ezymanage.model.User;
 import com.ankit.ezymanage.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -32,6 +35,12 @@ public class RegisterController extends BaseController {
         model.addAttribute("user", new User());
         isAuthorized(model, "ROLE_USER");
         return "register";
+    }
+
+    @ExceptionHandler(DuplicateKeyException.class)
+    public String handleDuplicateKeyException(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("errorMsg", "Username not available!");
+        return "redirect:/register/";
     }
 
     @PostMapping("/register/")
