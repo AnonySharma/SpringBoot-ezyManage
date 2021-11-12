@@ -1,5 +1,7 @@
 package com.ankit.ezymanage.service;
 
+import java.text.ParseException;
+
 // import java.util.Calendar;
 // import java.util.Date;
 
@@ -23,7 +25,12 @@ public class CartServiceImpl implements CartService {
         // today.set(Calendar.HOUR_OF_DAY, 0);
         // cart.setDate(new Date(today.getTime().getTime()));
         // System.out.println(cart);
-        cartDAO.createCart(cart);
+        try {
+            cartDAO.createCart(cart);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override

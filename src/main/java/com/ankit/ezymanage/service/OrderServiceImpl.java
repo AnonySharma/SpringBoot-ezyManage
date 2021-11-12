@@ -1,5 +1,6 @@
 package com.ankit.ezymanage.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import com.ankit.ezymanage.dao.OrderDAO;
@@ -33,7 +34,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean checkoutCart(Cart cart, int staffId) {
         Order order = createOrder(cart, staffId, "pending", "cash");
-        orderDAO.insertOrder(order);
+        try {
+            orderDAO.insertOrder(order);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return true;
     }
 
