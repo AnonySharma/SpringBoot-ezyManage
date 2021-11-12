@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card text-center text-white">
+					<div class="card-header">
+						<div style="width: 50px">
+							<a th:href="@{/admin/}" class="btn btn-primary"><i class="fas fa-arrow-circle-left"></i></a>
+						</div>
+						<h5 th:utext="${'<b>Username:</b> ' + user.username}"></h5>
+					</div>
+					<br />
+					<div class="cart-content">
+						<hr />
+						<h3>Current Roles</h3>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="table-responsive">
+									<table class="table table-striped table-bordered">
+										<thead>
+											<tr>
+												<th>Role</th>
+												<th>Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="role : ${allRoles}">
+												<td th:text="${role}"></td>
+												<td>
+													<a
+														th:href="@{/admin/users/edit/__${user.username}__/roles/add/__${role}__/}"
+														class="btn btn-info"
+														th:if="${#lists.contains(currentRoles, role) eq false}"
+														th:attr="disabled=${#strings.equals(role, 'ROLE_USER')}"
+														>Add</a
+													>
+													<a
+														th:href="@{/admin/users/edit/__${user.username}__/roles/remove/__${role}__/}"
+														class="btn btn-danger"
+														th:if="${#lists.contains(currentRoles, role) eq true} and ${#strings.equals(role, 'ROLE_USER') ne true}"
+														>Remove</a
+													>
+													<a
+														th:href="@{/admin/users/edit/__${user.username}__/roles/remove/__${role}__/}"
+														class="btn btn-danger disabled"
+														th:if="${#lists.contains(currentRoles, role) eq true} and ${#strings.equals(role, 'ROLE_USER') eq true}"
+														>Remove</a
+													>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+	</body>
+</html>

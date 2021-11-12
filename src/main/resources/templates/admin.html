@@ -16,8 +16,8 @@
 							<tr>
 								<th scope="col">id</th>
 								<th scope="col">Username</th>
-								<th scope="col">Role</th>
 								<th scope="col">isAdmin</th>
+								<th scope="col">Role</th>
 								<th scope="col">Edit</th>
 								<th scope="col">Delete</th>
 							</tr>
@@ -26,9 +26,11 @@
 							<tr th:each="user:${userList}">
 								<td th:text="${user.id}"></td>
 								<td th:text="${user.username}"></td>
-								<td th:text="${user.role}"></td>
 								<td th:text="${user.isAdmin}"></td>
-								<td><a th:href="@{/admin/}" class="btn btn-primary">Edit</a></td>
+								<td th:text="${user.role}"></td>
+								<td>
+									<a th:href="@{/admin/users/edit/__${user.username}__/}" class="btn btn-primary">Edit</a>
+								</td>
 								<td>
 									<a th:href="@{/admin/users/delete/__${user.username}__/}" class="btn btn-danger">Delete</a>
 								</td>

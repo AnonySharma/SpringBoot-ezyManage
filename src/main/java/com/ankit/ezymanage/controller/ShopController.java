@@ -1,7 +1,9 @@
 package com.ankit.ezymanage.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Order;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ShopController extends BaseController {
@@ -37,20 +40,47 @@ public class ShopController extends BaseController {
         this.orderService = orderService;
     }
 
+    @GetMapping("/myshops/grantpermission/")
+    public String makeOwner(Model model, RedirectAttributes redirectAttributes) {
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+            // return "redirect:/login?back=/myshops/grantpermission/";
+        }
+        String username = userService.findLoggedInUsername();
+        // TODO: REQUEST ADMIN TO MAKE OWNER
+        if (userService.addRoleToUser(username, "ROLE_OWNER")) {
+            System.out.println("Congrats! You can open your own shop accounts now!");
+            redirectAttributes.addFlashAttribute("successMsg", "Congrats! You can open your own shop-accounts now!");
+        } else {
+            System.out.println("Failed to grant permissions!");
+            redirectAttributes.addFlashAttribute("errorMsg", "Failed to grant permissions!");
+        }
+        return "redirect:/myshops/";
+    }
+
     @GetMapping("/myshops/")
-    public String myShops(Model model) {
-        isAuthorized(model, "ROLE_USER");
-        String owner = userService.findLoggedInUsername();
+    public String myShops(Model model, RedirectAttributes redirectAttributes) {
+        String username = userService.findLoggedInUsername();
+        System.out.println(isAuthorized(model, "ROLE_OWNER"));
+        System.out.println(isLoggedIn());
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, "ROLE_OWNER")) {
+            model.addAttribute("infoMsg", "You are not authorized to add new shops!");
+            return "my_shops_unauth";
+        }
         System.out.println("user: " + user);
-        List<Shop> shops = shopService.getAllShopsUnder(owner);
-        model.addAttribute("owner", owner);
+        List<Shop> shops = shopService.getAllShopsUnder(username);
+        model.addAttribute("owner", username);
         model.addAttribute("shops", shops);
         return "my_shops";
     }
 
     @GetMapping("/newshop/")
     public String newShop(Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isAuthorized(model, "ROLE_OWNER"))
+            return "error/401";
         String owner = userService.findLoggedInUsername();
         Shop shop = new Shop();
         shop.setOwner(owner);
@@ -63,7 +93,8 @@ public class ShopController extends BaseController {
 
     @PostMapping("/newshop/")
     public String newShopPost(@ModelAttribute("shop") Shop shop, Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isAuthorized(model, "ROLE_OWNER"))
+            return "error/401";
         System.out.println("Creating shop!");
         System.out.println(shop.toString());
 
@@ -76,7 +107,8 @@ public class ShopController extends BaseController {
 
     @GetMapping("/shops/{shopId}/")
     public String dashboard(@PathVariable("shopId") int shopId, Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isAuthorized(model, "ROLE_OWNER"))
+            return "error/401";
         System.out.println("Opened shop!");
         model.addAttribute("shop", shopService.getShopById(shopId));
         model.addAttribute("shopId", shopId);
@@ -85,7 +117,8 @@ public class ShopController extends BaseController {
 
     @GetMapping("/shops/{shopId}/products/")
     public String productsPerShop(@PathVariable("shopId") int shopId, Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isAuthorized(model, "ROLE_OWNER"))
+            return "error/401";
         System.out.println("Opened products under shop!");
         model.addAttribute("shop", shopService.getShopById(shopId));
         model.addAttribute("shopId", shopId);
@@ -95,7 +128,8 @@ public class ShopController extends BaseController {
 
     @GetMapping("/shops/{shopId}/products/add/")
     public String showAllProducts(@PathVariable("shopId") int shopId, Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isAuthorized(model, "ROLE_OWNER"))
+            return "error/401";
         System.out.println("Listing all product!");
 
         List<Integer> addedProducts = new ArrayList<>();
@@ -112,7 +146,8 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/products/add/{productId}/")
     public String addProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isAuthorized(model, "ROLE_OWNER"))
+            return "error/401";
         System.out.println("Listing a product!");
         shopService.addProductToShop(shopId, productId);
         return "redirect:/shops/" + shopId + "/products/add/";
@@ -121,7 +156,8 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/products/remove/{productId}/")
     public String unlistProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isAuthorized(model, "ROLE_OWNER"))
+            return "error/401";
         System.out.println("Unlisting a product!");
         shopService.removeProductFromShop(shopId, productId);
         return "redirect:/shops/" + shopId + "/products/";
@@ -130,15 +166,35 @@ public class ShopController extends BaseController {
     // PAST ORDERS
     @GetMapping("/shops/{shopId}/orders/")
     public String pastOrders(@PathVariable("shopId") int shopId, Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isAuthorized(model, "ROLE_OWNER"))
+            return "error/401";
         model.addAttribute("shopId", shopId);
-        model.addAttribute("orders", orderService.getOrdersByShopId(shopId));
+        List<Order> orders = orderService.getOrdersByShopId(shopId);
+        List<Pair<Order, String>> myOrderList = new ArrayList<>();
+        for (Order order : orders) {
+            String products = "";
+            for (Pair<Integer, Integer> product : order.getItems()) {
+                products += productService.getProduct(product.getFirst()).getName() + "(x" + product.getSecond()
+                        + "), ";
+            }
+            products = products.substring(0, products.length() - 2);
+            myOrderList.add(new Pair<>(order, products));
+        }
+
+        Map<Integer, String> customerMap = new HashMap<>();
+        for (Pair<Order, String> order : myOrderList) {
+            customerMap.put(order.getFirst().getCustomerId(),
+                    userService.getUserById(order.getFirst().getCustomerId()).getUsername());
+        }
+        model.addAttribute("customerMap", customerMap);
+        model.addAttribute("orders", myOrderList);
         return "orders";
     }
 
     @GetMapping("/shops/{shopId}/orders/{orderId}/")
     public String pastOrderItem(@PathVariable("shopId") int shopId, @PathVariable("orderId") int orderId, Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isAuthorized(model, "ROLE_OWNER"))
+            return "error/401";
         Order order = orderService.getOrderByOrderId(orderId);
         model.addAttribute("shopId", shopId);
         model.addAttribute("orderId", orderId);
@@ -154,6 +210,7 @@ public class ShopController extends BaseController {
                     product.getSecond()));
         }
         model.addAttribute("orderedItems", orderedItems);
+        model.addAttribute("backLink", "/shops/" + shopId + "/orders/");
         return "order_page";
     }
 }

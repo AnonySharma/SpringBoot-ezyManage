@@ -142,7 +142,7 @@ public class CartController extends BaseController {
             Model model, RedirectAttributes redirectAttributes) {
         isAuthorized(model, "ROLE_USER");
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
-        int staffId = userService.getUser(userService.findLoggedInUsername()).getId();
+        int staffId = userService.getUserByUsername(userService.findLoggedInUsername()).getId();
         if (orderService.checkoutCart(cart, staffId)) {
             redirectAttributes.addFlashAttribute("successMsg", "Order placed successfully!");
             cartService.deleteCartByCartId(cart.getId());

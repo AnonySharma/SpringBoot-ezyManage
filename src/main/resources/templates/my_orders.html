@@ -8,34 +8,32 @@
 				<div class="card text-center text-white">
 					<div class="card-header">
 						<div style="width: 50px">
-							<a th:href="@{/shops/__${shopId}__/}" class="btn btn-primary"
-								><i class="fas fa-arrow-circle-left"></i
-							></a>
+							<a th:href="@{/}" class="btn btn-primary"><i class="fas fa-arrow-circle-left"></i></a>
 						</div>
-						<h3>Past Orders</h3>
+						<h3>My Orders</h3>
 					</div>
 					<br />
 					<div class="cart-content">
-						<div th:if="${orders eq null or #lists.size(orders) eq 0}">No orders were placed under your shop.</div>
+						<div th:if="${orders eq null or #lists.size(orders) eq 0}">No orders!</div>
 						<div th:if="${orders ne null and #lists.size(orders) ne 0}">
 							<table class="table table-bordered">
 								<thead>
 									<tr>
 										<th>Items</th>
+										<th>Shop</th>
 										<th>Date</th>
 										<th>Total</th>
 										<th>Status</th>
-										<th>Customer</th>
 										<th>Actions</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr th:each="orderItem : ${orders}" th:with="order=${orderItem.getFirst()}">
 										<td th:text="${orderItem.getSecond()}"></td>
+										<td th:text="${shopMap[order.shopId]}"></td>
 										<td th:text="${order.date}"></td>
 										<td th:text="${order.total}"></td>
 										<td th:text="${order.status}"></td>
-										<td th:text="${customerMap[order.customerId]}"></td>
 										<td>
 											<a th:href="@{/myorders/__${order.orderId}__/}" class="btn btn-primary">View</a>
 										</td>

@@ -14,4 +14,6 @@ public interface OrderService {
     List<Order> getOrdersByShopId(int shopId);
 
     Order getOrderByOrderId(int orderId);
+
+    List<Order> getAllOrdersByUserId(int id);
 }

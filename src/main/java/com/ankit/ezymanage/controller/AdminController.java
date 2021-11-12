@@ -1,5 +1,6 @@
 package com.ankit.ezymanage.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.ankit.ezymanage.model.Product;
@@ -34,13 +35,13 @@ public class AdminController extends BaseController {
 
     @GetMapping("/admin/")
     public String adminHome(Model model) {
+        isAuthorized(model, "ROLE_USER");
         List<User> userList = userService.getAllUsers();
         List<Shop> shopList = shopService.getAllShops();
         List<Product> productList = productService.getAllProducts();
 
         System.out.println(shopList.toString());
         System.out.println("Opened Admin panel!");
-        isAuthorized(model, "ROLE_USER");
         model.addAttribute("userList", userList);
         model.addAttribute("shopList", shopList);
         model.addAttribute("productList", productList);
@@ -136,6 +137,48 @@ public class AdminController extends BaseController {
         productService.deleteProduct(id);
         System.out.println("Deleted product!");
 
+        return "redirect:/admin/";
+    }
+
+    @GetMapping("/admin/users/edit/{username}/")
+    public String editUserRoles(@PathVariable("username") String username, Model model) {
+        isAuthorized(model, "ROLE_USER");
+        User user = userService.getUserByUsername(username);
+        List<String> allRoles = Arrays.asList("ROLE_ADMIN", "ROLE_OWNER", "ROLE_STAFF", "ROLE_USER");
+        List<String> currentRoles = userService.getUserRoles(username);
+        model.addAttribute("user", user);
+        model.addAttribute("currentRoles", currentRoles);
+        model.addAttribute("allRoles", allRoles);
+        return "edit_user_roles";
+    }
+
+    @GetMapping("/admin/users/edit/{username}/roles/add/{role}")
+    public String addRole(@PathVariable("username") String username, @PathVariable("role") String role, Model model,
+            RedirectAttributes redirectAttributes) {
+        isAuthorized(model, "ROLE_USER");
+        System.out.println("Adding role to user!");
+        if (userService.addRoleToUser(username, role)) {
+            System.out.println("Added role to user!");
+            redirectAttributes.addFlashAttribute("successMsg", "Added role to user!");
+        } else {
+            System.out.println("Failed to add role to user!");
+            redirectAttributes.addFlashAttribute("errorMsg", "Failed to add role to user!");
+        }
+        return "redirect:/admin/";
+    }
+
+    @GetMapping("/admin/users/edit/{username}/roles/remove/{role}")
+    public String removeRole(@PathVariable("username") String username, @PathVariable("role") String role, Model model,
+            RedirectAttributes redirectAttributes) {
+        isAuthorized(model, "ROLE_USER");
+        System.out.println("Removing role to user!");
+        if (userService.removeRoleFromUser(username, role)) {
+            System.out.println("Removed role from user!");
+            redirectAttributes.addFlashAttribute("successMsg", "Removed role from user!");
+        } else {
+            System.out.println("Failed to remove role from user!");
+            redirectAttributes.addFlashAttribute("errorMsg", "Failed to remove role from user!");
+        }
         return "redirect:/admin/";
     }
 }

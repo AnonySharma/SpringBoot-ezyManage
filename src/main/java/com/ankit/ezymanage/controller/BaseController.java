@@ -28,13 +28,21 @@ public class BaseController {
     public boolean isAuthorized(Model model, String permittedRoles) {
         String username = userService.findLoggedInUsername();
         if (username != null) {
-            user = userService.getUser(username);
+            user = userService.getUserByUsername(username);
             model.addAttribute("username", username);
             model.addAttribute("role", user.getRole());
             model.addAttribute("loggedIn", true);
 
             List<String> permittedRolesList = Arrays.asList(permittedRoles.split(" "));
-            return permittedRolesList.contains(user.getRole());
+            List<String> userRolesList = Arrays.asList(user.getRole().split(" "));
+            // System.out.println("permittedRolesList: " + permittedRolesList);
+            // System.out.println("userRolesList: " + userRolesList);
+            for (String string : userRolesList) {
+                if (permittedRolesList.contains(string)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         return false;

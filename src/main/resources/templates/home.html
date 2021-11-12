@@ -15,22 +15,36 @@
 					<h4 class="text-white">Welcome to ezyManage!</h4>
 					<br />
 					<div class="mx-auto">
-						<a href="/login/" class="btn login_btn">Login</a>
-						<br />
-						<br />
-						<a href="/register/" class="btn login_btn">Register</a>
-						<br />
-						<br />
-						<a href="/admin/" class="btn login_btn">Admin</a>
-						<br />
-						<br />
-						<a href="/myshops/" class="btn login_btn">Shops</a>
-						<br />
-						<br />
-						<a href="/products/" class="btn login_btn">Products</a>
-						<!-- <br />
-						<br />
-						<a th:href="@{/dashboard/}" class="btn login_btn">Dashboard</a> -->
+						<div th:if="${loggedIn eq null}">
+							<a th:href="@{/login/}" class="btn login_btn">Login</a>
+							<br />
+							<br />
+						</div>
+						<div th:if="${loggedIn eq null}">
+							<a th:href="@{/register/}" class="btn login_btn">Register</a>
+							<br />
+							<br />
+						</div>
+						<div th:if="${loggedIn ne null}">
+							<a th:href="@{/admin/}" class="btn login_btn">Admin</a>
+							<br />
+							<br />
+						</div>
+						<div th:if="${loggedIn ne null}">
+							<a th:href="@{/myorders/}" class="btn login_btn">My Orders</a>
+							<br />
+							<br />
+						</div>
+						<div th:if="${loggedIn ne null}">
+							<a th:href="@{/myshops/}" class="btn login_btn">Shops</a>
+							<br />
+							<br />
+						</div>
+						<div th:if="${loggedIn ne null}">
+							<a th:href="@{/products/}" class="btn login_btn">Products</a>
+							<br />
+							<br />
+						</div>
 					</div>
 				</div>
 			</div>

@@ -8,9 +8,7 @@
 				<div class="card text-center text-white">
 					<div class="card-header">
 						<div style="width: 50px">
-							<a th:href="@{/shops/__${shopId}__/orders/}" class="btn btn-primary"
-								><i class="fas fa-arrow-circle-left"></i
-							></a>
+							<a th:href="@{__${backLink}__}" class="btn btn-primary"><i class="fas fa-arrow-circle-left"></i></a>
 						</div>
 						<h3 th:text="${'Order #' + order.orderId}"></h3>
 					</div>

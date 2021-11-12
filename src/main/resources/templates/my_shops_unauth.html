@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="text-white text-center">You can't add new shops.</h4>
+						<div class="d-flex justify-content-center">
+							<a th:href="@{/myshops/grantpermission/}" class="btn btn-primary">Request to start new shops</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+	</body>
+</html>

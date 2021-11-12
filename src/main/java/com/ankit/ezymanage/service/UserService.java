@@ -11,9 +11,13 @@ public interface UserService {
 
 	void deleteUser(String username);
 
-	void addRoleToUser(String username, String roleName);
+	List<String> getUserRoles(String username);
 
-	User getUser(String username);
+	boolean addRoleToUser(String username, String roleName);
+
+	boolean removeRoleFromUser(String username, String role);
+
+	User getUserByUsername(String username);
 
 	User getUserById(int id);
 
