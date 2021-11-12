@@ -31,7 +31,7 @@
 									<tr th:each="orderItem : ${orders}" th:with="order=${orderItem.getFirst()}">
 										<td th:text="${orderItem.getSecond()}"></td>
 										<td th:text="${shopMap[order.shopId]}"></td>
-										<td th:text="${order.date}"></td>
+										<td th:text="${#dates.format(order.date, 'dd MMM yyyy, HH:mm:ss')}"></td>
 										<td th:text="${order.total}"></td>
 										<td th:text="${order.status}"></td>
 										<td>

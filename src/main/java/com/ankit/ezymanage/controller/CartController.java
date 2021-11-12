@@ -73,7 +73,6 @@ public class CartController extends BaseController {
 
         System.out.println("Opened cart!");
 
-        cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         List<Integer> cartItemsIds = new ArrayList<>();
         List<Pair<Product, Integer>> cartItems = new ArrayList<>();
 
@@ -142,6 +141,7 @@ public class CartController extends BaseController {
             Model model, RedirectAttributes redirectAttributes) {
         isAuthorized(model, "ROLE_USER");
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
+        System.out.println(cart);
         int staffId = userService.getUserByUsername(userService.findLoggedInUsername()).getId();
         if (orderService.checkoutCart(cart, staffId)) {
             redirectAttributes.addFlashAttribute("successMsg", "Order placed successfully!");

@@ -41,15 +41,13 @@
 						<form method="POST" th:action="@{/shops/__${shopId}__/cart/new/}" th:object="${cart}">
 							<div class="form-group">
 								<label for="customer">Customer</label>
-								<select
-									class="form-control"
-									id="customer"
-									name="customer"
-									th:field="*{customerId}"
-									th:each="customer : ${customers}"
-								>
+								<select class="form-control" id="customer" name="customer" th:field="*{customerId}">
 									<option value="" hidden>Select a customer</option>
-									<option th:text="${customer.username}" th:value="${customer.id}"></option>
+									<option
+										th:each="customer : ${customers}"
+										th:text="${customer.username}"
+										th:value="${customer.id}"
+									></option>
 								</select>
 							</div>
 							<input type="submit" value="Continue" class="btn btn-primary" />

@@ -18,7 +18,7 @@
 						<h5 th:utext="${'<b>Staff:</b> ' + staffName}"></h5>
 						<h5 th:utext="${'<b>Customer:</b> ' + customerName}"></h5>
 						<br />
-						<h5 th:utext="${'<b>Date:</b> ' + order.date}"></h5>
+						<h5 th:utext="${'<b>Date:</b> ' + #dates.format(order.date, 'dd MMM yyyy, HH:mm:ss')}"></h5>
 
 						<hr />
 						<h3>Ordered Items</h3>

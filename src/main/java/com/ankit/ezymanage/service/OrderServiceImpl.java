@@ -23,7 +23,6 @@ public class OrderServiceImpl implements OrderService {
         order.setShopId(cart.getShopId());
         order.setStaffId(staffId);
         order.setCustomerId(cart.getCustomerId());
-        order.setDate(cart.getDate());
         order.setItems(cart.getProducts());
         order.setTotal(cart.getTotal());
         order.setMode(mode);

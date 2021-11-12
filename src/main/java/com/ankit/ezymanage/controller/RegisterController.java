@@ -49,12 +49,7 @@ public class RegisterController extends BaseController {
             return "redirect:/";
         }
 
-        System.out.println(model.toString());
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
-
         User userToSave = new User(user.getUsername(), user.getPassword());
-        System.out.println(userToSave.toString());
         userService.saveUser(userToSave);
 
         isAuthorized(model, "ROLE_USER");

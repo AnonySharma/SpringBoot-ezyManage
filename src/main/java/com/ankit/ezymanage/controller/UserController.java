@@ -1,10 +1,6 @@
 package com.ankit.ezymanage.controller;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,8 +76,7 @@ public class UserController extends BaseController {
 	}
 
 	@PostMapping("/profile/edit/")
-	public String profileEditRequestManager(@ModelAttribute("profile") Profile profile, Model model)
-			throws ParseException {
+	public String profileEditRequestManager(@ModelAttribute("profile") Profile profile, Model model) {
 		isAuthorized(model, "ROLE_USER");
 		System.out.println("Profile edit request page !!!!!!");
 		String username = userService.findLoggedInUsername();
@@ -91,20 +86,7 @@ public class UserController extends BaseController {
 
 		System.out.println(username + " is logged in!!");
 		System.out.println("Edited successfully!");
-		System.out.println("Check 1!");
 		System.out.println(profile);
-		System.out.println(profile.getDateOfBirth().toString());
-
-		System.out.println("Check 2!");
-		if (profile.getDateOfBirth() != null) {
-			DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
-			System.out.println("Check 3!");
-			Date date = (Date) formatter.parse(profile.getDateOfBirth().toString());
-			profile.setDateOfBirth(date);
-			System.out.println(date.toString());
-		}
-
-		System.out.println("Check 4!");
 		profileService.updateProfile(profile);
 
 		System.out.println(model.toString());

@@ -1,12 +1,13 @@
 package com.ankit.ezymanage.model;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ankit.ezymanage.utils.Pair;
 
 public class Cart {
     private int id;
-    private String date;
+    private Date date;
     private int shopId;
     private Integer customerId;
     private List<Pair<Integer, Integer>> products;
@@ -49,7 +50,7 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(int id, String date, int shopId, Integer customerId, List<Pair<Integer, Integer>> products, int total) {
+    public Cart(int id, Date date, int shopId, Integer customerId, List<Pair<Integer, Integer>> products, int total) {
         this.id = id;
         this.date = date;
         this.shopId = shopId;
@@ -66,11 +67,11 @@ public class Cart {
         this.id = id;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

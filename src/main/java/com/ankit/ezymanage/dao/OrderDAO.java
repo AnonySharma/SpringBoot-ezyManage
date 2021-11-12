@@ -1,5 +1,6 @@
 package com.ankit.ezymanage.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ankit.ezymanage.model.Order;
@@ -20,9 +21,10 @@ public class OrderDAO {
     }
 
     public void insertOrder(Order order) {
-        String sql = "INSERT INTO orders (order_id, token, shop_id, staff_id, customer_id, order_date, mode, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        Timestamp currentTime = new java.sql.Timestamp(new java.util.Date().getTime());
+        String sql = "INSERT INTO orders (order_id, token, shop_id, staff_id, customer_id, total, order_date, mode, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, order.getOrderId(), order.getToken(), order.getShopId(), order.getStaffId(),
-                order.getCustomerId(), order.getDate(), order.getMode(), order.getStatus());
+                order.getCustomerId(), order.getTotal(), currentTime, order.getMode(), order.getStatus());
 
         int orderId = getOrderByToken(order.getToken()).getOrderId();
         sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)";

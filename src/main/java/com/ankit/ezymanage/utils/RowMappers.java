@@ -2,8 +2,8 @@ package com.ankit.ezymanage.utils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import com.ankit.ezymanage.model.Cart;
 import com.ankit.ezymanage.model.Order;
@@ -41,6 +41,7 @@ public final class RowMappers {
             shop.setName(row.getString("name"));
             shop.setType(row.getString("type"));
             shop.setPhone(null);
+            // row.getTime(arg0)
             shop.setEmail(row.getString("email"));
             shop.setGSTIN(row.getString("gstin"));
             shop.setOwner(row.getString("owner"));
@@ -93,12 +94,7 @@ public final class RowMappers {
             }
 
             if (isValid(row.getString("dob"))) {
-                System.out.println(row.getString("dob"));
-                try {
-                    profile.setDateOfBirth(new SimpleDateFormat("dd/MM/yyyy").parse(row.getString("dob")));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                System.out.println(row.getDate("dob"));
             }
 
             if (isValid(row.getString("email"))) {
@@ -122,10 +118,12 @@ public final class RowMappers {
         public Cart mapRow(ResultSet row, int i) throws SQLException {
             Cart cart = new Cart();
             cart.setId(row.getInt("id"));
-            cart.setDate(row.getString("date"));
             cart.setShopId(row.getInt("shop_id"));
             cart.setCustomerId(row.getInt("customer_id"));
             cart.setTotal(row.getInt("total"));
+
+            Timestamp time = row.getTimestamp("date");
+            cart.setDate(new Date(time.getTime()));
             return cart;
         }
     };
@@ -147,10 +145,14 @@ public final class RowMappers {
             order.setOrderId(row.getInt("order_id"));
             order.setShopId(row.getInt("shop_id"));
             order.setStaffId(row.getInt("staff_id"));
+            order.setTotal(row.getInt("total"));
             order.setCustomerId(row.getInt("customer_id"));
-            order.setDate(row.getString("order_date"));
             order.setMode(row.getString("mode"));
             order.setStatus(row.getString("status"));
+
+            Timestamp time = row.getTimestamp("order_date");
+            System.out.println(time);
+            order.setDate(new Date(time.getTime()));
             return order;
         }
     };

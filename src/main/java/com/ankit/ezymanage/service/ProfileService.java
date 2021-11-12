@@ -2,7 +2,7 @@ package com.ankit.ezymanage.service;
 
 import com.ankit.ezymanage.model.Profile;
 
-import org.springframework.security.access.annotation.Secured;
+// import org.springframework.security.access.annotation.Secured;
 
 public interface ProfileService {
 	void saveProfile(Profile profile);

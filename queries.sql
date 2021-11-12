@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS profile
 	lastname VARCHAR(20),
 	phone BIGINT,
 	gender CHAR(1),
-	dob DATE,
+	dob TIMESTAMP,
 	email VARCHAR(255),
 	address VARCHAR(255),
 	aadhaar VARCHAR(50),
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS shop_products
 CREATE TABLE IF NOT EXISTS cart
 (
 	id INT NOT NULL AUTO_INCREMENT,
-	date VARCHAR(100),
+	date TIMESTAMP,
 	shop_id VARCHAR(255) NOT NULL,
 	customer_id VARCHAR(255) NOT NULL,
 	total INT,
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS orders
 	shop_id INT NOT NULL,
 	staff_id INT NOT NULL,
 	customer_id INT NOT NULL,
-	order_date VARCHAR(100),
+	order_date TIMESTAMP,
 	total INT,
 	mode VARCHAR(255),
 	status VARCHAR(255),
@@ -98,3 +98,11 @@ CREATE TABLE IF NOT EXISTS order_items
 	-- FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 	-- FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+------------------------------------- Populate products table -------------------------------------
+-- INSERT INTO products(name, image, description, price) VALUES("Rice", "https://d3pc1xvrcw35tl.cloudfront.net/ln/images/686x514/rice-news-20180262183_202106208254.jpg", "Chaaawal", 10);
+-- INSERT INTO products(name, image, description, price) VALUES("Sugar", "https://www.kinder.com/in/sites/kinder_in/files/documents/16871047/22803799/kinder-39-Sugar-final-header.jpg?t=1623490499", "Cheeni", 45);
+-- INSERT INTO products(name, image, description, price) VALUES("Salt", "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/322745_1100-732x549.jpg", "Namak", 12);
+-- INSERT INTO products(name, image, description, price) VALUES("Juggary", "https://static.toiimg.com/photo/msid-72056635/72056635.jpg", "Gud", 20);
+-- INSERT INTO products(name, image, description, price) VALUES("Flour", "https://www.unlockfood.ca/EatRightOntario/media/Website-images-resized/All-about-grain-flours-resized.jpg", "Aata", 35);
+---------------------------------------------------------------------------------------------------

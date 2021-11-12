@@ -22,22 +22,26 @@
 								<thead>
 									<tr>
 										<th>Items</th>
+										<th>Customer</th>
 										<th>Date</th>
 										<th>Total</th>
 										<th>Status</th>
-										<th>Customer</th>
 										<th>Actions</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr th:each="orderItem : ${orders}" th:with="order=${orderItem.getFirst()}">
 										<td th:text="${orderItem.getSecond()}"></td>
-										<td th:text="${order.date}"></td>
+										<td th:text="${customerMap[order.customerId]}"></td>
+										<td th:text="${#dates.format(order.date, 'dd MMM yyyy, HH:mm:ss')}"></td>
 										<td th:text="${order.total}"></td>
 										<td th:text="${order.status}"></td>
-										<td th:text="${customerMap[order.customerId]}"></td>
 										<td>
-											<a th:href="@{/myorders/__${order.orderId}__/}" class="btn btn-primary">View</a>
+											<a
+												th:href="@{/shops/__${shopId}__/orders/__${order.orderId}__/}"
+												class="btn btn-primary"
+												>View</a
+											>
 										</td>
 									</tr>
 								</tbody>

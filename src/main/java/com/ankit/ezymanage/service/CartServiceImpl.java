@@ -1,5 +1,8 @@
 package com.ankit.ezymanage.service;
 
+// import java.util.Calendar;
+// import java.util.Date;
+
 import com.ankit.ezymanage.dao.CartDAO;
 import com.ankit.ezymanage.model.Cart;
 
@@ -15,6 +18,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void addNewCart(Cart cart) {
+        // System.out.println(cart);
+        // Calendar today = Calendar.getInstance();
+        // today.set(Calendar.HOUR_OF_DAY, 0);
+        // cart.setDate(new Date(today.getTime().getTime()));
+        // System.out.println(cart);
         cartDAO.createCart(cart);
     }
 

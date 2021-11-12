@@ -1,5 +1,6 @@
 package com.ankit.ezymanage.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ankit.ezymanage.model.Cart;
@@ -18,8 +19,9 @@ public class CartDAO {
     }
 
     public void createCart(Cart cart) {
-        String sql = "INSERT INTO cart (id, shop_id, customer_id) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, cart.getId(), cart.getShopId(), cart.getCustomerId());
+        Timestamp currentTime = new java.sql.Timestamp(new java.util.Date().getTime());
+        String sql = "INSERT INTO cart (id, shop_id, customer_id, total, date) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, cart.getId(), cart.getShopId(), cart.getCustomerId(), cart.getTotal(), currentTime);
     }
 
     public void updateCart(Cart cart) {
