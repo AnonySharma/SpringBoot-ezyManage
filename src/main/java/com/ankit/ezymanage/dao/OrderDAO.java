@@ -1,13 +1,9 @@
 package com.ankit.ezymanage.dao;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-// import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-// import java.util.TimeZone;
 
 import com.ankit.ezymanage.model.Order;
+import com.ankit.ezymanage.utils.MyCalander;
 import com.ankit.ezymanage.utils.Pair;
 import com.ankit.ezymanage.utils.RowMappers;
 
@@ -24,16 +20,10 @@ public class OrderDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void insertOrder(Order order) throws ParseException {
-        Date date = new Date();
-        // SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // isoFormat.setTimeZone(TimeZone.getTimeZone("IST"));
-        // date = isoFormat.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new
-        // Date()));
-        Timestamp currentTime = new java.sql.Timestamp(date.getTime());
+    public void insertOrder(Order order) {
         String sql = "INSERT INTO orders (order_id, token, shop_id, staff_id, customer_id, total, order_date, mode, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, order.getOrderId(), order.getToken(), order.getShopId(), order.getStaffId(),
-                order.getCustomerId(), order.getTotal(), currentTime, order.getMode(), order.getStatus());
+                order.getCustomerId(), order.getTotal(), MyCalander.now(), order.getMode(), order.getStatus());
 
         int orderId = getOrderByToken(order.getToken()).getOrderId();
         sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)";

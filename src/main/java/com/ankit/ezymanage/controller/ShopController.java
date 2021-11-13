@@ -8,10 +8,13 @@ import java.util.Map;
 import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Order;
 import com.ankit.ezymanage.model.Shop;
+import com.ankit.ezymanage.model.Staff;
+import com.ankit.ezymanage.model.User;
 import com.ankit.ezymanage.service.OrderService;
 import com.ankit.ezymanage.service.ProductService;
 import com.ankit.ezymanage.service.ShopService;
 import com.ankit.ezymanage.service.UserService;
+import com.ankit.ezymanage.utils.MyCalander;
 import com.ankit.ezymanage.utils.Pair;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +49,10 @@ public class ShopController extends BaseController {
             return "redirect:/login/";
             // return "redirect:/login?back=/myshops/grantpermission/";
         }
+
         String username = userService.findLoggedInUsername();
         // TODO: REQUEST ADMIN TO MAKE OWNER
-        if (userService.addRoleToUser(username, "ROLE_OWNER")) {
+        if (userService.addRoleToUser(username, SHOP_STAFF)) {
             System.out.println("Congrats! You can open your own shop accounts now!");
             redirectAttributes.addFlashAttribute("successMsg", "Congrats! You can open your own shop-accounts now!");
         } else {
@@ -61,12 +65,12 @@ public class ShopController extends BaseController {
     @GetMapping("/myshops/")
     public String myShops(Model model, RedirectAttributes redirectAttributes) {
         String username = userService.findLoggedInUsername();
-        System.out.println(isAuthorized(model, "ROLE_OWNER"));
+        System.out.println(isAuthorized(model, SHOP_STAFF));
         System.out.println(isLoggedIn());
         if (!isLoggedIn()) {
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, "ROLE_OWNER")) {
+        if (!isAuthorized(model, SHOP_STAFF)) {
             model.addAttribute("infoMsg", "You are not authorized to add new shops!");
             return "my_shops_unauth";
         }
@@ -79,7 +83,10 @@ public class ShopController extends BaseController {
 
     @GetMapping("/newshop/")
     public String newShop(Model model) {
-        if (!isAuthorized(model, "ROLE_OWNER"))
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         String owner = userService.findLoggedInUsername();
         Shop shop = new Shop();
@@ -93,7 +100,10 @@ public class ShopController extends BaseController {
 
     @PostMapping("/newshop/")
     public String newShopPost(@ModelAttribute("shop") Shop shop, Model model) {
-        if (!isAuthorized(model, "ROLE_OWNER"))
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Creating shop!");
         System.out.println(shop.toString());
@@ -107,17 +117,24 @@ public class ShopController extends BaseController {
 
     @GetMapping("/shops/{shopId}/")
     public String dashboard(@PathVariable("shopId") int shopId, Model model) {
-        if (!isAuthorized(model, "ROLE_OWNER"))
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Opened shop!");
         model.addAttribute("shop", shopService.getShopById(shopId));
         model.addAttribute("shopId", shopId);
+        model.addAttribute("isOwner", user.getUsername() == shopService.getShopById(shopId).getOwner());
         return "dashboard";
     }
 
     @GetMapping("/shops/{shopId}/products/")
     public String productsPerShop(@PathVariable("shopId") int shopId, Model model) {
-        if (!isAuthorized(model, "ROLE_OWNER"))
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Opened products under shop!");
         model.addAttribute("shop", shopService.getShopById(shopId));
@@ -127,9 +144,16 @@ public class ShopController extends BaseController {
     }
 
     @GetMapping("/shops/{shopId}/products/add/")
-    public String showAllProducts(@PathVariable("shopId") int shopId, Model model) {
-        if (!isAuthorized(model, "ROLE_OWNER"))
-            return FORBIDDEN_ERROR_PAGE;
+    public String showAllProducts(@PathVariable("shopId") int shopId, Model model,
+            RedirectAttributes redirectAttributes) {
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_OWNER)) {
+            // return FORBIDDEN_ERROR_PAGE;
+            redirectAttributes.addFlashAttribute("errorMsg", "You are not authorized to add products!");
+            return "redirect:/shops/" + shopId + "/products/";
+        }
         System.out.println("Listing all product!");
 
         List<Integer> addedProducts = new ArrayList<>();
@@ -146,7 +170,10 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/products/add/{productId}/")
     public String addProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
-        if (!isAuthorized(model, "ROLE_OWNER"))
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Listing a product!");
         shopService.addProductToShop(shopId, productId);
@@ -156,7 +183,10 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/products/remove/{productId}/")
     public String unlistProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
-        if (!isAuthorized(model, "ROLE_OWNER"))
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Unlisting a product!");
         shopService.removeProductFromShop(shopId, productId);
@@ -166,7 +196,10 @@ public class ShopController extends BaseController {
     // PAST ORDERS
     @GetMapping("/shops/{shopId}/orders/")
     public String pastOrders(@PathVariable("shopId") int shopId, Model model) {
-        if (!isAuthorized(model, "ROLE_OWNER"))
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         model.addAttribute("shopId", shopId);
         List<Order> orders = orderService.getOrdersByShopId(shopId);
@@ -193,7 +226,10 @@ public class ShopController extends BaseController {
 
     @GetMapping("/shops/{shopId}/orders/{orderId}/")
     public String pastOrderItem(@PathVariable("shopId") int shopId, @PathVariable("orderId") int orderId, Model model) {
-        if (!isAuthorized(model, "ROLE_OWNER"))
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         Order order = orderService.getOrderByOrderId(orderId);
         model.addAttribute("shopId", shopId);
@@ -212,5 +248,78 @@ public class ShopController extends BaseController {
         model.addAttribute("orderedItems", orderedItems);
         model.addAttribute("backLink", "/shops/" + shopId + "/orders/");
         return "order_page";
+    }
+
+    @GetMapping("/shops/{shopId}/staffs/")
+    public String manageStaffs(@PathVariable("shopId") int shopId, Model model) {
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_OWNER))
+            return FORBIDDEN_ERROR_PAGE;
+        System.out.println("Opened staffs page!");
+        model.addAttribute("staffs", shopService.getStaffsByShop(shopId));
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("shopName", shopService.getShopById(shopId).getName());
+        return "manage_staffs";
+    }
+
+    @GetMapping("/shops/{shopId}/staffs/add/")
+    public String addStaff(@PathVariable("shopId") int shopId, Model model) {
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_OWNER))
+            return FORBIDDEN_ERROR_PAGE;
+        System.out.println("Adding staff!");
+
+        List<Pair<String, Integer>> users = new ArrayList<>();
+        for (User user : userService.getAllUsers()) {
+            users.add(new Pair<String, Integer>(user.getUsername(), user.getId()));
+        }
+        model.addAttribute("staff", new Staff());
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("users", users);
+        return "new_staff";
+    }
+
+    @PostMapping("/shops/{shopId}/staffs/add/")
+    public String addStaff(@PathVariable("shopId") int shopId, @ModelAttribute("staff") Staff staff, Model model,
+            RedirectAttributes redirectAttributes) {
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_OWNER))
+            return FORBIDDEN_ERROR_PAGE;
+
+        System.out.println("Adding staff!" + staff);
+        if (staff.getStaffId() == -1) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Choose a staff!");
+            return "redirect:/shops/" + shopId + "/staffs/add/";
+        }
+        if (shopService.checkStaffByShop(shopId, staff.getStaffId())) {
+            redirectAttributes.addFlashAttribute("warningMsg", "Staff already exists!");
+            return "redirect:/shops/" + shopId + "/staffs/add/";
+        }
+        staff.setShopId(shopId);
+        staff.setDateOfJoining(MyCalander.now());
+        staff.setName(userService.getUserById(staff.getStaffId()).getUsername());
+        shopService.addStaff(staff);
+        redirectAttributes.addFlashAttribute("successMsg", "Staff added successfully!");
+        return "redirect:/shops/" + shopId + "/staffs/";
+    }
+
+    @GetMapping("/shops/{shopId}/staffs/remove/{staffId}/")
+    public String removeStaff(@PathVariable("shopId") int shopId, @PathVariable("staffId") int staffId, Model model,
+            RedirectAttributes redirectAttributes) {
+        if (!isLoggedIn()) {
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, SHOP_OWNER))
+            return FORBIDDEN_ERROR_PAGE;
+        System.out.println("Removing staff!");
+        shopService.removeStaff(shopId, staffId);
+        redirectAttributes.addFlashAttribute("successMsg", "Staff removed successfully!");
+        return "redirect:/shops/" + shopId + "/staffs/";
     }
 }

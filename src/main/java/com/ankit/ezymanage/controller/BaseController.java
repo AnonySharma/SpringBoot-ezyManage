@@ -15,7 +15,17 @@ import org.springframework.ui.Model;
 public class BaseController {
     protected final UserService userService;
     protected User user;
-    protected String FORBIDDEN_ERROR_PAGE = "error/403";
+
+    // Pages constants
+    protected static final String FORBIDDEN_ERROR_PAGE = "error/403";
+    protected static final String NOT_FOUND_ERROR_PAGE = "error/404";
+    protected static final String UNAUTHORIZED_ERROR_PAGE = "error/401";
+
+    // Allowed Role Constants
+    protected static final String SHOP_CUSTOMER = "ROLE_USER ROLE_STAFF ROLE_OWNER ROLE_ADMIN";
+    protected static final String SHOP_STAFF = "ROLE_STAFF ROLE_OWNER ROLE_ADMIN";
+    protected static final String SHOP_OWNER = "ROLE_OWNER ROLE_ADMIN";
+    protected static final String ONLY_STAFF = "ROLE_STAFF";
 
     @Autowired
     public BaseController(UserService userService) {

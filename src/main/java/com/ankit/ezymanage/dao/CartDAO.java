@@ -1,13 +1,9 @@
 package com.ankit.ezymanage.dao;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-// import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-// import java.util.TimeZone;
 
 import com.ankit.ezymanage.model.Cart;
+import com.ankit.ezymanage.utils.MyCalander;
 import com.ankit.ezymanage.utils.Pair;
 import com.ankit.ezymanage.utils.RowMappers;
 
@@ -22,15 +18,10 @@ public class CartDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createCart(Cart cart) throws ParseException {
-        Date date = new Date();
-        // SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // isoFormat.setTimeZone(TimeZone.getTimeZone("IST"));
-        // date = isoFormat.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new
-        // Date()));
-        Timestamp currentTime = new java.sql.Timestamp(date.getTime());
+    public void createCart(Cart cart) {
         String sql = "INSERT INTO cart (id, shop_id, customer_id, total, date) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, cart.getId(), cart.getShopId(), cart.getCustomerId(), cart.getTotal(), currentTime);
+        jdbcTemplate.update(sql, cart.getId(), cart.getShopId(), cart.getCustomerId(), cart.getTotal(),
+                MyCalander.now());
     }
 
     public void updateCart(Cart cart) {

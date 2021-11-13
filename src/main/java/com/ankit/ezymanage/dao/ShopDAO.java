@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Shop;
+import com.ankit.ezymanage.model.Staff;
 import com.ankit.ezymanage.utils.RowMappers;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -67,6 +68,32 @@ public class ShopDAO {
     public void removeProductFromShop(int shopId, int productId) {
         final String sql = "DELETE FROM shop_products WHERE shop_id=? AND product_id=?";
         jdbcTemplate.update(sql, shopId, productId);
+    }
+
+    public void addStaff(Staff staff) {
+        final String sql = "INSERT INTO shop_staffs(shop_id, staff_id, staff_name, date_of_joining, designation, salary) VALUES(?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, staff.getShopId(), staff.getStaffId(), staff.getName(), staff.getDateOfJoining(),
+                staff.getDesignation(), staff.getSalary());
+    }
+
+    public void removeStaff(int shopId, int staffId) {
+        final String sql = "DELETE FROM shop_staffs WHERE shop_id=? AND staff_id=?";
+        jdbcTemplate.update(sql, shopId, staffId);
+    }
+
+    public List<Staff> getStaffsByShop(int shopId) {
+        String sql = "SELECT * FROM shop_staffs WHERE shop_id = ?";
+        return jdbcTemplate.query(sql, RowMappers.staffRowMapper, shopId);
+    }
+
+    public boolean checkStaffByShop(int shopId, int staffId) {
+        String sql = "SELECT COUNT(*) FROM shop_staffs WHERE shop_id = ? AND staff_id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, shopId, staffId) == 1;
+    }
+
+    public boolean checkIfStaffExists(int staffId) {
+        String sql = "SELECT COUNT(*) FROM shop_staffs WHERE staff_id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, staffId) > 0;
     }
 
 }

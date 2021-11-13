@@ -25,6 +25,11 @@
 						<br />
 						<br />
 						<a href="#" class="btn btn-secondary">Mass mailing</a>
+						<br />
+						<br />
+						<a th:href="@{/shops/__${shopId}__/staffs/}" class="btn btn-info" th:if="${isOwner ne null}"
+							>Manage Staffs</a
+						>
 					</div>
 				</div>
 			</div>

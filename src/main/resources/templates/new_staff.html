@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card text-center text-white">
+					<div class="card-header">
+						<div style="width: 50px">
+							<a th:href="@{/shops/__${shopId}__/staffs/}" class="btn btn-primary"
+								><i class="fas fa-arrow-circle-left"></i
+							></a>
+						</div>
+						<h3>New Staff</h3>
+					</div>
+					<br />
+					<div class="cart-content">
+						<form method="POST" th:action="@{/shops/__${shopId}__/staffs/add/}" th:object="${cart}">
+							<div class="form-group">
+								<label for="staffId">Customer</label>
+								<select class="form-control" id="staffId" name="staffId">
+									<option value="-1" hidden>Select a staff's username</option>
+									<option
+										name="staffId"
+										th:each="user : ${users}"
+										th:text="${user.getFirst()}"
+										th:value="${user.getSecond()}"
+									></option>
+								</select>
+							</div>
+							<input type="submit" value="Add" class="btn btn-primary" />
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+	</body>
+</html>

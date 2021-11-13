@@ -10,11 +10,13 @@ import com.ankit.ezymanage.model.Order;
 import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Profile;
 import com.ankit.ezymanage.model.Shop;
+import com.ankit.ezymanage.model.Staff;
 import com.ankit.ezymanage.model.User;
 
 import org.springframework.jdbc.core.RowMapper;
 
 public final class RowMappers {
+
     private static boolean isValid(String s) {
         return ((s != null) && (s != ""));
     }
@@ -164,6 +166,20 @@ public final class RowMappers {
             pair.setFirst(row.getInt("product_id"));
             pair.setSecond(row.getInt("quantity"));
             return pair;
+        }
+    };
+
+    public static RowMapper<Staff> staffRowMapper = new RowMapper<Staff>() {
+        @Override
+        public Staff mapRow(ResultSet row, int i) throws SQLException {
+            Staff staff = new Staff();
+            staff.setStaffId(row.getInt("staff_id"));
+            staff.setName(row.getString("staff_name"));
+            staff.setShopId(row.getInt("shop_id"));
+            staff.setDateOfJoining(row.getTimestamp("date_of_joining"));
+            staff.setDesignation(row.getString("designation"));
+            staff.setSalary(row.getInt("salary"));
+            return staff;
         }
     };
 }

@@ -11,6 +11,8 @@ Run SQL queries using running this command inside MySQL Command Line
 -   Add payments to payments' table
 -   ~~Implement the order and past-order system (Partial done)~~
 -   ~~Implement cart and cart-item sync system, implement in DAO~~
+-   **Separate ADMIN, CUSTOMER, OWNER and STAFF**
+-   Fix Authorization
 
 ## Roles we have
 
@@ -56,4 +58,4 @@ Posssible combinations:
 -   git push origin master
 -   heroku logs --tail
 
-_**Note:** Link to MySQL Server - https://www.freemysqlhosting.net/account/_
+_**Note:** Link to MySQL Server - https://remotemysql.com/databases.php_

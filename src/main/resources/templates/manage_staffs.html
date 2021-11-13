@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div class="container">
+			<div class="d-flex justify-content-center h-100">
+				<div class="card">
+					<div class="card-header">
+						<div style="width: 50px">
+							<a th:href="@{/shops/__${shopId}__/}" class="btn btn-primary"
+								><i class="fas fa-arrow-circle-left"></i
+							></a>
+						</div>
+						<h4
+							class="text-white text-center"
+							th:utext="${'List of staffs working under <b>' + shopName + '</b>'}"
+						></h4>
+					</div>
+					<br />
+					<div class="mx-auto">
+						<a th:href="@{/shops/__${shopId}__/staffs/add/}" class="btn float-right login_btn">Add New Staff</a>
+						<br />
+						<br />
+						<span th:if="${staffs eq null or #lists.size(staffs) eq 0}" class="text-white">No staff found.</span>
+						<div th:if="${staffs ne null and #lists.size(staffs) ne 0}">
+							<table class="table table-bordered text-white table-hover">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">Id</th>
+										<th scope="col">Name</th>
+										<th scope="col">Designation</th>
+										<th scope="col">Date of joining</th>
+										<th scope="col">Salary</th>
+										<th scope="col">Orders under</th>
+										<th scope="col">Remove</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="staff:${staffs}">
+										<td th:text="${staff.staffId}"></td>
+										<td th:text="${staff.name}"></td>
+										<td th:text="${staff.designation}"></td>
+										<td th:text="${#dates.format(staff.dateOfJoining, 'dd MMM yyyy, HH:mm:ss')}"></td>
+										<td th:text="${staff.salary}"></td>
+										<td>
+											<a
+												th:href="@{/shops/__${shopId}__/staffs/__${staff.staffId}__/orders/}"
+												class="btn btn-info"
+												>Open</a
+											>
+										</td>
+										<td>
+											<a
+												th:href="@{/shops/__${shopId}__/staffs/remove/__${staff.staffId}__/}"
+												class="btn btn-danger"
+												>Remove</a
+											>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+	</body>
+</html>
