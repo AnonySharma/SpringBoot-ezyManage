@@ -12,6 +12,7 @@ Run SQL queries using running this command inside MySQL Command Line
 -   ~~Implement the order and past-order system (Partial done)~~
 -   ~~Implement cart and cart-item sync system, implement in DAO~~
 -   **Separate ADMIN, CUSTOMER, OWNER and STAFF**
+-   **Implement the shops, in which a user works as a staff**
 -   Fix Authorization
 
 ## Roles we have
