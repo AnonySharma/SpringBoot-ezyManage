@@ -2,10 +2,10 @@ package com.ankit.ezymanage.dao;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+// import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
+// import java.util.TimeZone;
 
 import com.ankit.ezymanage.model.Cart;
 import com.ankit.ezymanage.utils.Pair;
@@ -23,9 +23,11 @@ public class CartDAO {
     }
 
     public void createCart(Cart cart) throws ParseException {
-        SimpleDateFormat isoFormat = new SimpleDateFormat();
-        isoFormat.setTimeZone(TimeZone.getTimeZone("IST"));
-        Date date = isoFormat.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        Date date = new Date();
+        // SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // isoFormat.setTimeZone(TimeZone.getTimeZone("IST"));
+        // date = isoFormat.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new
+        // Date()));
         Timestamp currentTime = new java.sql.Timestamp(date.getTime());
         String sql = "INSERT INTO cart (id, shop_id, customer_id, total, date) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, cart.getId(), cart.getShopId(), cart.getCustomerId(), cart.getTotal(), currentTime);

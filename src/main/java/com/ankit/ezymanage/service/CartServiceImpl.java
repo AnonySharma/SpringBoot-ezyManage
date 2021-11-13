@@ -19,18 +19,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addNewCart(Cart cart) {
+    public void addNewCart(Cart cart) throws ParseException {
         // System.out.println(cart);
         // Calendar today = Calendar.getInstance();
         // today.set(Calendar.HOUR_OF_DAY, 0);
         // cart.setDate(new Date(today.getTime().getTime()));
         // System.out.println(cart);
-        try {
-            cartDAO.createCart(cart);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        cartDAO.createCart(cart);
     }
 
     @Override

@@ -32,14 +32,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean checkoutCart(Cart cart, int staffId) {
+    public boolean checkoutCart(Cart cart, int staffId) throws ParseException {
         Order order = createOrder(cart, staffId, "pending", "cash");
-        try {
-            orderDAO.insertOrder(order);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        orderDAO.insertOrder(order);
         return true;
     }
 

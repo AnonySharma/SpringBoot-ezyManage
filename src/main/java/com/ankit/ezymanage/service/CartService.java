@@ -1,10 +1,12 @@
 package com.ankit.ezymanage.service;
 
+import java.text.ParseException;
+
 import com.ankit.ezymanage.model.Cart;
 
 public interface CartService {
 
-    void addNewCart(Cart cart);
+    void addNewCart(Cart cart) throws ParseException;
 
     void clearCart(int cartId);
 

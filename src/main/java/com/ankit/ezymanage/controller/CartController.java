@@ -1,5 +1,6 @@
 package com.ankit.ezymanage.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class CartController extends BaseController {
 
     @PostMapping("/shops/{shopId}/cart/new/")
     public String afterUsername(@PathVariable("shopId") int shopId, @ModelAttribute("cart") Cart cart, Model model,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) throws ParseException {
         int customerId = cart.getCustomerId();
         if (cartService.cartExistsForUserId(customerId, shopId)) {
             redirectAttributes.addFlashAttribute("infoMsg", "User already has an opened cart!");
@@ -72,7 +73,6 @@ public class CartController extends BaseController {
         model.addAttribute("customerId", customerId);
 
         System.out.println("Opened cart!");
-
         List<Integer> cartItemsIds = new ArrayList<>();
         List<Pair<Product, Integer>> cartItems = new ArrayList<>();
 
@@ -138,7 +138,7 @@ public class CartController extends BaseController {
 
     @GetMapping("/shops/{shopId}/cart/{customerId}/checkout/done/")
     public String checkoutComplete(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
-            Model model, RedirectAttributes redirectAttributes) {
+            Model model, RedirectAttributes redirectAttributes) throws ParseException {
         isAuthorized(model, "ROLE_USER");
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         System.out.println(cart);
