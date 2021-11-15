@@ -88,6 +88,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 return false;
 
         user.setRole(user.getRole() + " " + roleName);
+        if (roleName.equals("ROLE_ADMIN"))
+            user.setAdmin(true);
+
         userDAO.updateUser(user);
         updateAuthoritites(user, user.getRole());
         return true;
@@ -111,6 +114,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             if (roleName.equals(role)) {
                 String updatedRoles = user.getRole().replace(" " + roleName, "");
                 System.out.println(updatedRoles);
+                if (roleName.equals("ROLE_ADMIN"))
+                    user.setAdmin(false);
                 user.setRole(updatedRoles);
                 userDAO.updateUser(user);
                 updateAuthoritites(user, user.getRole());

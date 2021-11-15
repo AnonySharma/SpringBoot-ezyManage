@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users
 
 CREATE TABLE IF NOT EXISTS profile
 (
-	username VARCHAR(255) UNIQUE NOT NULL,
+	username VARCHAR(255) NOT NULL,
 	firstname VARCHAR(20),
 	middlename VARCHAR(20),
 	lastname VARCHAR(20),
@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS profile
 	email VARCHAR(255),
 	address VARCHAR(255),
 	aadhaar VARCHAR(50),
-	PRIMARY KEY (username)
+	PRIMARY KEY (username),
+	FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS shops
@@ -35,7 +36,8 @@ CREATE TABLE IF NOT EXISTS shops
 	phone BIGINT,
 	email VARCHAR(255),
 	gstin VARCHAR(255),
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS shop_staffs
@@ -47,8 +49,8 @@ CREATE TABLE IF NOT EXISTS shop_staffs
 	designation VARCHAR(255),
 	salary INT,
 	PRIMARY KEY (staff_id, shop_id),
-	FOREIGN KEY (staff_id) REFERENCES users(id),
-	FOREIGN KEY (shop_id) REFERENCES shops(id)
+	FOREIGN KEY (staff_id) REFERENCES users(id) ON DELETE CASCADE,
+	FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS products
@@ -63,19 +65,23 @@ CREATE TABLE IF NOT EXISTS products
 
 CREATE TABLE IF NOT EXISTS shop_products
 (
-	shop_id VARCHAR(255) NOT NULL,
-	product_id VARCHAR(255) NOT NULL,
-	PRIMARY KEY (shop_id, product_id)
+	shop_id INT NOT NULL,
+	product_id INT NOT NULL,
+	PRIMARY KEY (shop_id, product_id),
+	FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
+	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS cart
 (
 	id INT NOT NULL AUTO_INCREMENT,
 	date TIMESTAMP,
-	shop_id VARCHAR(255) NOT NULL,
-	customer_id VARCHAR(255) NOT NULL,
+	shop_id INT NOT NULL,
+	customer_id INT NOT NULL,
 	total INT,
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
+	FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS cart_items
@@ -83,9 +89,9 @@ CREATE TABLE IF NOT EXISTS cart_items
 	cart_id INT NOT NULL,
 	product_id INT NOT NULL,
 	quantity INT NOT NULL,
-	PRIMARY KEY (cart_id, product_id)
-	-- FOREIGN KEY (cart_id) REFERENCES cart(id) ON DELETE CASCADE
-	-- FOREIGN KEY (product_id) REFERENCES products(id)
+	PRIMARY KEY (cart_id, product_id),
+	FOREIGN KEY (cart_id) REFERENCES cart(id) ON DELETE CASCADE,
+	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS orders
@@ -99,7 +105,10 @@ CREATE TABLE IF NOT EXISTS orders
 	total INT,
 	mode VARCHAR(255),
 	status VARCHAR(255),
-	PRIMARY KEY (order_id)
+	PRIMARY KEY (order_id),
+	FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
+	FOREIGN KEY (staff_id) REFERENCES shop_staffs(staff_id) ON DELETE CASCADE,
+	FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS order_items
@@ -107,15 +116,15 @@ CREATE TABLE IF NOT EXISTS order_items
 	order_id INT NOT NULL,
 	product_id INT NOT NULL,
 	quantity INT NOT NULL,
-	PRIMARY KEY (order_id, product_id)
-	-- FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
-	-- FOREIGN KEY (product_id) REFERENCES products(id)
+	PRIMARY KEY (order_id, product_id),
+	FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 -- ----------------------------------- Populate products table -------------------------------------
--- INSERT INTO products(name, image, description, price) VALUES("Rice", "https://d3pc1xvrcw35tl.cloudfront.net/ln/images/686x514/rice-news-20180262183_202106208254.jpg", "Chaaawal", 10);
--- INSERT INTO products(name, image, description, price) VALUES("Sugar", "https://www.kinder.com/in/sites/kinder_in/files/documents/16871047/22803799/kinder-39-Sugar-final-header.jpg?t=1623490499", "Cheeni", 45);
--- INSERT INTO products(name, image, description, price) VALUES("Salt", "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/322745_1100-732x549.jpg", "Namak", 12);
--- INSERT INTO products(name, image, description, price) VALUES("Juggary", "https://static.toiimg.com/photo/msid-72056635/72056635.jpg", "Gud", 20);
--- INSERT INTO products(name, image, description, price) VALUES("Flour", "https://www.unlockfood.ca/EatRightOntario/media/Website-images-resized/All-about-grain-flours-resized.jpg", "Aata", 35);
+INSERT INTO products(name, image, description, price) VALUES("Rice", "https://d3pc1xvrcw35tl.cloudfront.net/ln/images/686x514/rice-news-20180262183_202106208254.jpg", "Chaaawal", 10);
+INSERT INTO products(name, image, description, price) VALUES("Sugar", "https://www.kinder.com/in/sites/kinder_in/files/documents/16871047/22803799/kinder-39-Sugar-final-header.jpg?t=1623490499", "Cheeni", 45);
+INSERT INTO products(name, image, description, price) VALUES("Salt", "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/322745_1100-732x549.jpg", "Namak", 12);
+INSERT INTO products(name, image, description, price) VALUES("Juggary", "https://static.toiimg.com/photo/msid-72056635/72056635.jpg", "Gud", 20);
+INSERT INTO products(name, image, description, price) VALUES("Flour", "https://www.unlockfood.ca/EatRightOntario/media/Website-images-resized/All-about-grain-flours-resized.jpg", "Aata", 35);
 -- -------------------------------------------------------------------------------------------------
