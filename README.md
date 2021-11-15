@@ -14,6 +14,7 @@ Run SQL queries using running this command inside MySQL Command Line
 -   **Separate ADMIN, CUSTOMER, OWNER and STAFF**
 -   **Implement the shops, in which a user works as a staff**
 -   Fix Authorization
+-   Separate the shop_staffs into shop_staffs and staffs
 
 ## Roles we have
 

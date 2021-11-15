@@ -46,7 +46,7 @@ public class CartController extends BaseController {
                 model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         Cart newCart = new Cart();
         newCart.setShopId(shopId);
@@ -80,7 +80,7 @@ public class CartController extends BaseController {
                 model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         model.addAttribute("cart", cart);
@@ -114,7 +114,7 @@ public class CartController extends BaseController {
                 model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.updateProductInCart(cart.getId(), productId, 1);
@@ -134,7 +134,7 @@ public class CartController extends BaseController {
                 model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Removing product from cart!");
 
@@ -155,7 +155,7 @@ public class CartController extends BaseController {
                 model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Checking out!");
 
@@ -186,7 +186,7 @@ public class CartController extends BaseController {
                 model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         if (cartService.cartExistsForUserId(customerId, shopId)) {
             Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
@@ -219,7 +219,7 @@ public class CartController extends BaseController {
                 model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.clearCart(cart.getId());
@@ -238,7 +238,7 @@ public class CartController extends BaseController {
                 model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.incrementProductInCart(cart.getId(), productId);
@@ -256,7 +256,7 @@ public class CartController extends BaseController {
                 model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.decrementProductInCart(cart.getId(), productId);

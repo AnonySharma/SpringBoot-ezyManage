@@ -102,7 +102,9 @@ public class UserController extends BaseController {
 			return "redirect:/login/";
 
 		System.out.println("Welcome to My Orders!");
-		List<Order> orders = orderService.getAllOrdersByUserId(user.getId());
+		int userId = userService.getUserByUsername(userService.findLoggedInUsername()).getId();
+		List<Order> orders = orderService.getAllOrdersByUserId(userId);
+		System.out.println("Hey!");
 		List<Pair<Order, String>> myOrderList = new ArrayList<>();
 		for (Order order : orders) {
 			String products = "";

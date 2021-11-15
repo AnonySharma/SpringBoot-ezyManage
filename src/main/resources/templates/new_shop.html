@@ -36,7 +36,7 @@
 										</div>
 										<div class="mb-4" th:if="${postLink != '/newshop/'}">
 											<div class="input-group is-filled">
-												<select class="form-control" th:field="*{owner}">
+												<select class="form-control" th:field="*{owner}" required>
 													<option value="" data-display="Choose the Owner" aria-hidden="true">Choose the Owner</option>
 													<option
 														th:each="user:${users}"
@@ -49,7 +49,7 @@
 										<div class="mb-4">
 											<div class="input-group input-group-dynamic">
 												<label class="form-label">Shop Name</label>
-												<input type="text" th:field="*{name}" class="form-control" />
+												<input type="text" th:field="*{name}" class="form-control" required/>
 											</div>
 										</div>
 										<div class="mb-4">
@@ -59,24 +59,25 @@
 													type="number"
 													th:field="*{phone}"
 													class="form-control input-number–noSpinners"
+													required
 												/>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="input-group input-group-dynamic">
 												<label class="form-label">Email</label>
-												<input type="email" th:field="*{email}" class="form-control" />
+												<input type="email" th:field="*{email}" class="form-control" required/>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="input-group input-group-dynamic">
 												<label class="form-label">GSTIN</label>
-												<input type="text" th:field="*{GSTIN}" class="form-control" />
+												<input type="text" th:field="*{GSTIN}" class="form-control" required/>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="input-group">
-												<select class="form-control wide" th:field="*{type}">
+												<select class="form-control wide" th:field="*{type}" required>
 													<option value="" data-display="Choose a type">Choose a type</option>
 													<option value="general">General Store</option>
 													<option value="tech">Technical Store</option>

@@ -54,7 +54,7 @@ public class ShopController extends BaseController {
 
         String username = userService.findLoggedInUsername();
         // TODO: REQUEST ADMIN TO MAKE OWNER
-        if (userService.addRoleToUser(username, ONLY_STAFF)) {
+        if (userService.addRoleToUser(username, ONLY_OWNER)) {
             System.out.println("Congrats! You can open your own shop accounts now!");
             redirectAttributes.addFlashAttribute("successMsg", "Congrats! You can open your own shop-accounts now!");
         } else {

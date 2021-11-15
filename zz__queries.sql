@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS orders
 	status VARCHAR(255),
 	PRIMARY KEY (order_id),
 	FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
-	FOREIGN KEY (staff_id) REFERENCES shop_staffs(staff_id) ON DELETE CASCADE,
+	-- FOREIGN KEY (staff_id) REFERENCES shop_staffs(staff_id) ON DELETE CASCADE,
 	FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
