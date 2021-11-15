@@ -28,24 +28,32 @@ public class RegisterController extends BaseController {
     @GetMapping("/register/")
     public String registerGoto(Model model) {
         if (isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/";
         }
 
         System.out.println("go and register!!!!!!");
         model.addAttribute("user", new User());
         isAuthorized(model, "ROLE_USER");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "register";
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
-    public String handleDuplicateKeyException(RedirectAttributes redirectAttributes) {
+    public String handleDuplicateKeyException(Model model, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("errorMsg", "Username not available!");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/register/";
     }
 
     @PostMapping("/register/")
     public String registerManager(@ModelAttribute("user") User user, Model model, HttpSession httpSession) {
         if (isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/";
         }
 
@@ -54,6 +62,8 @@ public class RegisterController extends BaseController {
 
         isAuthorized(model, "ROLE_USER");
         System.out.println("just registered!!!!!!");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/";
     }
 }

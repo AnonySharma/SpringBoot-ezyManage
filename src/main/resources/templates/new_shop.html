@@ -3,80 +3,117 @@
 	<head th:replace="components/head :: head"></head>
 	<body>
 		<div th:replace="components/navbar :: navbar"></div>
-		<div class="container">
-			<div class="d-flex justify-content-center h-100">
-				<div class="card">
-					<div class="card-header">
-						<h3>Add New Shop</h3>
-					</div>
-					<div class="card-body">
-						<form method="POST" th:action="@{${postLink}}" th:object="${shop}" class="forms-sample text-white">
-							<br />
-							<div class="form-group">
-								<label for="inputName">Name</label>
-								<input type="text" class="form-control" id="inputName" th:field="*{name}" placeholder="Name" />
+		<div
+			class="page-header align-items-start min-vh-100"
+			th:style="'background-image: url(' + @{/images/back-gradient.jpg} + ');'"
+			loading="lazy"
+		>
+			<span class="mask bg-gradient-dark opacity-6"></span>
+			<div class="container my-auto">
+				<div class="row">
+					<div class="col-lg-8 col-md-8 col-12 mx-auto">
+						<div class="card z-index-0 fadeIn3 fadeInBottom">
+							<div class="card-body bg-gradient-faded-white text-center">
+								<div style="width: 50px">
+									<a th:href="@{${backLink}}" class="btn btn-primary"
+										><i class="fas fa-arrow-circle-left"></i
+									></a>
+								</div>
+								<form
+									role="form"
+									autocomplete="off"
+									method="POST"
+									th:action="@{${postLink}}"
+									th:object="${shop}"
+									class="forms-sample text-white"
+								>
+									<div class="card-body">
+										<div class="mb-4" th:if="${postLink == '/newshop/'}">
+											<div class="input-group input-group-dynamic is-filled">
+												<label class="form-label">Owner</label>
+												<input type="text" th:field="*{owner}" class="form-control" disabled />
+											</div>
+										</div>
+										<div class="mb-4" th:if="${postLink != '/newshop/'}">
+											<div class="input-group is-filled">
+												<select class="form-control" th:field="*{owner}">
+													<option value="" data-display="Choose the Owner" aria-hidden="true">Choose the Owner</option>
+													<option
+														th:each="user:${users}"
+														th:value="${user.username}"
+														th:text="${user.username}"
+													></option>
+												</select>
+											</div>
+										</div>
+										<div class="mb-4">
+											<div class="input-group input-group-dynamic">
+												<label class="form-label">Shop Name</label>
+												<input type="text" th:field="*{name}" class="form-control" />
+											</div>
+										</div>
+										<div class="mb-4">
+											<div class="input-group input-group-dynamic">
+												<label class="form-label">Phone Number</label>
+												<input
+													type="number"
+													th:field="*{phone}"
+													class="form-control input-number–noSpinners"
+												/>
+											</div>
+										</div>
+										<div class="mb-4">
+											<div class="input-group input-group-dynamic">
+												<label class="form-label">Email</label>
+												<input type="email" th:field="*{email}" class="form-control" />
+											</div>
+										</div>
+										<div class="mb-4">
+											<div class="input-group input-group-dynamic">
+												<label class="form-label">GSTIN</label>
+												<input type="text" th:field="*{GSTIN}" class="form-control" />
+											</div>
+										</div>
+										<div class="mb-4">
+											<div class="input-group">
+												<select class="form-control wide" th:field="*{type}">
+													<option value="" data-display="Choose a type">Choose a type</option>
+													<option value="general">General Store</option>
+													<option value="tech">Technical Store</option>
+													<option value="grocery">Grocery</option>
+													<option value="service">Service Centre</option>
+													<option value="others">Others</option>
+												</select>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-check form-switch mb-4 d-flex align-items-center">
+													<input
+														class="form-check-input"
+														type="checkbox"
+														id="flexSwitchCheckDefault"
+														checked=""
+													/>
+													<label class="form-check-label ms-3 mb-0" for="flexSwitchCheckDefault"
+														>I agree to the
+														<a href="javascript:;" class="text-dark"><u>Terms and Conditions</u></a
+														>.</label
+													>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<input type="submit" class="btn bg-gradient-dark w-100">Add Shop</input>
+											</div>
+										</div>
+									</div>
+								</form>
 							</div>
-							<div class="form-group" th:if="${postLink == '/newshop/'}">
-								<label for="inputOwner">Owner</label>
-								<input
-									type="text"
-									class="form-control"
-									id="inputOwner"
-									th:field="*{owner}"
-									placeholder="Owner"
-									disabled
-								/>
-							</div>
-
-							<div class="form-group" th:if="${postLink != '/newshop/'}">
-								<select class="form-control" id="inputOwner" th:field="*{owner}" th:each="user:${users}">
-									<option th:value="${user.username}" th:text="${user.username}"></option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="inputType">Type</label>
-								<select class="form-control" id="inputType" th:field="*{type}">
-									<option value="general">General Store</option>
-									<option value="tech">Technical Store</option>
-									<option value="grocery">Grocery</option>
-									<option value="service">Service Centre</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="inputPhone">Phone</label>
-								<input
-									type="text"
-									class="form-control"
-									th:field="*{phone}"
-									id="inputPhone"
-									placeholder="Phone"
-								/>
-							</div>
-							<div class="form-group">
-								<label for="inputEmail">Email address</label>
-								<input
-									type="email"
-									class="form-control"
-									id="inputEmail"
-									th:field="*{email}"
-									placeholder="Email"
-								/>
-							</div>
-							<div class="form-group">
-								<label for="inputGSTIN">GSTIN</label>
-								<input
-									type="text"
-									class="form-control"
-									th:field="*{GSTIN}"
-									id="inputGSTIN"
-									placeholder="Aadhaar Number"
-								/>
-							</div>
-							<button type="submit" class="btn btn-primary mr-2">Submit</button>
-						</form>
+						</div>
 					</div>
 				</div>
 			</div>
+			<footer th:replace="components/footer :: footer"></footer>
 		</div>
 		<script th:replace="components/toast :: toast"></script>
 	</body>

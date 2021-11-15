@@ -3,34 +3,58 @@
 	<head th:replace="components/head :: head"></head>
 	<body>
 		<div th:replace="components/navbar :: navbar"></div>
-		<div class="container">
-			<div class="d-flex justify-content-center h-100">
-				<div class="card text-center text-white">
-					<div class="card-header">
-						<div style="width: 50px">
-							<a th:href="@{/shops/__${shopId}__/}" class="btn btn-primary"
-								><i class="fas fa-home"></i
-							></a>
+		<div
+			class="page-header align-items-start min-vh-100"
+			th:style="'background-image: url(' + @{/images/back-gradient.jpg} + ');'"
+			loading="lazy"
+		>
+			<span class="mask bg-gradient-dark opacity-6"></span>
+			<div class="container my-auto">
+				<div class="row">
+					<div class="col-lg-8 col-md-8 col-12 mx-auto">
+						<div class="card z-index-0 fadeIn3 fadeInBottom">
+							<div class="card-body bg-gradient-secondary text-center">
+								<div class="card-body">
+									<div style="width: 50px">
+										<a th:href="@{/shops/__${shopId}__/cart/__${customerId}__/}" class="btn btn-primary"
+											><i class="fas fa-home"></i
+										></a>
+									</div>
+									<h5 class="card-title text-success">
+										<i class="fas fa-check-circle"></i>
+										<span>Success!</span>
+									</h5>
+									<p class="card-textq text-white-50">
+										<span>
+											Your order has been successfully placed. You will receive an email with your order
+											details.
+											<br />
+											Redirecting to home page in <span id="time_left"></span> seconds...
+										</span>
+									</p>
+								</div>
+							</div>
 						</div>
-						<h5 class="card-title text-success">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Success!</span>
-                        </h5>
 					</div>
-                    <div class="card-body">
-                        
-                        <p class="card-text">
-                            <span>
-                                Your order has been successfully placed. You will receive an email with your
-                                order details.
-                            </span>
-                        </p>
 				</div>
 			</div>
+			<footer th:replace="components/footer :: footer"></footer>
 		</div>
 		<script th:replace="components/toast :: toast"></script>
-
-		<!-- Custom scripts -->
-		<script src="/js/script.js"></script>
+		<script>
+			var url = "/shops/" + [[${shopId}]] + "/";
+			var counter = 10;
+			console.log("Redirecting to " + url);
+			for (var i = 10; i > 0; i--) {
+				setTimeout(function () {
+					counter--;
+					console.log(counter + "...");
+					document.getElementById("time_left").innerHTML = counter;
+				}, 1000 * i);
+			}
+			setTimeout(function () {
+				window.location.href = url;
+			}, 10000);
+		</script>
 	</body>
 </html>

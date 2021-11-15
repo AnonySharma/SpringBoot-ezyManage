@@ -41,12 +41,20 @@ public class CartController extends BaseController {
 
     @GetMapping("/shops/{shopId}/cart/")
     public String cart(@PathVariable("shopId") int shopId, Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
         Cart newCart = new Cart();
         newCart.setShopId(shopId);
         model.addAttribute("cart", newCart);
         model.addAttribute("shopId", shopId);
         model.addAttribute("customers", userService.getAllUsers());
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "new_cart";
     }
 
@@ -60,12 +68,20 @@ public class CartController extends BaseController {
             cartService.addNewCart(cart);
         }
 
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";
     }
 
     @GetMapping("/shops/{shopId}/cart/{customerId}/")
     public String cart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId, Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         model.addAttribute("cart", cart);
         model.addAttribute("customerName", userService.getUserById(customerId).getUsername());
@@ -85,38 +101,62 @@ public class CartController extends BaseController {
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("cartItemsIds", cartItemsIds);
         model.addAttribute("productList", shopService.getProductsByShop(shopId));
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "new_cart";
     }
 
     @GetMapping("/shops/{shopId}/cart/{customerId}/add/{productId}/")
     public String addProductToCart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
             @PathVariable("productId") int productId, Model model, RedirectAttributes redirectAttributes) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.updateProductInCart(cart.getId(), productId, 1);
 
         redirectAttributes.addFlashAttribute("infoMsg", "Product added to cart!");
         System.out.println("Updated products in the cart!");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";
     }
 
     @GetMapping("/shops/{shopId}/cart/{customerId}/remove/{productId}/")
     public String removeProductFromCart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
             @PathVariable("productId") int productId, Model model, RedirectAttributes redirectAttributes) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
         System.out.println("Removing product from cart!");
 
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.updateProductInCart(cart.getId(), productId, 0);
 
         redirectAttributes.addFlashAttribute("infoMsg", "Product removed from cart!");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";
     }
 
     @GetMapping("/shops/{shopId}/cart/{customerId}/checkout/")
     public String checkout(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId, Model model,
             RedirectAttributes redirectAttributes) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
         System.out.println("Checking out!");
 
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
@@ -133,38 +173,59 @@ public class CartController extends BaseController {
         model.addAttribute("customerId", customerId);
 
         redirectAttributes.addFlashAttribute("infoMsg", "Cart checked out!");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "checkout";
     }
 
     @GetMapping("/shops/{shopId}/cart/{customerId}/checkout/done/")
     public String checkoutComplete(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
             Model model, RedirectAttributes redirectAttributes) throws ParseException {
-        isAuthorized(model, "ROLE_USER");
-        Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
-        System.out.println(cart);
-        int staffId = userService.getUserByUsername(userService.findLoggedInUsername()).getId();
-        if (orderService.checkoutCart(cart, staffId)) {
-            redirectAttributes.addFlashAttribute("successMsg", "Order placed successfully!");
-            cartService.deleteCartByCartId(cart.getId());
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
+        if (cartService.cartExistsForUserId(customerId, shopId)) {
+            Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
+            System.out.println(cart);
+            int staffId = userService.getUserByUsername(userService.findLoggedInUsername()).getId();
+            if (orderService.checkoutCart(cart, staffId, "cash")) {
+                redirectAttributes.addFlashAttribute("successMsg", "Order placed successfully!");
+                cartService.deleteCartByCartId(cart.getId());
+            } else {
+                redirectAttributes.addFlashAttribute("errorMsg", "Cart checkout failed!");
+            }
         } else {
-            redirectAttributes.addFlashAttribute("errrorMsg", "Cart checkout failed!");
+            redirectAttributes.addFlashAttribute("warningMsg", "No cart found!");
         }
         System.out.println("Checked out!");
 
-        model.addAttribute("cart", cart);
         model.addAttribute("shopId", shopId);
         model.addAttribute("customerId", customerId);
 
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "checkout_success";
     }
 
     @GetMapping("/shops/{shopId}/cart/{customerId}/clear/")
     public String clearCart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId, Model model,
             RedirectAttributes redirectAttributes) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.clearCart(cart.getId());
         redirectAttributes.addFlashAttribute("infoMsg", "Cart cleared!");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";
     }
 
@@ -172,9 +233,17 @@ public class CartController extends BaseController {
     public String incrementProductFromCart(@PathVariable("shopId") int shopId,
             @PathVariable("customerId") int customerId, @PathVariable("productId") int productId, Model model,
             RedirectAttributes redirectAttributes) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.incrementProductInCart(cart.getId(), productId);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";
     }
 
@@ -182,9 +251,17 @@ public class CartController extends BaseController {
     public String decrementProductFromCart(@PathVariable("shopId") int shopId,
             @PathVariable("customerId") int customerId, @PathVariable("productId") int productId, Model model,
             RedirectAttributes redirectAttributes) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
         Cart cart = cartService.getCartByUserIdAndShopId(customerId, shopId);
         cartService.decrementProductInCart(cart.getId(), productId);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/cart/" + customerId + "/";
     }
 

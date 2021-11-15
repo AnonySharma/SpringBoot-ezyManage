@@ -1,5 +1,5 @@
 {
-	"java.configuration.updateBuildConfiguration": "interactive",
+	"java.configuration.updateBuildConfiguration": "automatic",
 	"html.validate.scripts": false,
 	"parameterHints.enabled": true,
 	"javascript.inlayHints.parameterNames.enabled": "all"

@@ -18,14 +18,20 @@ public class BaseController {
 
     // Pages constants
     protected static final String FORBIDDEN_ERROR_PAGE = "error/403";
-    protected static final String NOT_FOUND_ERROR_PAGE = "error/404";
+    protected static final String PAGE_NOT_FOUND_ERROR_PAGE = "error/404";
     protected static final String UNAUTHORIZED_ERROR_PAGE = "error/401";
 
     // Allowed Role Constants
-    protected static final String SHOP_CUSTOMER = "ROLE_USER ROLE_STAFF ROLE_OWNER ROLE_ADMIN";
-    protected static final String SHOP_STAFF = "ROLE_STAFF ROLE_OWNER ROLE_ADMIN";
-    protected static final String SHOP_OWNER = "ROLE_OWNER ROLE_ADMIN";
+    protected static final String ONLY_CUSTOMER = "ROLE_USER";
     protected static final String ONLY_STAFF = "ROLE_STAFF";
+    protected static final String ONLY_OWNER = "ROLE_OWNER";
+    protected static final String ONLY_ADMIN = "ROLE_ADMIN";
+
+    protected static final String ROLE_ABOVE_CUSTOMER = ONLY_CUSTOMER + " " + ONLY_STAFF + " " + ONLY_OWNER + " "
+            + ONLY_ADMIN;
+    protected static final String ROLE_ABOVE_STAFF = ONLY_STAFF + " " + ONLY_OWNER + " " + ONLY_ADMIN;
+    protected static final String ROLE_ABOVE_OWNER = ONLY_OWNER + " " + ONLY_ADMIN;
+    protected static final String ROLE_ABOVE_ADMIN = ONLY_ADMIN;
 
     @Autowired
     public BaseController(UserService userService) {
@@ -46,8 +52,6 @@ public class BaseController {
 
             List<String> permittedRolesList = Arrays.asList(permittedRoles.split(" "));
             List<String> userRolesList = Arrays.asList(user.getRole().split(" "));
-            // System.out.println("permittedRolesList: " + permittedRolesList);
-            // System.out.println("userRolesList: " + userRolesList);
             for (String string : userRolesList) {
                 if (permittedRolesList.contains(string)) {
                     return true;

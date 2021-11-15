@@ -3,51 +3,33 @@
 	<head th:replace="components/head :: head"></head>
 	<body>
 		<div th:replace="components/navbar :: navbar"></div>
-		<div class="container">
-			<div class="d-flex justify-content-center h-100">
-				<div class="card text-center">
-					<div class="card-header" th:if="${loggedIn ne null}">
-						<span class="text-white" th:text="${'Hello ' + username + '!'}"></span>
-						<a th:href="@{/logout/}" class="float-right"><span class="badge badge-danger">Logout</span></a>
-						<br />
-					</div>
-					<br />
-					<h4 class="text-white">Welcome to ezyManage!</h4>
-					<br />
-					<div class="mx-auto">
-						<div th:if="${loggedIn eq null}">
-							<a th:href="@{/login/}" class="btn login_btn">Login</a>
-							<br />
-							<br />
-						</div>
-						<div th:if="${loggedIn eq null}">
-							<a th:href="@{/register/}" class="btn login_btn">Register</a>
-							<br />
-							<br />
-						</div>
-						<div th:if="${loggedIn ne null}">
-							<a th:href="@{/admin/}" class="btn login_btn">Admin</a>
-							<br />
-							<br />
-						</div>
-						<div th:if="${loggedIn ne null}">
-							<a th:href="@{/myorders/}" class="btn login_btn">My Orders</a>
-							<br />
-							<br />
-						</div>
-						<div th:if="${loggedIn ne null}">
-							<a th:href="@{/myshops/}" class="btn login_btn">Shops</a>
-							<br />
-							<br />
-						</div>
-						<div th:if="${loggedIn ne null}">
-							<a th:href="@{/products/}" class="btn login_btn">Products</a>
-							<br />
-							<br />
+		<div
+			class="page-header align-items-start min-vh-100"
+			th:style="'background-image: url(' + @{/images/back-gradient.jpg} + ');'"
+			loading="lazy"
+		>
+			<span class="mask bg-gradient-dark opacity-6"></span>
+			<div class="container my-auto">
+				<div class="row">
+					<div class="col-lg-4 col-md-8 col-12 mx-auto">
+						<div class="card z-index-0 fadeIn3 fadeInBottom">
+							<div class="card-body bg-gradient-secondary text-center">
+								<br />
+								<div th:if="${isAdmin ne null}">
+									<a th:href="@{/admin/}" class="btn bg-gradient-danger w-auto me-2">Admin</a>
+									<br />
+									<br />
+								</div>
+								<a th:href="@{/myorders/}" class="btn bg-gradient-success w-auto me-2">My Orders</a>
+								<br />
+								<br />
+								<a th:href="@{/myshops/}" class="btn bg-gradient-warning w-auto me-2">My Shops</a>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<footer th:replace="components/footer :: footer"></footer>
 		</div>
 		<script th:replace="components/toast :: toast"></script>
 	</body>

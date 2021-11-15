@@ -60,3 +60,12 @@ Posssible combinations:
 -   heroku logs --tail
 
 _**Note:** Link to MySQL Server - https://remotemysql.com/databases.php_
+
+---
+
+# Color Palette
+
+-   #2E2966 Jacarta
+-   #433B84 Victoria
+-   #4C4B8B East Bay
+-   https://coolors.co/231d59-312d68-39367d-413e85-4b4988

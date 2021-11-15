@@ -3,51 +3,78 @@
 	<head th:replace="components/head :: head"></head>
 	<body>
 		<div th:replace="components/navbar :: navbar"></div>
-		<div class="container">
-			<div class="d-flex justify-content-center h-100">
-				<div class="card">
-					<div class="card-header">
-						<div style="width: 50px">
-							<a th:href="@{/shops/__${shopId}__/}" class="btn btn-primary"
-								><i class="fas fa-arrow-circle-left"></i
-							></a>
+		<div
+			class="page-header align-items-start min-vh-100"
+			th:style="'background-image: url(' + @{/images/back-gradient.jpg} + ');'"
+			loading="lazy"
+		>
+			<span class="mask bg-gradient-dark opacity-6"></span>
+			<div class="container my-auto">
+				<div class="row">
+					<div class="col-lg-10 col-md-10 col-12 mx-auto">
+						<div class="card z-index-0 fadeIn3 fadeInBottom">
+							<div class="card-body bg-gradient-secondary text-center">
+								<div style="width: 50px">
+									<a th:href="@{/shops/__${shopId}__/}" class="btn btn-primary"
+										><i class="fas fa-arrow-circle-left"></i
+									></a>
+								</div>
+								<h2 class="text-center" th:text="${'Products listed under ' + shop.name}"></h2>
+								<div>
+									<a class="btn btn-primary btn-lg" th:href="@{/shops/__${shop.id}__/products/add/}">
+										Add Product
+									</a>
+								</div>
+								<div th:if="${products eq null or #lists.size(products) eq 0}">
+									No products found! <br />
+									Add some
+								</div>
+								<br />
+								<br />
+								<table
+									class="table table-dark table-striped text-white"
+									th:if="${products ne null and #lists.size(products) ne 0}"
+								>
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Price</th>
+											<th>Description</th>
+											<th>Image</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody class="text-white">
+										<tr th:each="product : ${products}">
+											<td th:text="${product.name}" />
+											<td th:text="${product.price}"></td>
+											<td th:text="${product.description}" />
+											<td>
+												<img
+													th:src="${product.image}"
+													th:alt="${product.name}"
+													width="75"
+													height="75"
+												/>
+											</td>
+											<td>
+												<a
+													class="btn btn-danger"
+													th:href="@{/shops/__${shop.id}__/products/remove/__${product.id}__/}"
+													>Unlist</a
+												>
+												<!-- <a class="btn btn-primary" th:href="@{/products/edit/__${product.id}__/}">Edit</a> -->
+												<!-- <a class="btn btn-danger" th:href="@{/products/delete/__${product.id}__/}">Delete</a> -->
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
-						<h4 class="text-white text-center" th:text="${'Products listed under ' + shop.name}"></h4>
-					</div>
-					<div class="card-body">
-						<div class="text-center">
-							<a class="btn btn-primary btn-lg" th:href="@{/shops/__${shop.id}__/products/add/}"> Add Product </a>
-						</div>
-						<br />
-						<table class="table table-striped text-white">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Price</th>
-									<th>Description</th>
-									<th>Image</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="product : ${products}">
-									<td th:text="${product.name}" />
-									<td th:text="${product.price}"></td>
-									<td th:text="${product.description}" />
-									<td><img th:src="${product.image}" th:alt="${product.name}" width="100" height="100" /></td>
-									<td>
-										<a class="btn btn-danger" th:href="@{/shops/__${shop.id}__/remove/__${product.id}__/}"
-											>Unlist</a
-										>
-										<!-- <a class="btn btn-primary" th:href="@{/products/edit/__${product.id}__/}">Edit</a> -->
-										<!-- <a class="btn btn-danger" th:href="@{/products/delete/__${product.id}__/}">Delete</a> -->
-									</td>
-								</tr>
-							</tbody>
-						</table>
 					</div>
 				</div>
 			</div>
+			<footer th:replace="components/footer :: footer"></footer>
 		</div>
 		<script th:replace="components/toast :: toast"></script>
 	</body>

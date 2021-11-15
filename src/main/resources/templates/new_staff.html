@@ -3,37 +3,56 @@
 	<head th:replace="components/head :: head"></head>
 	<body>
 		<div th:replace="components/navbar :: navbar"></div>
-		<div class="container">
-			<div class="d-flex justify-content-center h-100">
-				<div class="card text-center text-white">
-					<div class="card-header">
-						<div style="width: 50px">
-							<a th:href="@{/shops/__${shopId}__/staffs/}" class="btn btn-primary"
-								><i class="fas fa-arrow-circle-left"></i
-							></a>
-						</div>
-						<h3>New Staff</h3>
-					</div>
-					<br />
-					<div class="cart-content">
-						<form method="POST" th:action="@{/shops/__${shopId}__/staffs/add/}" th:object="${cart}">
-							<div class="form-group">
-								<label for="staffId">Customer</label>
-								<select class="form-control" id="staffId" name="staffId">
-									<option value="-1" hidden>Select a staff's username</option>
-									<option
-										name="staffId"
-										th:each="user : ${users}"
-										th:text="${user.getFirst()}"
-										th:value="${user.getSecond()}"
-									></option>
-								</select>
+		<div
+			class="page-header align-items-start min-vh-100"
+			th:style="'background-image: url(' + @{/images/back-gradient.jpg} + ');'"
+			loading="lazy"
+		>
+			<span class="mask bg-gradient-dark opacity-6"></span>
+			<div class="container my-auto">
+				<div class="row">
+					<div class="col-lg-4 col-md-8 col-12 mx-auto">
+						<div class="card z-index-0 fadeIn3 fadeInBottom">
+							<div class="card-body bg-gradient-faded-white text-center">
+								<div style="width: 50px">
+									<a th:href="@{/shops/__${shopId}__/staffs/}" class="btn btn-primary"
+										><i class="fas fa-arrow-circle-left"></i
+									></a>
+								</div>
+								<h3>New Staff</h3>
+								<br />
+
+								<form method="POST" th:action="@{/shops/__${shopId}__/staffs/add/}" th:object="${staff}">
+									<div class="form-group">
+										<div class="input-group is-filled">
+											<select class="form-control wide" th:field="*{staffId}">
+												<option
+													data-display="Select new staff's username"
+													value="-1"
+													aria-hidden="true"
+												>
+													Select new staff's username
+												</option>
+												<option
+													th:each="user : ${users}"
+													th:text="${user.getFirst()}"
+													th:value="${user.getSecond()}"
+												></option>
+											</select>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<input type="submit" class="btn bg-gradient-dark w-100" value="Add" />
+										</div>
+									</div>
+								</form>
 							</div>
-							<input type="submit" value="Add" class="btn btn-primary" />
-						</form>
+						</div>
 					</div>
 				</div>
 			</div>
+			<footer th:replace="components/footer :: footer"></footer>
 		</div>
 		<script th:replace="components/toast :: toast"></script>
 	</body>

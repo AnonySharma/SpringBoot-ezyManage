@@ -47,7 +47,6 @@ public class UserController extends BaseController {
 		if (!isLoggedIn())
 			return "redirect:/login/";
 
-		isAuthorized(model, "ROLE_USER");
 		System.out.println("Profile page !!!!!!");
 		String username = userService.findLoggedInUsername();
 		Profile profile = profileService.getProfile(username);
@@ -55,6 +54,8 @@ public class UserController extends BaseController {
 		System.out.println(profile.toString());
 
 		System.out.println(model.toString());
+		if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+			model.addAttribute("isAdmin", true);
 		return "profile";
 	}
 
@@ -63,7 +64,6 @@ public class UserController extends BaseController {
 		if (!isLoggedIn())
 			return "redirect:/login/";
 
-		isAuthorized(model, "ROLE_USER");
 		System.out.println("Profile edit page !!!!!!");
 		String username = userService.findLoggedInUsername();
 		Profile profile = profileService.getProfile(username);
@@ -72,33 +72,36 @@ public class UserController extends BaseController {
 		System.out.println(profile.toString());
 
 		System.out.println(model.toString());
+		if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+			model.addAttribute("isAdmin", true);
 		return "profile";
 	}
 
 	@PostMapping("/profile/edit/")
 	public String profileEditRequestManager(@ModelAttribute("profile") Profile profile, Model model) {
-		isAuthorized(model, "ROLE_USER");
-		System.out.println("Profile edit request page !!!!!!");
-		String username = userService.findLoggedInUsername();
-
-		if (username == null)
+		if (!isLoggedIn())
 			return "redirect:/login/";
 
+		System.out.println("Profile edit request page !!!!!!");
+		String username = userService.findLoggedInUsername();
 		System.out.println(username + " is logged in!!");
 		System.out.println("Edited successfully!");
 		System.out.println(profile);
 		profileService.updateProfile(profile);
 
 		System.out.println(model.toString());
+		if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+			model.addAttribute("isAdmin", true);
 		return "redirect:/profile/";
 	}
 
 	// My orders
 	@GetMapping("/myorders/")
 	public String myOrders(Model model) {
-		isLoggedIn();
+		if (!isLoggedIn())
+			return "redirect:/login/";
+
 		System.out.println("Welcome to My Orders!");
-		isAuthorized(model, "ROLE_USER");
 		List<Order> orders = orderService.getAllOrdersByUserId(user.getId());
 		List<Pair<Order, String>> myOrderList = new ArrayList<>();
 		for (Order order : orders) {
@@ -116,11 +119,16 @@ public class UserController extends BaseController {
 		}
 		model.addAttribute("shopMap", shopMap);
 		model.addAttribute("orders", myOrderList);
+		if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+			model.addAttribute("isAdmin", true);
 		return "my_orders";
 	}
 
 	@GetMapping("/myorders/{orderId}/")
 	public String pastOrderItem(@PathVariable("orderId") int orderId, Model model) {
+		if (!isLoggedIn())
+			return "redirect:/login/";
+
 		Order order = orderService.getOrderByOrderId(orderId);
 		model.addAttribute("orderId", orderId);
 		model.addAttribute("shopName",
@@ -137,6 +145,8 @@ public class UserController extends BaseController {
 		}
 		model.addAttribute("orderedItems", orderedItems);
 		model.addAttribute("backLink", "/myorders/");
+		if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+			model.addAttribute("isAdmin", true);
 		return "order_page";
 	}
 }

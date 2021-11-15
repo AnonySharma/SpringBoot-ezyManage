@@ -12,7 +12,7 @@
 	<artifactId>ezymanage</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ezyManage</name>
-	<description>a shop management app using Spring Boot</description>
+	<description>A shop management app using Spring Boot</description>
 	<!-- <properties>
 		<java.version>11</java.version>
 	</properties> -->

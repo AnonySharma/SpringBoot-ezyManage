@@ -3,36 +3,39 @@
 	<head th:replace="components/head :: head"></head>
 	<body>
 		<div th:replace="components/navbar :: navbar"></div>
-		<div class="container">
-			<div class="d-flex justify-content-center h-100">
-				<div class="card text-center">
-					<h4 class="text-white" th:text="${'Dashboard of ' + shop.name}"></h4>
-					<br />
-					<div class="mx-auto">
-						<a th:href="@{/shops/__${shopId}__/cart/}" class="btn btn-success">New Order</a>
-						<br />
-						<br />
-						<a th:href="@{/payments/}" class="btn btn-danger">Payments</a>
-						<br />
-						<br />
-						<a th:href="@{/shops/__${shopId}__/products/}" class="btn btn-info">Products</a>
-						<br />
-						<br />
-						<a th:href="@{/shops/__${shopId}__/orders/}" class="btn btn-warning">Past Orders</a>
-						<br />
-						<br />
-						<a th:href="@{/customers/}" class="btn btn-primary">Customers</a>
-						<br />
-						<br />
-						<a href="#" class="btn btn-secondary">Mass mailing</a>
-						<br />
-						<br />
-						<a th:href="@{/shops/__${shopId}__/staffs/}" class="btn btn-info" th:if="${isOwner ne null}"
-							>Manage Staffs</a
-						>
+		<div
+			class="page-header align-items-start min-vh-100"
+			th:style="'background-image: url(' + @{/images/back-gradient.jpg} + ');'"
+			loading="lazy"
+		>
+			<span class="mask bg-gradient-dark opacity-6"></span>
+			<div class="container my-auto">
+				<div class="row">
+					<div class="col-lg-4 col-md-8 col-12 mx-auto">
+						<div class="card z-index-0 fadeIn3 fadeInBottom">
+							<div class="card-body bg-gradient-secondary text-center">
+								<h3 th:text="${'Dashboard of ' + shop.name}"></h3>
+								<a th:href="@{/shops/__${shopId}__/cart/}" class="btn btn-success">New Order</a>
+								<br />
+								<a th:href="@{/payments/}" class="btn btn-danger">Payments</a>
+								<br />
+								<a th:href="@{/shops/__${shopId}__/products/}" class="btn btn-info">Products</a>
+								<br />
+								<a th:href="@{/shops/__${shopId}__/orders/}" class="btn btn-warning">Past Orders</a>
+								<br />
+								<a th:href="@{/customers/}" class="btn btn-primary">Customers</a>
+								<br />
+								<a href="#" class="btn btn-secondary">Mass mailing</a>
+								<br />
+								<a th:href="@{/shops/__${shopId}__/staffs/}" class="btn btn-info" th:if="${isOwner ne null}"
+									>Manage Staffs</a
+								>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
+			<footer th:replace="components/footer :: footer"></footer>
 		</div>
 		<script th:replace="components/toast :: toast"></script>
 	</body>

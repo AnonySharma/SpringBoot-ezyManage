@@ -3,16 +3,26 @@
 	<head th:replace="components/head :: head"></head>
 	<body>
 		<div th:replace="components/navbar :: navbar"></div>
-		<div class="page-wrap d-flex flex-row align-items-center text-white">
-			<div class="container">
-				<div class="card row justify-content-center">
-					<div class="col-md-12 text-center">
-						<span class="display-1 d-block">404</span>
-						<div class="mb-4 lead">The page you are looking for was not found.</div>
-						<a th:href="@{/}" class="btn btn-info font-weight-bold">Back to Home</a>
+		<div
+			class="page-header align-items-start min-vh-100"
+			th:style="'background-image: url(' + @{/images/back-gradient.jpg} + ');'"
+			loading="lazy"
+		>
+			<span class="mask bg-gradient-dark opacity-6"></span>
+			<div class="container my-auto">
+				<div class="row">
+					<div class="col-lg-12 col-md-8 col-12 mx-auto">
+						<div class="card z-index-0 fadeIn3 fadeInBottom">
+							<div class="card-body bg-gradient-secondary text-center">
+								<span class="display-1 d-block text-white">404</span>
+								<div class="mb-4 lead text-white-50">The page you are looking for was not found.</div>
+								<a th:href="@{/}" class="btn btn-info font-weight-bold">Back to Home</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
+			<footer th:replace="components/footer :: footer"></footer>
 		</div>
 		<script th:replace="components/toast :: toast"></script>
 	</body>

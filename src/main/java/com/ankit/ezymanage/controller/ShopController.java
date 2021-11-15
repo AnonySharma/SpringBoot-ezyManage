@@ -46,47 +46,59 @@ public class ShopController extends BaseController {
     @GetMapping("/myshops/grantpermission/")
     public String makeOwner(Model model, RedirectAttributes redirectAttributes) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
             // return "redirect:/login?back=/myshops/grantpermission/";
         }
 
         String username = userService.findLoggedInUsername();
         // TODO: REQUEST ADMIN TO MAKE OWNER
-        if (userService.addRoleToUser(username, SHOP_STAFF)) {
+        if (userService.addRoleToUser(username, ONLY_STAFF)) {
             System.out.println("Congrats! You can open your own shop accounts now!");
             redirectAttributes.addFlashAttribute("successMsg", "Congrats! You can open your own shop-accounts now!");
         } else {
             System.out.println("Failed to grant permissions!");
             redirectAttributes.addFlashAttribute("errorMsg", "Failed to grant permissions!");
         }
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/myshops/";
     }
 
     @GetMapping("/myshops/")
     public String myShops(Model model, RedirectAttributes redirectAttributes) {
         String username = userService.findLoggedInUsername();
-        System.out.println(isAuthorized(model, SHOP_STAFF));
+        System.out.println(isAuthorized(model, ROLE_ABOVE_STAFF));
         System.out.println(isLoggedIn());
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_STAFF)) {
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF)) {
             model.addAttribute("infoMsg", "You are not authorized to add new shops!");
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "my_shops_unauth";
         }
         System.out.println("user: " + user);
         List<Shop> shops = shopService.getAllShopsUnder(username);
         model.addAttribute("owner", username);
         model.addAttribute("shops", shops);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "my_shops";
     }
 
     @GetMapping("/newshop/")
     public String newShop(Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_OWNER))
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         String owner = userService.findLoggedInUsername();
         Shop shop = new Shop();
@@ -95,15 +107,20 @@ public class ShopController extends BaseController {
         model.addAttribute("shop", shop);
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("postLink", "/newshop/");
+        model.addAttribute("backLink", "/myshops/");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "new_shop";
     }
 
     @PostMapping("/newshop/")
     public String newShopPost(@ModelAttribute("shop") Shop shop, Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_OWNER))
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Creating shop!");
         System.out.println(shop.toString());
@@ -112,34 +129,44 @@ public class ShopController extends BaseController {
         String owner = userService.findLoggedInUsername();
         shop.setOwner(owner);
         shopService.createShop(shop);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/myshops/";
     }
 
     @GetMapping("/shops/{shopId}/")
     public String dashboard(@PathVariable("shopId") int shopId, Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Opened shop!");
         model.addAttribute("shop", shopService.getShopById(shopId));
         model.addAttribute("shopId", shopId);
         model.addAttribute("isOwner", user.getUsername() == shopService.getShopById(shopId).getOwner());
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "dashboard";
     }
 
     @GetMapping("/shops/{shopId}/products/")
     public String productsPerShop(@PathVariable("shopId") int shopId, Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Opened products under shop!");
         model.addAttribute("shop", shopService.getShopById(shopId));
         model.addAttribute("shopId", shopId);
         model.addAttribute("products", shopService.getProductsByShop(shopId));
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "products_per_shop";
     }
 
@@ -147,11 +174,15 @@ public class ShopController extends BaseController {
     public String showAllProducts(@PathVariable("shopId") int shopId, Model model,
             RedirectAttributes redirectAttributes) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_OWNER)) {
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER)) {
             // return FORBIDDEN_ERROR_PAGE;
             redirectAttributes.addFlashAttribute("errorMsg", "You are not authorized to add products!");
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/shops/" + shopId + "/products/";
         }
         System.out.println("Listing all product!");
@@ -164,6 +195,8 @@ public class ShopController extends BaseController {
         model.addAttribute("productList", productService.getAllProducts());
         model.addAttribute("addedProducts", addedProducts);
         model.addAttribute("shopId", shopId);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "allProducts";
     }
 
@@ -171,12 +204,16 @@ public class ShopController extends BaseController {
     public String addProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_OWNER))
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Listing a product!");
         shopService.addProductToShop(shopId, productId);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/products/add/";
     }
 
@@ -184,12 +221,16 @@ public class ShopController extends BaseController {
     public String unlistProduct(@PathVariable("shopId") int shopId, @PathVariable("productId") int productId,
             Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_OWNER))
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Unlisting a product!");
         shopService.removeProductFromShop(shopId, productId);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/products/";
     }
 
@@ -197,9 +238,11 @@ public class ShopController extends BaseController {
     @GetMapping("/shops/{shopId}/orders/")
     public String pastOrders(@PathVariable("shopId") int shopId, Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         model.addAttribute("shopId", shopId);
         List<Order> orders = orderService.getOrdersByShopId(shopId);
@@ -221,15 +264,19 @@ public class ShopController extends BaseController {
         }
         model.addAttribute("customerMap", customerMap);
         model.addAttribute("orders", myOrderList);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "orders";
     }
 
     @GetMapping("/shops/{shopId}/orders/{orderId}/")
     public String pastOrderItem(@PathVariable("shopId") int shopId, @PathVariable("orderId") int orderId, Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_STAFF))
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
             return FORBIDDEN_ERROR_PAGE;
         Order order = orderService.getOrderByOrderId(orderId);
         model.addAttribute("shopId", shopId);
@@ -240,36 +287,43 @@ public class ShopController extends BaseController {
         model.addAttribute("order", order);
 
         List<Pair<Product, Integer>> orderedItems = new ArrayList<>();
-
         for (Pair<Integer, Integer> product : order.getItems()) {
             orderedItems.add(new Pair<Product, Integer>(productService.getProduct(product.getFirst().intValue()),
                     product.getSecond()));
         }
         model.addAttribute("orderedItems", orderedItems);
         model.addAttribute("backLink", "/shops/" + shopId + "/orders/");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "order_page";
     }
 
     @GetMapping("/shops/{shopId}/staffs/")
     public String manageStaffs(@PathVariable("shopId") int shopId, Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_OWNER))
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Opened staffs page!");
         model.addAttribute("staffs", shopService.getStaffsByShop(shopId));
         model.addAttribute("shopId", shopId);
         model.addAttribute("shopName", shopService.getShopById(shopId).getName());
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "manage_staffs";
     }
 
     @GetMapping("/shops/{shopId}/staffs/add/")
     public String addStaff(@PathVariable("shopId") int shopId, Model model) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_OWNER))
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Adding staff!");
 
@@ -280,25 +334,34 @@ public class ShopController extends BaseController {
         model.addAttribute("staff", new Staff());
         model.addAttribute("shopId", shopId);
         model.addAttribute("users", users);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "new_staff";
     }
 
     @PostMapping("/shops/{shopId}/staffs/add/")
     public String addStaff(@PathVariable("shopId") int shopId, @ModelAttribute("staff") Staff staff, Model model,
             RedirectAttributes redirectAttributes) {
+        System.out.println("Adding staff!" + staff);
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_OWNER))
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER))
             return FORBIDDEN_ERROR_PAGE;
 
         System.out.println("Adding staff!" + staff);
         if (staff.getStaffId() == -1) {
             redirectAttributes.addFlashAttribute("errorMsg", "Choose a staff!");
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/shops/" + shopId + "/staffs/add/";
         }
         if (shopService.checkStaffByShop(shopId, staff.getStaffId())) {
             redirectAttributes.addFlashAttribute("warningMsg", "Staff already exists!");
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/shops/" + shopId + "/staffs/add/";
         }
         staff.setShopId(shopId);
@@ -306,6 +369,8 @@ public class ShopController extends BaseController {
         staff.setName(userService.getUserById(staff.getStaffId()).getUsername());
         shopService.addStaff(staff);
         redirectAttributes.addFlashAttribute("successMsg", "Staff added successfully!");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/staffs/";
     }
 
@@ -313,13 +378,17 @@ public class ShopController extends BaseController {
     public String removeStaff(@PathVariable("shopId") int shopId, @PathVariable("staffId") int staffId, Model model,
             RedirectAttributes redirectAttributes) {
         if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
             return "redirect:/login/";
         }
-        if (!isAuthorized(model, SHOP_OWNER))
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER))
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Removing staff!");
         shopService.removeStaff(shopId, staffId);
         redirectAttributes.addFlashAttribute("successMsg", "Staff removed successfully!");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/staffs/";
     }
 }

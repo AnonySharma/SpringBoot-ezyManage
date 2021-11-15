@@ -8,7 +8,7 @@ import com.ankit.ezymanage.model.Order;
 
 public interface OrderService {
 
-    boolean checkoutCart(Cart cart, int staffId) throws ParseException;
+    boolean checkoutCart(Cart cart, int staffId, String mode) throws ParseException;
 
     List<Order> getAllOrders();
 

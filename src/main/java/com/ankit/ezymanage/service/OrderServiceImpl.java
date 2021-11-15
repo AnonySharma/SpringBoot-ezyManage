@@ -32,8 +32,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean checkoutCart(Cart cart, int staffId) throws ParseException {
-        Order order = createOrder(cart, staffId, "pending", "cash");
+    public boolean checkoutCart(Cart cart, int staffId, String mode) throws ParseException {
+        Order order;
+        if (mode.equals("cash")) {
+            order = createOrder(cart, staffId, "paid", mode);
+        } else {
+            order = createOrder(cart, staffId, "pending", mode);
+        }
         orderDAO.insertOrder(order);
         return true;
     }

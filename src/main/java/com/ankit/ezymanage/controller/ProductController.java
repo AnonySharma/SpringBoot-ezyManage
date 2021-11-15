@@ -20,8 +20,16 @@ public class ProductController extends BaseController {
 
     @GetMapping("/products/")
     public String getProducts(Model model) {
-        isAuthorized(model, "ROLE_USER");
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, ROLE_ABOVE_ADMIN))
+            return FORBIDDEN_ERROR_PAGE;
         model.addAttribute("products", productService.getAllProducts());
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "products";
     }
 }

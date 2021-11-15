@@ -16,21 +16,40 @@ public class HomeController extends BaseController {
 
     @GetMapping({ "/", "" })
     public String home(Model model) {
-        isLoggedIn();
-        System.out.println("Welcome to Home!");
-        isAuthorized(model, "ROLE_USER");
-        return "home";
+        System.out.println(isLoggedIn());
+        if (isLoggedIn()) {
+            System.out.println("Welcome to Home page!");
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "home";
+        }
+        System.out.println("Welcome to Landing page!");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
+        return "landing";
     }
+
+    // @GetMapping("/landing/")
+    // public String landing(Model model) {
+    // isLoggedIn();
+    // System.out.println("Welcome to Landing Page!");
+    // isAuthorized(model, "ROLE_USER");
+    // return "landing";
+    // }
 
     @GetMapping("/payments/")
     public String payments(Model model) {
         isAuthorized(model, "ROLE_USER");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "payments";
     }
 
     @GetMapping("/customers/")
     public String customers(Model model) {
         isAuthorized(model, "ROLE_USER");
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
         return "customers";
     }
 }
