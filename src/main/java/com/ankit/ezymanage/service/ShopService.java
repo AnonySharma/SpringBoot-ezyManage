@@ -33,4 +33,6 @@ public interface ShopService {
 
     boolean checkIfStaffExists(int staffId);
 
+    List<Integer> getCustomersByShop(int shopId);
+
 }

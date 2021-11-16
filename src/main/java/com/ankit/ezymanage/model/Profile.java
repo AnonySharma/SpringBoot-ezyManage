@@ -2,19 +2,16 @@ package com.ankit.ezymanage.model;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class Profile {
-    private String username = "";
-    private String firstName = "";
-    private String middleName = "";
-    private String lastName = "";
-    private Long phoneNumber = Long.parseLong("0");
-    private Character gender = 'N';
-    private String email = "";
-    private String address = ""; // TODO: Add different parts
-    private Long aadhaarNumber = Long.parseLong("0");
-    @DateTimeFormat(pattern = "mm/dd/yyyy")
+    private String username;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String phoneNumber;
+    private Character gender;
+    private String email;
+    private String address;
+    private String aadhaarNumber;
     private Date dateOfBirth;
 
     public Profile() {
@@ -24,8 +21,8 @@ public class Profile {
         this.username = username;
     }
 
-    public Profile(String username, String firstName, String middleName, String lastName, Long phoneNumber,
-            Character gender, Date dateOfBirth, String email, String address, Long aadhaarNumber) {
+    public Profile(String username, String firstName, String middleName, String lastName, String phoneNumber,
+            Character gender, Date dateOfBirth, String email, String address, String aadhaarNumber) {
         this.username = username;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -72,11 +69,11 @@ public class Profile {
         this.lastName = lastName;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(Long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -112,11 +109,11 @@ public class Profile {
         this.address = address;
     }
 
-    public Long getAadhaarNumber() {
+    public String getAadhaarNumber() {
         return aadhaarNumber;
     }
 
-    public void setAadhaarNumber(Long aadhaarNumber) {
+    public void setAadhaarNumber(String aadhaarNumber) {
         this.aadhaarNumber = aadhaarNumber;
     }
 

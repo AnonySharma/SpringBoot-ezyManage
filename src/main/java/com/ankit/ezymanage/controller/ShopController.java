@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Order;
+import com.ankit.ezymanage.model.OwnerRequest;
 import com.ankit.ezymanage.model.Shop;
 import com.ankit.ezymanage.model.Staff;
 import com.ankit.ezymanage.model.User;
@@ -44,26 +45,34 @@ public class ShopController extends BaseController {
     }
 
     @GetMapping("/myshops/grantpermission/")
-    public String makeOwner(Model model, RedirectAttributes redirectAttributes) {
-        if (!isLoggedIn()) {
+    public String requestOwner(Model model, RedirectAttributes redirectAttributes) {
+        if (!isLoggedIn())
+            return "redirect:/login/";
+        if (isAuthorized(model, ROLE_ABOVE_OWNER))
+            return "redirect:/myshops/";
+        String username = userService.findLoggedInUsername();
+        int userId = userService.getUserByUsername(username).getId();
+        model.addAttribute("user", user);
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            redirectAttributes.addFlashAttribute("isAdmin", true);
+
+        System.out.println("Requesting for owner permission...");
+        if (userService.checkIfAlreadyRequestedToBeOwner(userId)) {
+            model.addAttribute("infoMsg", "You have already requested once! Contact admin if reason is not known!");
             if (isAuthorized(model, ROLE_ABOVE_ADMIN))
                 model.addAttribute("isAdmin", true);
-            return "redirect:/login/";
-            // return "redirect:/login?back=/myshops/grantpermission/";
+            return "my_shops_unauth";
         }
-
-        String username = userService.findLoggedInUsername();
-        // TODO: REQUEST ADMIN TO MAKE OWNER
-        if (userService.addRoleToUser(username, ONLY_OWNER)) {
-            System.out.println("Congrats! You can open your own shop accounts now!");
-            redirectAttributes.addFlashAttribute("successMsg", "Congrats! You can open your own shop-accounts now!");
-        } else {
-            System.out.println("Failed to grant permissions!");
-            redirectAttributes.addFlashAttribute("errorMsg", "Failed to grant permissions!");
-        }
+        OwnerRequest ownerRequest = new OwnerRequest();
+        ownerRequest.setUserId(userId);
+        ownerRequest.setStatus("pending");
+        ownerRequest.setDate(MyCalander.now());
+        userService.createOwnerRequest(ownerRequest);
+        System.out.println("Request sent!");
+        model.addAttribute("infoMsg", "Request sent! Please wait for admin's approval!");
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))
             model.addAttribute("isAdmin", true);
-        return "redirect:/myshops/";
+        return "my_shops_unauth";
     }
 
     @GetMapping("/myshops/")
@@ -81,6 +90,12 @@ public class ShopController extends BaseController {
             if (isAuthorized(model, ROLE_ABOVE_ADMIN))
                 model.addAttribute("isAdmin", true);
             return "my_shops_unauth";
+        }
+        int userId = userService.getUserByUsername(username).getId();
+        OwnerRequest ownerRequest = userService.getOwnerRequestByUserId(userId);
+        if ((ownerRequest != null) && (ownerRequest.getStatus().equals("allowed"))) {
+            model.addAttribute("successMsg", "You can now add shops under your account!");
+            userService.deleteOwnerRequest(userId);
         }
         System.out.println("user: " + user);
         List<Shop> shops = shopService.getAllShopsUnder(username);
@@ -125,9 +140,6 @@ public class ShopController extends BaseController {
         System.out.println("Creating shop!");
         System.out.println(shop.toString());
 
-        // TODO: no need to set again
-        String owner = userService.findLoggedInUsername();
-        shop.setOwner(owner);
         shopService.createShop(shop);
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))
             model.addAttribute("isAdmin", true);
@@ -246,24 +258,25 @@ public class ShopController extends BaseController {
             return FORBIDDEN_ERROR_PAGE;
         model.addAttribute("shopId", shopId);
         List<Order> orders = orderService.getOrdersByShopId(shopId);
-        List<Pair<Order, String>> myOrderList = new ArrayList<>();
+        List<Pair<Order, String>> orderList = new ArrayList<>();
         for (Order order : orders) {
             String products = "";
             for (Pair<Integer, Integer> product : order.getItems()) {
                 products += productService.getProduct(product.getFirst()).getName() + "(x" + product.getSecond()
                         + "), ";
             }
-            products = products.substring(0, products.length() - 2);
-            myOrderList.add(new Pair<>(order, products));
+            if (products.length() > 2)
+                products = products.substring(0, products.length() - 2);
+            orderList.add(new Pair<>(order, products));
         }
 
         Map<Integer, String> customerMap = new HashMap<>();
-        for (Pair<Order, String> order : myOrderList) {
+        for (Pair<Order, String> order : orderList) {
             customerMap.put(order.getFirst().getCustomerId(),
                     userService.getUserById(order.getFirst().getCustomerId()).getUsername());
         }
         model.addAttribute("customerMap", customerMap);
-        model.addAttribute("orders", myOrderList);
+        model.addAttribute("orders", orderList);
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))
             model.addAttribute("isAdmin", true);
         return "orders";
@@ -390,5 +403,91 @@ public class ShopController extends BaseController {
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))
             model.addAttribute("isAdmin", true);
         return "redirect:/shops/" + shopId + "/staffs/";
+    }
+
+    @GetMapping("/shops/{shopId}/staffs/{staffId}/orders/")
+    public String manageStaffOrders(@PathVariable("shopId") int shopId, @PathVariable("staffId") int staffId,
+            Model model) {
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, ROLE_ABOVE_OWNER))
+            return FORBIDDEN_ERROR_PAGE;
+        System.out.println("Opened staff orders page!");
+        model.addAttribute("staffId", staffId);
+        model.addAttribute("staffName", userService.getUserById(staffId).getUsername());
+        List<Order> orders = orderService.getOrdersByStaff(shopId, staffId);
+        List<Pair<Order, String>> orderList = new ArrayList<>();
+        for (Order order : orders) {
+            String products = "";
+            for (Pair<Integer, Integer> product : order.getItems()) {
+                products += productService.getProduct(product.getFirst()).getName() + "(x" + product.getSecond()
+                        + "), ";
+            }
+            if (products.length() > 2)
+                products = products.substring(0, products.length() - 2);
+            orderList.add(new Pair<>(order, products));
+        }
+
+        Map<Integer, String> customerMap = new HashMap<>();
+        for (Pair<Order, String> order : orderList) {
+            customerMap.put(order.getFirst().getCustomerId(),
+                    userService.getUserById(order.getFirst().getCustomerId()).getUsername());
+        }
+        model.addAttribute("customerMap", customerMap);
+        model.addAttribute("orders", orderList);
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("shopName", shopService.getShopById(shopId).getName());
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
+        return "manage_staff_orders";
+    }
+
+    @GetMapping("/shops/{shopId}/customers/")
+    public String manageCustomers(@PathVariable("shopId") int shopId, Model model) {
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
+        System.out.println("Opened customers page!");
+        List<Integer> customerIds = shopService.getCustomersByShop(shopId);
+        Map<Integer, String> customerMap = new HashMap<>();
+        for (int customerId : customerIds) {
+            customerMap.put(customerId, userService.getUserById(customerId).getUsername());
+        }
+
+        model.addAttribute("customerIds", customerIds);
+        model.addAttribute("customerMap", customerMap);
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("shopName", shopService.getShopById(shopId).getName());
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
+        return "manage_customers";
+    }
+
+    @GetMapping("/shops/{shopId}/customers/{customerId}/orders/")
+    public String manageCustomerOrders(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
+            Model model) {
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
+        System.out.println("Opened customer orders page!");
+        model.addAttribute("customerId", customerId);
+        model.addAttribute("customerName", userService.getUserById(customerId).getUsername());
+        model.addAttribute("orders", orderService.getOrdersByCustomer(shopId, customerId));
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("shopName", shopService.getShopById(shopId).getName());
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
+        return "manage_customer_orders";
     }
 }

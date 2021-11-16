@@ -211,6 +211,26 @@ public class CartController extends BaseController {
         return "checkout_success";
     }
 
+    @GetMapping("/shops/{shopId}/cart/{customerId}/checkout/failed/")
+    public String checkoutFailed(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
+            Model model, RedirectAttributes redirectAttributes) throws ParseException {
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
+
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("customerId", customerId);
+        model.addAttribute("errorMsg", "Checkout failed. Please, Try again!");
+
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
+        return "checkout_failed";
+    }
+
     @GetMapping("/shops/{shopId}/cart/{customerId}/clear/")
     public String clearCart(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId, Model model,
             RedirectAttributes redirectAttributes) {

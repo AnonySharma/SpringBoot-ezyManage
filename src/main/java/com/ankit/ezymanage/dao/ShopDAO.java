@@ -96,4 +96,11 @@ public class ShopDAO {
         return jdbcTemplate.queryForObject(sql, Integer.class, staffId) > 0;
     }
 
+    public List<Integer> getCustomersByShop(int shopId) {
+        String sql = "SELECT customer_id FROM orders WHERE shop_id = ?";
+        return jdbcTemplate.query(sql, (row, i) -> {
+            return row.getInt("customer_id");
+        }, shopId);
+    }
+
 }

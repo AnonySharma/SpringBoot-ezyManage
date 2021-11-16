@@ -100,6 +100,28 @@ public class OrderDAO {
         return jdbcTemplate.query(sql, RowMappers.orderItemRowMapper, orderId);
     }
 
+    public List<Order> getOrdersByStaff(int shopId, int staffId) {
+        String sql = "SELECT * FROM orders WHERE shop_id = ? AND staff_id = ?";
+        List<Order> orders = jdbcTemplate.query(sql, RowMappers.orderRowMapper, shopId, staffId);
+
+        for (int i = 0; i < orders.size(); i++) {
+            orders.get(i).setItems(getOrderItemsByOrderId(orders.get(i).getOrderId()));
+        }
+
+        return orders;
+    }
+
+    public List<Order> getOrdersByCustomer(int shopId, int customerId) {
+        String sql = "SELECT * FROM orders WHERE shop_id = ? AND customer_id = ?";
+        List<Order> orders = jdbcTemplate.query(sql, RowMappers.orderRowMapper, shopId, customerId);
+
+        for (int i = 0; i < orders.size(); i++) {
+            orders.get(i).setItems(getOrderItemsByOrderId(orders.get(i).getOrderId()));
+        }
+
+        return orders;
+    }
+
     // public void updateTotalPrice(int orderId) {
     // List<Pair<Integer, Integer>> orders = getOrderItemsByOrderId(orderId);
 

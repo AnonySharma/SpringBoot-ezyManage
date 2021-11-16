@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ankit.ezymanage.model.User;
-// import com.ankit.ezymanage.utils.Constants.*;
 import com.ankit.ezymanage.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;

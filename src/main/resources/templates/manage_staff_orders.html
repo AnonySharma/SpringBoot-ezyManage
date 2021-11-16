@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+	<head th:replace="components/head :: head"></head>
+	<body>
+		<div th:replace="components/navbar :: navbar"></div>
+		<div
+			class="page-header align-items-start min-vh-100"
+			th:style="'background-image: url(' + @{/images/back-gradient.jpg} + ');'"
+			loading="lazy"
+		>
+			<span class="mask bg-gradient-dark opacity-6"></span>
+			<div class="container my-auto">
+				<div class="row">
+					<div class="col-lg-10 col-md-10 col-12 mx-auto">
+						<div class="card z-index-0 fadeIn3 fadeInBottom">
+							<div class="card-body bg-gradient-secondary text-center">
+								<div style="width: 50px">
+									<a th:href="@{/shops/__${shopId}__/staffs/}" class="btn btn-primary"
+										><i class="fas fa-arrow-circle-left"></i
+									></a>
+								</div>
+								<h3 th:utext="${'Orders by <b>' + staffName + '</b>'}"></h3>
+								<hr />
+								<div th:if="${orders eq null or #lists.size(orders) eq 0}">
+									No orders were made by this staff.
+								</div>
+								<div th:if="${orders ne null and #lists.size(orders) ne 0}">
+									<table class="table table-dark table-striped text-white-50">
+										<thead class="thead-dark">
+											<tr>
+												<th>Items</th>
+												<th>Customer</th>
+												<th>Date</th>
+												<th>Total</th>
+												<th>Status</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tbody class="text-white">
+											<tr th:each="orderItem : ${orders}" th:with="order=${orderItem.getFirst()}">
+												<td th:text="${orderItem.getSecond()}"></td>
+												<td th:text="${customerMap[order.customerId]}"></td>
+												<td th:text="${#dates.format(order.date, 'dd MMM yyyy, HH:mm:ss')}"></td>
+												<td th:text="${order.total}"></td>
+												<td th:text="${order.status}"></td>
+												<td>
+													<a
+														th:href="@{/shops/__${shopId}__/orders/__${order.orderId}__/}"
+														class="btn btn-primary btn-sm"
+														>View</a
+													>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<footer th:replace="components/footer :: footer"></footer>
+		</div>
+		<script th:replace="components/toast :: toast"></script>
+	</body>
+</html>

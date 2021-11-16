@@ -13,6 +13,12 @@ input[type="number"].input-number–noSpinners::-webkit-outer-spin-button {
 	display: none !important;
 }
 
+/* Required asterisk */
+.form-group.required .control-label:after {
+	content: "*";
+	color: red;
+}
+
 /* Floating Action Button */
 .fab-container {
 	display: flex;

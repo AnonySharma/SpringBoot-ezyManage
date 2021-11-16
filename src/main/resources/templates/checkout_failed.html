@@ -11,17 +11,23 @@
 			<span class="mask bg-gradient-dark opacity-6"></span>
 			<div class="container my-auto">
 				<div class="row">
-					<div class="col-lg-12 col-md-8 col-12 mx-auto">
+					<div class="col-lg-8 col-md-8 col-12 mx-auto">
 						<div class="card z-index-0 fadeIn3 fadeInBottom">
 							<div class="card-body bg-gradient-secondary text-center">
-								<span class="display-1 d-block text-white">403</span>
-								<div class="mb-4 lead text-white-50">
-									We are sorry, but this page needs high level authorization.
+								<div class="card-body">
+									<div style="width: 50px">
+										<a th:href="@{/shops/__${shopId}__/}" class="btn btn-primary"
+											><i class="fas fa-home"></i
+										></a>
+									</div>
+									<h5 class="card-title text-danger">
+										<i class="fas fa-times-circle"></i>
+										<span>Failed!</span>
+									</h5>
+									<p class="card-textq text-white-50">
+										<span> Your checkout of order has been failed. </span>
+									</p>
 								</div>
-								<a th:href="@{/}" class="btn btn-info font-weight-bold">Back to Home</a>
-								<a th:href="${'mailto:'+SUPPORT_EMAIL}" class="btn btn-danger font-weight-bold"
-									>Customer Support</a
-								>
 							</div>
 						</div>
 					</div>

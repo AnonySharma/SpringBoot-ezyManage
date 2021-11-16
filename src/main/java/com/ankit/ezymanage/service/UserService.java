@@ -2,6 +2,7 @@ package com.ankit.ezymanage.service;
 
 import java.util.List;
 
+import com.ankit.ezymanage.model.OwnerRequest;
 import com.ankit.ezymanage.model.User;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,4 +28,15 @@ public interface UserService {
 
 	String findLoggedInUsername();
 
+	void createOwnerRequest(OwnerRequest ownerRequest);
+
+	void updateStatusOwnerRequest(int user_id, String status);
+
+	List<OwnerRequest> getAllActiveOwnerRequests();
+
+	void deleteOwnerRequest(int userId);
+
+	boolean checkIfAlreadyRequestedToBeOwner(int userId);
+
+	OwnerRequest getOwnerRequestByUserId(int id);
 }

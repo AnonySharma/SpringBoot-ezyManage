@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.ankit.ezymanage.dao.UserDAO;
+import com.ankit.ezymanage.model.OwnerRequest;
 import com.ankit.ezymanage.model.Profile;
 import com.ankit.ezymanage.model.User;
 
@@ -138,4 +139,38 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User getUserByUsername(String username) {
         return userDAO.getUserDataByUsername(username);
     }
+
+    @Override
+    public void createOwnerRequest(OwnerRequest ownerRequest) {
+        userDAO.createOwnerRequest(ownerRequest);
+    }
+
+    @Override
+    public void deleteOwnerRequest(int userId) {
+        userDAO.deleteOwnerRequest(userId);
+    }
+
+    @Override
+    public List<OwnerRequest> getAllActiveOwnerRequests() {
+        return userDAO.getAllActiveOwnerRequests();
+    }
+
+    @Override
+    public void updateStatusOwnerRequest(int user_id, String status) {
+        userDAO.updateStatusOwnerRequest(user_id, status);
+    }
+
+    @Override
+    public boolean checkIfAlreadyRequestedToBeOwner(int userId) {
+        return getOwnerRequestByUserId(userId) != null;
+    }
+
+    @Override
+    public OwnerRequest getOwnerRequestByUserId(int userId) {
+        List<OwnerRequest> ownerRequests = userDAO.getOwnerRequestByUserId(userId);
+        if (ownerRequests.size() == 0)
+            return null;
+        return ownerRequests.get(0);
+    }
+
 }

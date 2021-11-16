@@ -63,6 +63,11 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    public List<Integer> getCustomersByShop(int shopId) {
+        return shopDAO.getCustomersByShop(shopId);
+    }
+
+    @Override
     public void addStaff(Staff staff) {
         if (checkIfStaffExists(staff.getStaffId()) == false) {
             userService.addRoleToUser(userService.getUserById(staff.getStaffId()).getUsername(), "ROLE_STAFF");

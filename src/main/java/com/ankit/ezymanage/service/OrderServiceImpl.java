@@ -35,9 +35,9 @@ public class OrderServiceImpl implements OrderService {
     public boolean checkoutCart(Cart cart, int staffId, String mode) throws ParseException {
         Order order;
         if (mode.equals("cash")) {
-            order = createOrder(cart, staffId, "paid", mode);
+            order = createOrder(cart, staffId, "cash", mode);
         } else {
-            order = createOrder(cart, staffId, "pending", mode);
+            order = createOrder(cart, staffId, "mojo", mode);
         }
         orderDAO.insertOrder(order);
         return true;
@@ -61,6 +61,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllOrdersByUserId(int id) {
         return orderDAO.getOrdersByCustomerId(id);
+    }
+
+    @Override
+    public List<Order> getOrdersByCustomer(int shopId, int customerId) {
+        return orderDAO.getOrdersByCustomer(shopId, customerId);
+    }
+
+    @Override
+    public List<Order> getOrdersByStaff(int shopId, int staffId) {
+        return orderDAO.getOrdersByStaff(shopId, staffId);
     }
 
 }

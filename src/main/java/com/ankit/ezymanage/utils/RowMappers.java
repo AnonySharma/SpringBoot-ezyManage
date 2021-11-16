@@ -7,6 +7,7 @@ import java.util.Date;
 
 import com.ankit.ezymanage.model.Cart;
 import com.ankit.ezymanage.model.Order;
+import com.ankit.ezymanage.model.OwnerRequest;
 import com.ankit.ezymanage.model.Product;
 import com.ankit.ezymanage.model.Profile;
 import com.ankit.ezymanage.model.Shop;
@@ -86,9 +87,7 @@ public final class RowMappers {
             }
 
             if (isValid(row.getString("phone"))) {
-                profile.setPhoneNumber(row.getString("phone") != null && row.getString("phone") != ""
-                        ? Long.parseLong(row.getString("phone"))
-                        : null);
+                profile.setPhoneNumber(row.getString("phone"));
             }
 
             if (isValid(row.getString("gender"))) {
@@ -108,7 +107,7 @@ public final class RowMappers {
             }
 
             if (isValid(row.getString("aadhaar"))) {
-                profile.setAadhaarNumber(Long.parseLong(row.getString("aadhaar")));
+                profile.setAadhaarNumber(row.getString("aadhaar"));
             }
 
             return profile;
@@ -180,6 +179,18 @@ public final class RowMappers {
             staff.setDesignation(row.getString("designation"));
             staff.setSalary(row.getInt("salary"));
             return staff;
+        }
+    };
+
+    public static RowMapper<OwnerRequest> ownerRequestRowMapper = new RowMapper<OwnerRequest>() {
+        @Override
+        public OwnerRequest mapRow(ResultSet row, int i) throws SQLException {
+            OwnerRequest ownerRequest = new OwnerRequest();
+            ownerRequest.setId(row.getInt("id"));
+            ownerRequest.setUserId(row.getInt("user_id"));
+            ownerRequest.setDate(row.getTimestamp("date"));
+            ownerRequest.setStatus(row.getString("status"));
+            return ownerRequest;
         }
     };
 }

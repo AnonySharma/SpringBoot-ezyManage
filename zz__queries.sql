@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS profile
 	firstname VARCHAR(20),
 	middlename VARCHAR(20),
 	lastname VARCHAR(20),
-	phone BIGINT,
+	phone VARCHAR(10),
 	gender CHAR(1),
 	dob TIMESTAMP,
 	email VARCHAR(255),
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS shops
 	name VARCHAR(255) NOT NULL,
 	type VARCHAR(255),
 	owner VARCHAR(255) NOT NULL,
-	phone BIGINT,
+	phone VARCHAR(10),
 	email VARCHAR(255),
 	gstin VARCHAR(255),
 	PRIMARY KEY (id),
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS orders
 	status VARCHAR(255),
 	PRIMARY KEY (order_id),
 	FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
-	-- FOREIGN KEY (staff_id) REFERENCES shop_staffs(staff_id) ON DELETE CASCADE,
+	FOREIGN KEY (staff_id) REFERENCES users(id) ON DELETE CASCADE,
 	FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -121,10 +121,47 @@ CREATE TABLE IF NOT EXISTS order_items
 	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS owner_requests
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	date TIMESTAMP,
+	status VARCHAR(255),
+	PRIMARY KEY (id),
+	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS transactions
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	mojo_id VARCHAR(255) NOT NULL,
+	status VARCHAR(255),
+	created_at TIMESTAMP,
+	shop_id INT NOT NULL,
+	order_id INT NOT NULL,
+	amount INT NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
+	FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
+);
+
+-- Non functional yet
+-- CREATE TABLE IF NOT EXISTS feedback
+-- (
+-- 	id INT NOT NULL AUTO_INCREMENT,
+-- 	product_id INT NOT NULL,
+-- 	customer_id INT NOT NULL,
+-- 	rating INT,
+-- 	comment VARCHAR(255),
+-- 	PRIMARY KEY (id),
+-- 	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+-- 	FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE
+-- );
+
 -- ----------------------------------- Populate products table -------------------------------------
-INSERT INTO products(name, image, description, price) VALUES("Rice", "https://d3pc1xvrcw35tl.cloudfront.net/ln/images/686x514/rice-news-20180262183_202106208254.jpg", "Chaaawal", 10);
-INSERT INTO products(name, image, description, price) VALUES("Sugar", "https://www.kinder.com/in/sites/kinder_in/files/documents/16871047/22803799/kinder-39-Sugar-final-header.jpg?t=1623490499", "Cheeni", 45);
-INSERT INTO products(name, image, description, price) VALUES("Salt", "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/322745_1100-732x549.jpg", "Namak", 12);
-INSERT INTO products(name, image, description, price) VALUES("Juggary", "https://static.toiimg.com/photo/msid-72056635/72056635.jpg", "Gud", 20);
-INSERT INTO products(name, image, description, price) VALUES("Flour", "https://www.unlockfood.ca/EatRightOntario/media/Website-images-resized/All-about-grain-flours-resized.jpg", "Aata", 35);
+-- INSERT INTO products(name, image, description, price) VALUES("Rice", "https://d3pc1xvrcw35tl.cloudfront.net/ln/images/686x514/rice-news-20180262183_202106208254.jpg", "Chaaawal", 10);
+-- INSERT INTO products(name, image, description, price) VALUES("Sugar", "https://www.kinder.com/in/sites/kinder_in/files/documents/16871047/22803799/kinder-39-Sugar-final-header.jpg?t=1623490499", "Cheeni", 45);
+-- INSERT INTO products(name, image, description, price) VALUES("Salt", "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/322745_1100-732x549.jpg", "Namak", 12);
+-- INSERT INTO products(name, image, description, price) VALUES("Juggary", "https://static.toiimg.com/photo/msid-72056635/72056635.jpg", "Gud", 20);
+-- INSERT INTO products(name, image, description, price) VALUES("Flour", "https://www.unlockfood.ca/EatRightOntario/media/Website-images-resized/All-about-grain-flours-resized.jpg", "Aata", 35);
 -- -------------------------------------------------------------------------------------------------

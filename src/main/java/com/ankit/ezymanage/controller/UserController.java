@@ -112,7 +112,8 @@ public class UserController extends BaseController {
 				products += productService.getProduct(product.getFirst()).getName() + "(x" + product.getSecond()
 						+ "), ";
 			}
-			products = products.substring(0, products.length() - 2);
+			if (products.length() > 2)
+				products = products.substring(0, products.length() - 2);
 			myOrderList.add(new Pair<>(order, products));
 		}
 		Map<Integer, String> shopMap = new HashMap<>();
@@ -151,4 +152,5 @@ public class UserController extends BaseController {
 			model.addAttribute("isAdmin", true);
 		return "order_page";
 	}
+
 }

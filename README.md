@@ -4,17 +4,16 @@ Run SQL queries using running this command inside MySQL Command Line
 
 # TODO:
 
--   ~~Fix static links make it th:href instead of href.~~
 -   Fix the links in the README.md file.
 -   Write dummy data for the database in queries.sql.
--   Implement the payment system
--   Add payments to payments' table
--   ~~Implement the order and past-order system (Partial done)~~
--   ~~Implement cart and cart-item sync system, implement in DAO~~
+-   Implement transactions
 -   **Separate ADMIN, CUSTOMER, OWNER and STAFF**
 -   **Implement the shops, in which a user works as a staff**
 -   Fix Authorization
--   Separate the shop_staffs into shop_staffs and staffs
+
+# Bugs:
+
+-   Any owner or staff can open any shop from link
 
 ## Roles we have
 

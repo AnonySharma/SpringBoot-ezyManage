@@ -2,6 +2,7 @@ package com.ankit.ezymanage.dao;
 
 import java.util.List;
 
+import com.ankit.ezymanage.model.OwnerRequest;
 import com.ankit.ezymanage.model.User;
 import com.ankit.ezymanage.utils.RowMappers;
 
@@ -62,5 +63,30 @@ public class UserDAO {
 	public List<User> getAllUsers() {
 		final String sql = "SELECT * FROM users";
 		return jdbcTemplate.query(sql, RowMappers.userRowMapper);
+	}
+
+	public void createOwnerRequest(OwnerRequest ownerRequest) {
+		final String sql = "INSERT INTO owner_requests(user_id, date, status) VALUES(?, ?, ?)";
+		jdbcTemplate.update(sql, ownerRequest.getUserId(), ownerRequest.getDate(), ownerRequest.getStatus());
+	}
+
+	public void updateStatusOwnerRequest(int user_id, String status) {
+		final String sql = "UPDATE owner_requests SET status = ? WHERE user_id = ?";
+		jdbcTemplate.update(sql, status, user_id);
+	}
+
+	public List<OwnerRequest> getAllActiveOwnerRequests() {
+		final String sql = "SELECT * FROM owner_requests WHERE status = ?";
+		return jdbcTemplate.query(sql, RowMappers.ownerRequestRowMapper, "pending");
+	}
+
+	public void deleteOwnerRequest(int userId) {
+		final String sql = "DELETE FROM owner_requests WHERE user_id = ?";
+		jdbcTemplate.update(sql, userId);
+	}
+
+	public List<OwnerRequest> getOwnerRequestByUserId(int userId) {
+		final String sql = "SELECT * FROM owner_requests WHERE user_id = ?";
+		return jdbcTemplate.query(sql, RowMappers.ownerRequestRowMapper, userId);
 	}
 }

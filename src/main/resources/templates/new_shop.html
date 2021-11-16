@@ -30,14 +30,14 @@
 									<div class="card-body">
 										<div class="mb-4" th:if="${postLink == '/newshop/'}">
 											<div class="input-group input-group-dynamic is-filled">
-												<label class="form-label">Owner</label>
+												<label class="form-label">Owner *</label>
 												<input type="text" th:field="*{owner}" class="form-control" disabled />
 											</div>
 										</div>
 										<div class="mb-4" th:if="${postLink != '/newshop/'}">
 											<div class="input-group is-filled">
 												<select class="form-control" th:field="*{owner}" required>
-													<option value="" data-display="Choose the Owner" aria-hidden="true">Choose the Owner</option>
+													<option value="" data-display="Choose the Owner" aria-hidden="true">Choose the Owner *</option>
 													<option
 														th:each="user:${users}"
 														th:value="${user.username}"
@@ -48,37 +48,39 @@
 										</div>
 										<div class="mb-4">
 											<div class="input-group input-group-dynamic">
-												<label class="form-label">Shop Name</label>
+												<label class="form-label">Shop Name *</label>
 												<input type="text" th:field="*{name}" class="form-control" required/>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="input-group input-group-dynamic">
-												<label class="form-label">Phone Number</label>
+												<label class="form-label">Phone Number *</label>
 												<input
-													type="number"
+													type="tel"
 													th:field="*{phone}"
 													class="form-control input-number–noSpinners"
+													pattern="[0-9]{10}"
+													title="Please enter your 10-digit valid phone number"
 													required
 												/>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="input-group input-group-dynamic">
-												<label class="form-label">Email</label>
+												<label class="form-label">Email *</label>
 												<input type="email" th:field="*{email}" class="form-control" required/>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="input-group input-group-dynamic">
-												<label class="form-label">GSTIN</label>
+												<label class="form-label">GSTIN *</label>
 												<input type="text" th:field="*{GSTIN}" class="form-control" required/>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="input-group">
 												<select class="form-control wide" th:field="*{type}" required>
-													<option value="" data-display="Choose a type">Choose a type</option>
+													<option value="" data-display="Choose a type *">Choose a type</option>
 													<option value="general">General Store</option>
 													<option value="tech">Technical Store</option>
 													<option value="grocery">Grocery</option>

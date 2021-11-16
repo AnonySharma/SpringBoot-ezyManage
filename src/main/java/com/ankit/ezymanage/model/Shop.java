@@ -5,14 +5,14 @@ public class Shop {
     private String name;
     private String owner;
     private String type;
-    private Long phone;
+    private String phone;
     private String email;
     private String GSTIN;
 
     public Shop() {
     }
 
-    public Shop(int id, String name, String owner, String type, Long phone, String email, String gSTIN) {
+    public Shop(int id, String name, String owner, String type, String phone, String email, String gSTIN) {
         this.id = id;
         this.name = name;
         this.owner = owner;
@@ -54,11 +54,11 @@ public class Shop {
         this.type = type;
     }
 
-    public Long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Long phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

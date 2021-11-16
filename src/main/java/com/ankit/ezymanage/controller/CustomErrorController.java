@@ -23,17 +23,17 @@ public class CustomErrorController implements ErrorController {
 	// return "error/404";
 	// }
 
-	// @RequestMapping("${server.error.path}")
-	@RequestMapping("/error")
-	public String handleError(HttpServletRequest request) {
+	@RequestMapping({ "/error", "/error/" })
+	public String handleError(HttpServletRequest request, Model model) {
 		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 		System.out.println("status: " + status);
 		if (status != null) {
+			model.addAttribute("SUPPORT_EMAIL", "ankit.kumar.cse19+ezymanagesupport@iitbhu.ac.in");
 			Integer statusCode = Integer.valueOf(status.toString());
 			if (statusCode == HttpStatus.NOT_FOUND.value()) {
 				return "error/404";
 			} else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-				return "error/401";
+				return "error/500";
 			} else if (statusCode == HttpStatus.FORBIDDEN.value()) {
 				return "error/403";
 			}
@@ -58,20 +58,23 @@ public class CustomErrorController implements ErrorController {
 		return "redirect:/login/";
 	}
 
-	@GetMapping("/401/")
+	@GetMapping("/500/")
 	public String unauthorizedManager(Model model) {
-		System.out.println("UNAUTHORIZED");
-		return "error/401";
+		System.out.println("INTERNAL SERVER ERROR");
+		model.addAttribute("SUPPORT_EMAIL", "ankit.kumar.cse19+ezymanagesupport@iitbhu.ac.in");
+		return "error/500";
 	}
 
 	@GetMapping("/403/")
 	public String forbiddenManager(Model model) {
+		model.addAttribute("SUPPORT_EMAIL", "ankit.kumar.cse19+ezymanagesupport@iitbhu.ac.in");
 		System.out.println("FORBIDDEN");
 		return "error/403";
 	}
 
 	@GetMapping("/404/")
 	public String pageNotFoundManager(Model model) {
+		model.addAttribute("SUPPORT_EMAIL", "ankit.kumar.cse19+ezymanagesupport@iitbhu.ac.in");
 		System.out.println("Page Not Found");
 		return "error/404";
 	}

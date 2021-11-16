@@ -16,20 +16,21 @@
 							<div class="card-body bg-gradient-secondary text-center">
 								<div class="card-body">
 									<div style="width: 50px">
-										<a th:href="@{/shops/__${shopId}__/cart/__${customerId}__/}" class="btn btn-primary"
+										<a th:href="@{/shops/__${shopId}__/}" class="btn btn-primary"
 											><i class="fas fa-home"></i
 										></a>
 									</div>
 									<h5 class="card-title text-success">
 										<i class="fas fa-check-circle"></i>
 										<span>Success!</span>
+										<p th:if="${paymentOrder ne null}" th:text="${paymentOrder}"></p>
 									</h5>
 									<p class="card-textq text-white-50">
 										<span>
-											Your order has been successfully placed. You will receive an email with your order
-											details.
+											The order has been successfully placed. The customer will receive an email with all
+											the order details.
 											<br />
-											Redirecting to home page in <span id="time_left"></span> seconds...
+											Redirecting to home page in <span id="time_left">10</span> seconds...
 										</span>
 									</p>
 								</div>

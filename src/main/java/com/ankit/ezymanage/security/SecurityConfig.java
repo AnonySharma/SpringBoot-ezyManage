@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().anyRequest().permitAll();
-        // http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/401/");
+        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/401/");
         // http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         // http.authenticationProvider(authenticationProvider());
         http.authorizeRequests().and().formLogin().loginPage("/login/").defaultSuccessUrl("/loggedin/")
