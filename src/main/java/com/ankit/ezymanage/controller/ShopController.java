@@ -11,8 +11,10 @@ import com.ankit.ezymanage.model.OwnerRequest;
 import com.ankit.ezymanage.model.Shop;
 import com.ankit.ezymanage.model.Staff;
 import com.ankit.ezymanage.model.User;
+import com.ankit.ezymanage.service.EmailService;
 import com.ankit.ezymanage.service.OrderService;
 import com.ankit.ezymanage.service.ProductService;
+import com.ankit.ezymanage.service.ProfileService;
 import com.ankit.ezymanage.service.ShopService;
 import com.ankit.ezymanage.service.UserService;
 import com.ankit.ezymanage.utils.MyCalander;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -33,15 +36,19 @@ public class ShopController extends BaseController {
     private final ShopService shopService;
     private final ProductService productService;
     private final OrderService orderService;
+    private final EmailService emailService;
+    private final ProfileService profileService;
 
     @Autowired
     public ShopController(UserService userService, ShopService shopService, ProductService productService,
-            OrderService orderService) {
+            OrderService orderService, EmailService emailService, ProfileService profileService) {
         super(userService);
         this.shopService = shopService;
         this.userService = userService;
         this.productService = productService;
         this.orderService = orderService;
+        this.emailService = emailService;
+        this.profileService = profileService;
     }
 
     @GetMapping("/myshops/grantpermission/")
@@ -489,5 +496,55 @@ public class ShopController extends BaseController {
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))
             model.addAttribute("isAdmin", true);
         return "manage_customer_orders";
+    }
+
+    @GetMapping("/shops/{shopId}/mailing/")
+    public String mailToCustomer(@PathVariable("shopId") int shopId, Model model) {
+        if (!isLoggedIn()) {
+            if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+                model.addAttribute("isAdmin", true);
+            return "redirect:/login/";
+        }
+        if (!isAuthorized(model, ROLE_ABOVE_STAFF))
+            return FORBIDDEN_ERROR_PAGE;
+        List<Integer> customerIds = shopService.getCustomersByShop(shopId);
+        Map<Integer, String> customerMap = new HashMap<>();
+        for (int customerId : customerIds) {
+            customerMap.put(customerId, userService.getUserById(customerId).getUsername());
+        }
+
+        model.addAttribute("customerIds", customerIds);
+        model.addAttribute("customerMap", customerMap);
+        return "mailing";
+    }
+
+    @PostMapping("/shops/{shopId}/mailing/all/")
+    public String mailToAllCustomers(@PathVariable("shopId") int shopId, @RequestParam("mail_subject") String subject,
+            @RequestParam("mail_body") String body, Model model, RedirectAttributes redirectAttributes) {
+        List<Integer> customerIds = shopService.getCustomersByShop(shopId);
+        String to = "";
+        for (Integer customerId : customerIds) {
+            String username = userService.getUserById(customerId).getUsername();
+            to += profileService.getProfile(username).getEmail() + " ";
+        }
+
+        if ((to.length() > 1) && (to.charAt(to.length() - 1) == ' '))
+            to = to.substring(0, to.length() - 1);
+        System.out.println("Sending mail to: " + to + "#");
+        emailService.sendHTMLEmailByShop(shopId, to, subject, body);
+        redirectAttributes.addAttribute("successMsg", "Mailed successfully to all customers");
+        return "redirect:/shops/" + shopId + "/";
+    }
+
+    @PostMapping("/shops/{shopId}/mailing/{customerId}/")
+    public String mailToACustomer(@PathVariable("shopId") int shopId, @PathVariable("customerId") int customerId,
+            @RequestParam("mail_subject") String subject, @RequestParam("mail_body") String body, Model model,
+            RedirectAttributes redirectAttributes) {
+        String username = userService.getUserById(customerId).getUsername();
+        String to = profileService.getProfile(username).getEmail();
+        System.out.println("Sending mail to: " + to + "#");
+        emailService.sendHTMLEmailByShop(shopId, to, subject, body);
+        redirectAttributes.addAttribute("successMsg", "Mailed successfully to " + username);
+        return "redirect:/shops/" + shopId + "/";
     }
 }

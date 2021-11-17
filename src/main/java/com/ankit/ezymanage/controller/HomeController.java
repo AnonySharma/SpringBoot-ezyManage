@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController extends BaseController {
+
     @Autowired
     public HomeController(UserService userService) {
         super(userService);
@@ -21,6 +22,7 @@ public class HomeController extends BaseController {
             System.out.println("Welcome to Home page!");
             if (isAuthorized(model, ROLE_ABOVE_ADMIN))
                 model.addAttribute("isAdmin", true);
+
             return "home";
         }
         System.out.println("Welcome to Landing page!");
@@ -28,14 +30,6 @@ public class HomeController extends BaseController {
             model.addAttribute("isAdmin", true);
         return "landing";
     }
-
-    // @GetMapping("/landing/")
-    // public String landing(Model model) {
-    // isLoggedIn();
-    // System.out.println("Welcome to Landing Page!");
-    // isAuthorized(model, "ROLE_USER");
-    // return "landing";
-    // }
 
     @GetMapping("/payments/")
     public String payments(Model model) {
@@ -45,11 +39,4 @@ public class HomeController extends BaseController {
         return "payments";
     }
 
-    @GetMapping("/customers/")
-    public String customers(Model model) {
-        isAuthorized(model, "ROLE_USER");
-        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
-            model.addAttribute("isAdmin", true);
-        return "customers";
-    }
 }

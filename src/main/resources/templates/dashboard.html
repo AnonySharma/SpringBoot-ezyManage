@@ -25,7 +25,7 @@
 								<br />
 								<a th:href="@{/shops/__${shopId}__/customers/}" class="btn btn-primary">Customers</a>
 								<br />
-								<a href="#" class="btn btn-secondary">Mass mailing</a>
+								<a th:href="@{/shops/__${shopId}__/mailing/}" class="btn btn-secondary">Mass mailing</a>
 								<br />
 								<a th:href="@{/shops/__${shopId}__/staffs/}" class="btn btn-info" th:if="${isOwner ne null}"
 									>Manage Staffs</a

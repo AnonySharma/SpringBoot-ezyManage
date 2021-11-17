@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CustomErrorController implements ErrorController {
+	private static final String SUPPORT_EMAIL = "ezymanageteam+support@gmail.com";
 	// @RequestMapping({ "/error/", "/error" })
 	// public String errorManager(Model model) {
 	// isAuthorized(model, "ROLE_USER");
@@ -28,7 +29,7 @@ public class CustomErrorController implements ErrorController {
 		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 		System.out.println("status: " + status);
 		if (status != null) {
-			model.addAttribute("SUPPORT_EMAIL", "ankit.kumar.cse19+ezymanagesupport@iitbhu.ac.in");
+			model.addAttribute("SUPPORT_EMAIL", SUPPORT_EMAIL);
 			Integer statusCode = Integer.valueOf(status.toString());
 			if (statusCode == HttpStatus.NOT_FOUND.value()) {
 				return "error/404";
@@ -61,20 +62,20 @@ public class CustomErrorController implements ErrorController {
 	@GetMapping("/500/")
 	public String unauthorizedManager(Model model) {
 		System.out.println("INTERNAL SERVER ERROR");
-		model.addAttribute("SUPPORT_EMAIL", "ankit.kumar.cse19+ezymanagesupport@iitbhu.ac.in");
+		model.addAttribute("SUPPORT_EMAIL", SUPPORT_EMAIL);
 		return "error/500";
 	}
 
 	@GetMapping("/403/")
 	public String forbiddenManager(Model model) {
-		model.addAttribute("SUPPORT_EMAIL", "ankit.kumar.cse19+ezymanagesupport@iitbhu.ac.in");
+		model.addAttribute("SUPPORT_EMAIL", SUPPORT_EMAIL);
 		System.out.println("FORBIDDEN");
 		return "error/403";
 	}
 
 	@GetMapping("/404/")
 	public String pageNotFoundManager(Model model) {
-		model.addAttribute("SUPPORT_EMAIL", "ankit.kumar.cse19+ezymanagesupport@iitbhu.ac.in");
+		model.addAttribute("SUPPORT_EMAIL", SUPPORT_EMAIL);
 		System.out.println("Page Not Found");
 		return "error/404";
 	}
