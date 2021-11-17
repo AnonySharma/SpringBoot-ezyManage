@@ -29,13 +29,18 @@
 										<div class="bg-gradient-faded-white rounded p-5 mb-5">
 											<div class="">
 												<div class="input-group input-group-dynamic text-info">
-													<label class="form-label">Mail Subject</label>
-													<input type="text" class="form-control" name="mail_subject" />
+													<label class="form-label">Mail Subject *</label>
+													<input type="text" class="form-control" name="mail_subject" required />
 												</div>
 											</div>
 											<div class="input-group input-group-static">
-												<label>Mail Body</label>
-												<textarea class="form-control" name="mail_body" rows="4"></textarea>
+												<!-- <label>Mail Body (Supports HTML Tags too)</label> -->
+												<textarea
+													class="form-control"
+													name="mail_body"
+													rows="4"
+													placeholder="Mail Body (Supports HTML Tags too)"
+												></textarea>
 											</div>
 										</div>
 

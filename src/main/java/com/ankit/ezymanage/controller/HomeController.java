@@ -33,10 +33,29 @@ public class HomeController extends BaseController {
 
     @GetMapping("/payments/")
     public String payments(Model model) {
-        isAuthorized(model, "ROLE_USER");
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))
             model.addAttribute("isAdmin", true);
         return "payments";
     }
 
+    @GetMapping("/terms/")
+    public String terms(Model model) {
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
+        return "terms_and_conditions";
+    }
+
+    @GetMapping("/contact/")
+    public String contact(Model model) {
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
+        return "contact_us";
+    }
+
+    @GetMapping("/about/")
+    public String about(Model model) {
+        if (isAuthorized(model, ROLE_ABOVE_ADMIN))
+            model.addAttribute("isAdmin", true);
+        return "about_us";
+    }
 }

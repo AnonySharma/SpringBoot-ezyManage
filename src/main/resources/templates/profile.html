@@ -3,82 +3,6 @@
 	<head th:replace="components/head :: head"></head>
 	<body>
 		<div th:replace="components/navbar :: navbar"></div>
-		<div class="container card" style="width: auto;" th:with="show=${edit_form ne null}">
-            <div th:if="${!show}" class="inline mx-auto">
-                <h1 class="text-center text-white mt-20" style = "display: inline; margin-left: 0; margin-right: 0;">Profile</h1>
-                <a th:href="@{/profile/edit/}"><span class="badge badge-warning">Edit</span></a>
-            </div>
-
-            <h1 class="text-center text-white mt-2" th:if="${show}">Edit Profile</h1>
-			
-            <form method="POST" th:action="@{/profile/edit/}" th:object="${profile}" class="forms-sample text-white">
-                <!-- <h1 th:text="${show}"></h1> -->
-                <br>
-                <div class="form-group">
-                    <label for="inputUsername1">Username</label>
-                    <input type="text" class="form-control" id="inputUsername1" th:field="*{username}" placeholder="Username" disabled>
-                </div>
-                <div class="form-group">
-                    <label for="inputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="inputEmail1" th:field="*{email}" placeholder="Email" th:attr="disabled=${!show}">
-                </div>
-                <label for="inputName1">Name</label>
-                <div class="form-group form-inline">
-                    <input type="text" style="width: 32%;" class="form-control mx-2" id="inputName1" th:field="*{firstName}" placeholder="First Name" th:attr="disabled=${!show}">
-                    <input type="text" style="width: 32%;" class="form-control mx-2" id="inputName2" th:field="*{middleName}" placeholder="Middle Name" th:attr="disabled=${!show}">
-                    <input type="text" style="width: 31%;" class="form-control mx-2" id="inputName3" th:field="*{lastName}" placeholder="Last Name" th:attr="disabled=${!show}">
-                </div>
-                <div class="form-group">
-                    <label for="inputGender1">Gender</label>
-                    <select class="form-control" id="inputGender1" th:field="*{gender}" th:attr="disabled=${!show}">
-                        <option value="N">Prefer not to share</option>
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="inputDOB1">Date Of Birth</label>
-                    <div class="input-group date" id="inputDOBdiv">
-                        <input type="text" class="form-control" th:field="*{dateOfBirth}" id="inputDOB1" style="cursor: pointer;" th:attr="disabled=${!show}">
-                        <div class="input-group-addon">
-                            <span class="form-control input-group-text"><i class="far fa-calendar-alt"></i></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputPhone1">Phone</label>
-                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="inputPhone1" placeholder="Phone" pattern="[0-9]{10}" title="Please enter your 10-digit valid phone number" th:attr="disabled=${!show}">
-                </div>
-                <div class="form-group">
-                    <label for="inputAadhaar1">Aadhaar Number</label>
-                    <input type="text" class="form-control" th:field="*{aadhaarNumber}" id="inputAadhaar1" placeholder="Aadhaar Number" th:attr="disabled=${!show}">
-                </div>
-                <div class="form-group">
-                    <label for="inputAddress1">Address</label>
-                    <input type="text" class="form-control" th:field="*{address}" id="inputAddress1" placeholder="Address" th:attr="disabled=${!show}">
-                </div>
-
-                <div th:if="${show}">
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                </div>
-            </form>
-		</h1>
-        <script th:replace="components/toast :: toast"></script>
-        <script>
-            $('#inputDOBdiv').datepicker({
-                autoclose: true,
-                todayHighlight: true
-            });
-        </script>
-	</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
-	<head th:replace="components/head :: head"></head>
-	<body>
-		<div th:replace="components/navbar :: navbar"></div>
 		<div
 			class="page-header align-items-start min-vh-100"
 			th:style="'background-image: url(' + @{/images/back-gradient.jpg} + ');'"
@@ -91,37 +15,61 @@
 						<div class="card z-index-0 fadeIn3 fadeInBottom">
 							<div class="card-body bg-gradient-faded-white text-center">
 								<div style="width: 50px">
-									<a th:href="@{/}" class="btn btn-primary"
-										><i class="fas fa-arrow-circle-left"></i
-									></a>
+									<a th:href="@{/}" class="btn btn-primary"><i class="fas fa-arrow-circle-left"></i></a>
 								</div>
 								<form
 									role="form"
 									autocomplete="off"
 									method="POST"
 									th:action="@{/profile/edit/}"
-									th:object="${shop}"
+									th:object="${profile}"
 									class="forms-sample text-white"
 								>
 									<div class="card-body">
 										<div class="mb-4">
 											<div class="input-group input-group-dynamic is-filled">
-												<label class="form-label">Owner *</label>
-												<input type="text" th:field="*{owner}" class="form-control" disabled />
+												<label class="form-label">Username *</label>
+												<input
+													type="text"
+													th:field="*{username}"
+													class="form-control"
+													disabled
+													required
+												/>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="input-group input-group-dynamic mb-4 is-filled">
+													<label class="form-label">First Name *</label>
+													<input class="form-control" type="text" th:field="*{firstName}" required />
+												</div>
+											</div>
+											<div class="col-md-4 ps-2">
+												<div class="input-group input-group-dynamic is-filled">
+													<label class="form-label">Middle Name</label>
+													<input type="text" class="form-control" th:field="*{middleName}" />
+												</div>
+											</div>
+											<div class="col-md-4 ps-2">
+												<div class="input-group input-group-dynamic is-filled">
+													<label class="form-label">Last Name</label>
+													<input type="text" class="form-control" th:field="*{lastName}" />
+												</div>
 											</div>
 										</div>
 										<div class="mb-4">
-											<div class="input-group input-group-dynamic">
-												<label class="form-label">Shop Name *</label>
-												<input type="text" th:field="*{name}" class="form-control" required/>
+											<div class="input-group input-group-dynamic is-filled">
+												<label class="form-label">Email *</label>
+												<input type="email" th:field="*{email}" class="form-control" required />
 											</div>
 										</div>
 										<div class="mb-4">
-											<div class="input-group input-group-dynamic">
+											<div class="input-group input-group-dynamic is-filled">
 												<label class="form-label">Phone Number *</label>
 												<input
 													type="tel"
-													th:field="*{phone}"
+													th:field="*{phoneNumber}"
 													class="form-control input-number–noSpinners"
 													pattern="[0-9]{10}"
 													title="Please enter your 10-digit valid phone number"
@@ -130,27 +78,31 @@
 											</div>
 										</div>
 										<div class="mb-4">
-											<div class="input-group input-group-dynamic">
-												<label class="form-label">Email *</label>
-												<input type="email" th:field="*{email}" class="form-control" required/>
-											</div>
-										</div>
-										<div class="mb-4">
-											<div class="input-group input-group-dynamic">
-												<label class="form-label">GSTIN *</label>
-												<input type="text" th:field="*{GSTIN}" class="form-control" required/>
-											</div>
-										</div>
-										<div class="mb-4">
 											<div class="input-group">
-												<select class="form-control wide" th:field="*{type}" required>
-													<option value="" data-display="Choose a type *">Choose a type</option>
-													<option value="general">General Store</option>
-													<option value="tech">Technical Store</option>
-													<option value="grocery">Grocery</option>
-													<option value="service">Service Centre</option>
-													<option value="others">Others</option>
+												<select class="form-control wide" th:field="*{gender}">
+													<option value="N" data-display="Choose a Gender">Choose a Gender</option>
+													<option value="M">Male</option>
+													<option value="F">Female</option>
+													<option value="O">Prefer not to share</option>
 												</select>
+											</div>
+										</div>
+										<div class="mb-4">
+											<div class="input-group input-group-dynamic is-filled">
+												<label class="form-label">Date of Birth</label>
+												<input type="date" th:field="*{dateOfBirth}" class="form-control" />
+											</div>
+										</div>
+										<div class="mb-4">
+											<div class="input-group input-group-dynamic is-filled">
+												<label class="form-label">Aadhaar Number</label>
+												<input type="text" th:field="*{aadhaarNumber}" class="form-control" />
+											</div>
+										</div>
+										<div class="mb-4">
+											<div class="input-group input-group-dynamic is-filled">
+												<label class="form-label">Address</label>
+												<input type="text" th:field="*{address}" class="form-control" />
 											</div>
 										</div>
 										<div class="row">
@@ -164,13 +116,17 @@
 													/>
 													<label class="form-check-label ms-3 mb-0" for="flexSwitchCheckDefault"
 														>I agree to the
-														<a href="javascript:;" class="text-dark"><u>Terms and Conditions</u></a
+														<a th:href="@{/terms/}" class="text-dark"><u>Terms and Conditions</u></a
 														>.</label
 													>
 												</div>
 											</div>
 											<div class="col-md-12">
-												<input type="submit" class="btn bg-gradient-dark w-100">Add Shop</input>
+												<input
+													type="submit"
+													class="btn bg-gradient-dark w-100"
+													value="Update Profile"
+												/>
 											</div>
 										</div>
 									</div>

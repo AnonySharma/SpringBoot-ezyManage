@@ -17,8 +17,8 @@ public class ProfileDAO {
 	}
 
 	public void createProfile(Profile profile) {
-		final String sql = "INSERT INTO profile(username, firstname, middlename, lastname, phone, gender, dob, email, address, aadhaar) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, profile.getUsername(), null, null, null, null, null, null, null, null, null);
+		final String sql = "INSERT INTO profile(username) VALUES(?)";
+		jdbcTemplate.update(sql, profile.getUsername());
 	}
 
 	public void updateProfile(Profile profile) {

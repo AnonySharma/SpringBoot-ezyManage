@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS profile
 	lastname VARCHAR(20),
 	phone VARCHAR(10),
 	gender CHAR(1),
-	dob TIMESTAMP,
+	dob DATE,
 	email VARCHAR(255),
 	address VARCHAR(255),
 	aadhaar VARCHAR(50),

@@ -146,7 +146,8 @@ public class ShopController extends BaseController {
             return FORBIDDEN_ERROR_PAGE;
         System.out.println("Creating shop!");
         System.out.println(shop.toString());
-
+        String owner = userService.findLoggedInUsername();
+        shop.setOwner(owner);
         shopService.createShop(shop);
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))
             model.addAttribute("isAdmin", true);

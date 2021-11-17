@@ -80,10 +80,10 @@ public class PaymentController extends BaseController {
         String email = profileService.getProfile(username).getEmail();
         String phone = profileService.getProfile(username).getPhoneNumber();
 
-        if (email == null)
-            email = "cgankitsharma@gmail.com";
-        if (phone == null)
-            phone = "7979939400";
+        // if (email == null)
+        // email = "cgankitsharma@gmail.com";
+        // if (phone == null)
+        // phone = "7979939400";
 
         order.setEmail(email);
         order.setPhone(phone);

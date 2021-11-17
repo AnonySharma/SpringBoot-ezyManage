@@ -87,7 +87,7 @@ public class EmailServiceImpl implements EmailService {
         String content = "";
         content += header;
         content += divider;
-        content += centered_content_start + "<h1> Sent by:<i>" + shopName + "</i></h1>" + centered_content_end;
+        content += centered_content_start + "<h1> Sent by: <i>" + shopName + "</i></h1>" + centered_content_end;
         content += divider;
         content += centered_content_start + body + centered_content_end;
         content += divider;
