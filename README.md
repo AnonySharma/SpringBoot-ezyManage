@@ -43,6 +43,18 @@ Posssible combinations:
 -   ROLE_USER, ROLE_OWNER
 -   ROLE_USER, ROLE_STAFF
 
+# Usage guide
+
+## Current admin
+
+**Username:** admin
+**Password:** admin
+
+## To create a new admins
+
+-   Register a user
+-   Go to database, and append " ROLE_ADMIN" to its role, and make is_admin = 1
+
 # Initial Commands:
 
 -   git init
@@ -64,8 +76,6 @@ Posssible combinations:
 
 _**Note:** Link to MySQL Server - https://remotemysql.com/databases.php_
 
----
-
 ## Color Palette
 
 -   #2E2966 Jacarta
@@ -73,7 +83,7 @@ _**Note:** Link to MySQL Server - https://remotemysql.com/databases.php_
 -   #4C4B8B East Bay
 -   https://coolors.co/231d59-312d68-39367d-413e85-4b4988
 
-##
+## Extras
 
 Run SQL queries using running this command inside MySQL Command Line
 
