@@ -48,6 +48,7 @@ Posssible combinations:
 ## Current admin
 
 **Username:** admin
+
 **Password:** admin
 
 ## To create a new admins
