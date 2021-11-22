@@ -2,6 +2,7 @@ package com.ankit.ezymanage;
 
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -13,6 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 // @EnableAutoConfiguration(exclude = { ErrorMvcAutoConfiguration.class })
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class EzyManageApplication {
+	@Value("${spring.mail.username}")
+	private String username;
+
+	@Value("${spring.mail.password}")
+	private String password;
 
 	@Bean
 	BCryptPasswordEncoder passwordEncoder() {
@@ -25,8 +31,8 @@ public class EzyManageApplication {
 		mailSender.setHost("smtp.gmail.com");
 		mailSender.setPort(587);
 
-		mailSender.setUsername("ezymanageteam@gmail.com");
-		mailSender.setPassword("ezyManage@$1");
+		mailSender.setUsername(username);
+		mailSender.setPassword(password);
 
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");

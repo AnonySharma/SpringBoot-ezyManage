@@ -533,7 +533,7 @@ public class ShopController extends BaseController {
             to = to.substring(0, to.length() - 1);
         System.out.println("Sending mail to: " + to + "#");
         emailService.sendHTMLEmailByShop(shopId, to, subject, body);
-        redirectAttributes.addAttribute("successMsg", "Mailed successfully to all customers");
+        redirectAttributes.addFlashAttribute("successMsg", "Mailed successfully to all customers");
         return "redirect:/shops/" + shopId + "/";
     }
 
@@ -545,7 +545,7 @@ public class ShopController extends BaseController {
         String to = profileService.getProfile(username).getEmail();
         System.out.println("Sending mail to: " + to + "#");
         emailService.sendHTMLEmailByShop(shopId, to, subject, body);
-        redirectAttributes.addAttribute("successMsg", "Mailed successfully to " + username);
+        redirectAttributes.addFlashAttribute("successMsg", "Mailed successfully to " + username);
         return "redirect:/shops/" + shopId + "/";
     }
 }
