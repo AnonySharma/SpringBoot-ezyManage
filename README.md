@@ -1,14 +1,14 @@
-Run SQL queries using running this command inside MySQL Command Line
+# ezyManage
 
-`source \home\user\Desktop\test.sql;`
+ezyManage is a web application backed by Spring Boot and MySQL, that helps you manage your shops including products, inventory, staffs, customers, orders and payments.
 
-# TODO:
+## TODO:
 
 -   Write dummy data for the database in queries.sql.
 -   Edit products
 -   Update profile
 
-# Bugs:
+## Bugs:
 
 -   Any owner or staff can open any shop from link
 
@@ -42,9 +42,9 @@ Posssible combinations:
 -   git init
 -   git add .
 -   git commit -m "test"
--   heroku create
+-   heroku create (optional)
 -   heroku git:remote -a ezy-manage
--   git push heroku master
+-   git push heroku master (optional)
 -   git push origin master
 -   heroku logs --tail
 
@@ -52,7 +52,7 @@ Posssible combinations:
 
 -   git add .
 -   git commit -m "test"
--   git push heroku master
+-   git push heroku master (optional)
 -   git push origin master
 -   heroku logs --tail
 
@@ -60,9 +60,15 @@ _**Note:** Link to MySQL Server - https://remotemysql.com/databases.php_
 
 ---
 
-# Color Palette
+## Color Palette
 
 -   #2E2966 Jacarta
 -   #433B84 Victoria
 -   #4C4B8B East Bay
 -   https://coolors.co/231d59-312d68-39367d-413e85-4b4988
+
+##
+
+Run SQL queries using running this command inside MySQL Command Line
+
+`source \home\user\Desktop\test.sql;`
