@@ -2,11 +2,11 @@
 
 ezyManage is a web application backed by Spring Boot and MySQL, that helps you manage your shops including products, inventory, staffs, customers, orders and payments.
 
-![Website Landing Page](https://github.com/AnonySharma/SpringBoot-ezyManage/blob/master/home.jpg?raw=true)
+![Website Landing Page](https://github.com/AnonySharma/SpringBoot-ezyManage/blob/master/images/home.jpg?raw=true)
 
 # Relational Schema
 
-![Relational Schema](https://github.com/AnonySharma/SpringBoot-ezyManage/blob/master/schema-blue.png?raw=true)
+![Relational Schema](https://github.com/AnonySharma/SpringBoot-ezyManage/blob/master/images/schema-blue.png?raw=true)
 
 ## TODO:
 
