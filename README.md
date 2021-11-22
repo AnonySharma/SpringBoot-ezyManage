@@ -45,16 +45,20 @@ Posssible combinations:
 
 # Usage guide
 
-## Current admin
-
-**Username:** admin
-
-**Password:** admin
-
 ## To create a new admins
 
 -   Register a user
 -   Go to database, and append " ROLE_ADMIN" to its role, and make is_admin = 1
+
+### Test admin
+
+**Username:** admin <br>
+**Password:** admin
+
+## To start a new store
+
+-   Register a user
+-   Request to get owner role, open admin panel, and accept its request
 
 # Initial Commands:
 
