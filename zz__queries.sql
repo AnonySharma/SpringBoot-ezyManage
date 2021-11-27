@@ -170,9 +170,9 @@ CREATE TABLE IF NOT EXISTS verification_emails
 -- );
 
 -- ----------------------------------- Populate products table -------------------------------------
--- INSERT INTO products(name, image, description, price) VALUES("Rice", "https://d3pc1xvrcw35tl.cloudfront.net/ln/images/686x514/rice-news-20180262183_202106208254.jpg", "Chaaawal", 10);
--- INSERT INTO products(name, image, description, price) VALUES("Sugar", "https://www.kinder.com/in/sites/kinder_in/files/documents/16871047/22803799/kinder-39-Sugar-final-header.jpg?t=1623490499", "Cheeni", 45);
--- INSERT INTO products(name, image, description, price) VALUES("Salt", "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/322745_1100-732x549.jpg", "Namak", 12);
--- INSERT INTO products(name, image, description, price) VALUES("Juggary", "https://static.toiimg.com/photo/msid-72056635/72056635.jpg", "Gud", 20);
--- INSERT INTO products(name, image, description, price) VALUES("Flour", "https://www.unlockfood.ca/EatRightOntario/media/Website-images-resized/All-about-grain-flours-resized.jpg", "Aata", 35);
+INSERT INTO products(name, image, description, price) VALUES("Rice", "https://d3pc1xvrcw35tl.cloudfront.net/ln/images/686x514/rice-news-20180262183_202106208254.jpg", "Chaaawal", 10);
+INSERT INTO products(name, image, description, price) VALUES("Sugar", "https://www.kinder.com/in/sites/kinder_in/files/documents/16871047/22803799/kinder-39-Sugar-final-header.jpg?t=1623490499", "Cheeni", 45);
+INSERT INTO products(name, image, description, price) VALUES("Salt", "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/322745_1100-732x549.jpg", "Namak", 12);
+INSERT INTO products(name, image, description, price) VALUES("Juggary", "https://static.toiimg.com/photo/msid-72056635/72056635.jpg", "Gud", 20);
+INSERT INTO products(name, image, description, price) VALUES("Flour", "https://www.unlockfood.ca/EatRightOntario/media/Website-images-resized/All-about-grain-flours-resized.jpg", "Aata", 35);
 -- -------------------------------------------------------------------------------------------------
