@@ -3,6 +3,8 @@ package com.ankit.ezymanage.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import com.ankit.ezymanage.utils.GetHost;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -94,9 +96,10 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendVerificationEmail(String username, String email, String token) {
+        String host = GetHost.getHost();
         String body = "Hi " + username + ",<br><br>";
         body += "Please click on the link below to verify your email address.<br><br>";
-        body += "<a href=\"http://localhost:8080/verify?token=" + token + "\">Verify Email</a><br><br>";
+        body += "<a href=\"" + host + "/verify?token=" + token + "\">Verify Email</a><br><br>";
         body += "If you did not request this, please ignore this email.<br><br>";
         body += "Thanks,<br>";
         body += "Team ezyManage";

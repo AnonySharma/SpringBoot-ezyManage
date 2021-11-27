@@ -1,7 +1,5 @@
 package com.ankit.ezymanage.controller;
 
-import javax.servlet.http.HttpSession;
-
 import com.ankit.ezymanage.model.User;
 import com.ankit.ezymanage.service.UserService;
 
@@ -50,7 +48,8 @@ public class RegisterController extends BaseController {
     }
 
     @PostMapping("/register/")
-    public String registerManager(@ModelAttribute("user") User user, Model model, HttpSession httpSession) {
+    public String registerManager(@ModelAttribute("user") User user, Model model,
+            RedirectAttributes redirectAttributes) {
         if (isLoggedIn()) {
             if (isAuthorized(model, ROLE_ABOVE_ADMIN))
                 model.addAttribute("isAdmin", true);
@@ -60,6 +59,8 @@ public class RegisterController extends BaseController {
         User userToSave = new User(user.getUsername(), user.getEmail(), user.getPassword());
         userService.saveUser(userToSave);
 
+        redirectAttributes.addFlashAttribute("successMsg",
+                "Registered successfully! Please check and confirm your email.");
         isAuthorized(model, "ROLE_USER");
         System.out.println("just registered!!!!!!");
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))

@@ -8,6 +8,7 @@ import com.ankit.ezymanage.service.CartService;
 import com.ankit.ezymanage.service.OrderService;
 import com.ankit.ezymanage.service.ProfileService;
 import com.ankit.ezymanage.service.UserService;
+import com.ankit.ezymanage.utils.GetHost;
 import com.ankit.ezymanage.utils.MyCalander;
 import com.instamojo.wrapper.api.ApiContext;
 import com.instamojo.wrapper.api.Instamojo;
@@ -71,8 +72,8 @@ public class PaymentController extends BaseController {
         order.setCreatedAt(MyCalander.now().toString());
         order.setDescription(String.valueOf(shopId));
 
-        order.setRedirectUrl("http://localhost:8080/shops/" + shopId + "/cart/" + customerId + "/checkout/success/");
-        // order.setWebhookUrl("http://localhost:8080/shops/" + shopId + "/cart/" +
+        order.setRedirectUrl(GetHost.getHost() + "/shops/" + shopId + "/cart/" + customerId + "/checkout/success/");
+        // order.setWebhookUrl(GetHost.getHost() + "/shops/" + shopId + "/cart/" +
         // customerId + "/checkout/webhook/");
         String token = UUID.randomUUID().toString();
         order.setTransactionId(token);
