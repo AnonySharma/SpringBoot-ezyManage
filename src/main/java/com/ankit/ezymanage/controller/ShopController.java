@@ -532,7 +532,8 @@ public class ShopController extends BaseController {
         if ((to.length() > 1) && (to.charAt(to.length() - 1) == ' '))
             to = to.substring(0, to.length() - 1);
         System.out.println("Sending mail to: " + to + "#");
-        emailService.sendHTMLEmailByShop(shopId, to, subject, body);
+        Shop shop = shopService.getShopById(shopId);
+        emailService.sendHTMLEmailByShop(shop.getName(), to, subject, body);
         redirectAttributes.addFlashAttribute("successMsg", "Mailed successfully to all customers");
         return "redirect:/shops/" + shopId + "/";
     }
@@ -544,7 +545,8 @@ public class ShopController extends BaseController {
         String username = userService.getUserById(customerId).getUsername();
         String to = profileService.getProfile(username).getEmail();
         System.out.println("Sending mail to: " + to + "#");
-        emailService.sendHTMLEmailByShop(shopId, to, subject, body);
+        Shop shop = shopService.getShopById(shopId);
+        emailService.sendHTMLEmailByShop(shop.getName(), to, subject, body);
         redirectAttributes.addFlashAttribute("successMsg", "Mailed successfully to " + username);
         return "redirect:/shops/" + shopId + "/";
     }

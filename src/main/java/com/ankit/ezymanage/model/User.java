@@ -5,24 +5,28 @@ public class User {
 	private String username;
 	private String password;
 	private String role;
+	private String email;
 	private boolean isAdmin;
+	private boolean isVerified;
 
 	public User() {
 	}
 
-	public User(int id, String username, String password, String role, boolean isAdmin) {
+	public User(String username, String email, String password) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
+
+	public User(int id, String username, String password, String role, String email, boolean isAdmin,
+			boolean isVerified) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.role = role;
+		this.email = email;
 		this.isAdmin = isAdmin;
-	}
-
-	public User(String username, String password) {
-		this.username = username;
-		this.password = password;
-		this.role = "ROLE_USER";
-		this.isAdmin = false;
+		this.isVerified = isVerified;
 	}
 
 	public int getId() {
@@ -57,6 +61,14 @@ public class User {
 		this.role = role;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public boolean isAdmin() {
 		return isAdmin;
 	}
@@ -65,9 +77,18 @@ public class User {
 		this.isAdmin = isAdmin;
 	}
 
+	public boolean isVerified() {
+		return isVerified;
+	}
+
+	public void setVerified(boolean isVerified) {
+		this.isVerified = isVerified;
+	}
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", isAdmin=" + isAdmin + ", password=" + password + ", role=" + role + ", username="
-				+ username + "]";
+		return "User [email=" + email + ", id=" + id + ", isAdmin=" + isAdmin + ", isVerified=" + isVerified
+				+ ", password=" + password + ", role=" + role + ", username=" + username + "]";
 	}
+
 }

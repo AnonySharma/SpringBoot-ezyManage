@@ -39,4 +39,8 @@ public interface UserService {
 	boolean checkIfAlreadyRequestedToBeOwner(int userId);
 
 	OwnerRequest getOwnerRequestByUserId(int id);
+
+	String getUsernameByVerificationToken(String token);
+
+	void updateUserVerificationStatus(String username, boolean isVerified);
 }

@@ -57,7 +57,7 @@ public class RegisterController extends BaseController {
             return "redirect:/";
         }
 
-        User userToSave = new User(user.getUsername(), user.getPassword());
+        User userToSave = new User(user.getUsername(), user.getEmail(), user.getPassword());
         userService.saveUser(userToSave);
 
         isAuthorized(model, "ROLE_USER");

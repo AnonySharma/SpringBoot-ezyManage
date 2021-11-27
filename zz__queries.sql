@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users
 	password VARCHAR(1000) NOT NULL,
 	role VARCHAR(100),
 	isadmin BOOLEAN,
+	isverified BOOLEAN,
 	PRIMARY KEY (id)
 );
 
@@ -143,6 +144,15 @@ CREATE TABLE IF NOT EXISTS transactions
 	PRIMARY KEY (id),
 	FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
 	FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS verification_emails
+(
+	username VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	token VARCHAR(255) NOT NULL,
+	PRIMARY KEY (username),
+	FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE
 );
 
 -- Non functional yet

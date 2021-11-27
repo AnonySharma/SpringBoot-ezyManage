@@ -89,4 +89,25 @@ public class UserDAO {
 		final String sql = "SELECT * FROM owner_requests WHERE user_id = ?";
 		return jdbcTemplate.query(sql, RowMappers.ownerRequestRowMapper, userId);
 	}
+
+	public void createVerificationToken(String username, String email, String token) {
+		final String sql = "INSERT INTO verification_emails(username, email, token) VALUES(?, ?, ?)";
+		jdbcTemplate.update(sql, username, email, token);
+	}
+
+	public void deleteVerificationToken(String username) {
+		final String sql = "DELETE FROM verification_emails WHERE username = ?";
+		jdbcTemplate.update(sql, username);
+	}
+
+	public String getUsernameByVerificationToken(String token) {
+		final String sql = "SELECT username FROM verification_emails WHERE token = ?";
+		return jdbcTemplate.queryForObject(sql, String.class, token);
+	}
+
+	public void updateUserVerificationStatus(String username, boolean isVerified) {
+		final String sql = "UPDATE users SET isverified = ? WHERE username = ?";
+		jdbcTemplate.update(sql, isVerified, username);
+		deleteVerificationToken(username);
+	}
 }

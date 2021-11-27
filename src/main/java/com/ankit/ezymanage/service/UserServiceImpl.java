@@ -3,6 +3,7 @@ package com.ankit.ezymanage.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import com.ankit.ezymanage.dao.UserDAO;
 import com.ankit.ezymanage.model.OwnerRequest;
@@ -24,11 +25,13 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserDAO userDAO;
     private final ProfileService profileService;
+    private final EmailService emailService;
 
     @Autowired
-    public UserServiceImpl(UserDAO userDAO, ProfileService profileService) {
+    public UserServiceImpl(UserDAO userDAO, ProfileService profileService, EmailService emailService) {
         this.userDAO = userDAO;
         this.profileService = profileService;
+        this.emailService = emailService;
     }
 
     public String findLoggedInUsername() {
@@ -61,7 +64,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void saveUser(User user) {
         userDAO.createUser(user);
-        profileService.saveProfile(new Profile(user.getUsername()));
+        Profile profile = new Profile(user.getUsername());
+        profile.setEmail(user.getEmail());
+        profileService.saveProfile(profile);
+
+        String token = UUID.randomUUID().toString();
+        userDAO.createVerificationToken(user.getUsername(), user.getEmail(), token);
+        emailService.sendVerificationEmail(user.getUsername(), user.getEmail(), token);
+    }
+
+    @Override
+    public void updateUserVerificationStatus(String username, boolean isVerified) {
+        userDAO.updateUserVerificationStatus(username, isVerified);
+    }
+
+    @Override
+    public String getUsernameByVerificationToken(String token) {
+        return userDAO.getUsernameByVerificationToken(token);
     }
 
     @Override
