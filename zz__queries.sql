@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users
 	username VARCHAR(255) UNIQUE NOT NULL,
 	password VARCHAR(1000) NOT NULL,
 	role VARCHAR(100),
+	email VARCHAR(255) NOT NULL,
 	isadmin BOOLEAN,
 	isverified BOOLEAN,
 	PRIMARY KEY (id)

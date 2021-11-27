@@ -30,7 +30,9 @@ public final class RowMappers {
             user.setUsername(row.getString("username"));
             user.setPassword(row.getString("password"));
             user.setRole(row.getString("role"));
+            user.setEmail(row.getString("email"));
             user.setAdmin(row.getBoolean("isadmin"));
+            user.setVerified(row.getBoolean("isverified"));
             return user;
         }
     };

@@ -2,8 +2,6 @@ package com.ankit.ezymanage;
 
 import java.util.Properties;
 
-import com.ankit.ezymanage.utils.GetHost;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -46,7 +44,6 @@ public class EzyManageApplication {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(GetHost.getHost());
 		SpringApplication.run(EzyManageApplication.class, args);
 	}
 

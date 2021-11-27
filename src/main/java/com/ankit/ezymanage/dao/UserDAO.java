@@ -26,19 +26,21 @@ public class UserDAO {
 
 	public void createUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		final String sql = "INSERT INTO users(id, username, password, role, isadmin) VALUES(?, ?, ?, ?, ?)";
+		final String sql = "INSERT INTO users(id, username, email, password, role, isadmin) VALUES(?, ?, ?, ?, ?, ?)";
 		try {
-			jdbcTemplate.update(sql, user.getId(), user.getUsername(), user.getPassword(), user.getRole(),
-					user.isAdmin());
+			jdbcTemplate.update(sql, user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),
+					user.getRole(), user.isAdmin());
 		} catch (Exception e) {
+			System.out.println(e);
 			throw new DuplicateKeyException("Username not available!");
 		}
 
 	}
 
 	public void updateUser(User user) {
-		final String sql = "UPDATE users SET username = ?, password = ?, role = ?, isadmin = ? WHERE id = ?";
-		jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getRole(), user.isAdmin(), user.getId());
+		final String sql = "UPDATE users SET username = ?, password = ?, role = ?, email = ?, isadmin = ? WHERE id = ?";
+		jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getRole(), user.getEmail(),
+				user.isAdmin(), user.getId());
 	}
 
 	public User getUserDataByUsername(String username) {
@@ -100,7 +102,14 @@ public class UserDAO {
 		jdbcTemplate.update(sql, username);
 	}
 
+	public boolean isVerificationTokenExists(String token) {
+		final String sql = "SELECT COUNT(*) FROM verification_emails WHERE token = ?";
+		return jdbcTemplate.queryForObject(sql, Integer.class, token) > 0;
+	}
+
 	public String getUsernameByVerificationToken(String token) {
+		if (!isVerificationTokenExists(token))
+			return null;
 		final String sql = "SELECT username FROM verification_emails WHERE token = ?";
 		return jdbcTemplate.queryForObject(sql, String.class, token);
 	}

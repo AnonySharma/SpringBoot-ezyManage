@@ -9,9 +9,9 @@ public class GetHost {
         try {
             cannonicalHost = java.net.InetAddress.getLocalHost().getCanonicalHostName();
             if (cannonicalHost.contains("heroku")) {
-                host = "http://localhost:8080";
-            } else {
                 host = "https://ezy-manage.herokuapp.com";
+            } else {
+                host = "http://localhost:8080";
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();

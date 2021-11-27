@@ -30,14 +30,12 @@ public class LoginController extends BaseController {
         return "login";
     }
 
-    // verify email token
     @GetMapping("/verify")
     public String verifyEmail(@RequestParam("token") String token, RedirectAttributes redirectAttributes) {
         String username = userService.getUsernameByVerificationToken(token);
+        System.out.println(token + " " + username);
         if (username != null) {
             userService.updateUserVerificationStatus(username, true);
-            User user = userService.getUserByUsername(username);
-            userService.updateUserVerificationStatus(user.getUsername(), true);
             redirectAttributes.addFlashAttribute("successMsg", "Your email has been verified, you can now login.");
             return "redirect:/login/";
         } else {
@@ -50,10 +48,13 @@ public class LoginController extends BaseController {
     public String loginManager(Model model, RedirectAttributes redirectAttributes) {
         if (!isLoggedIn())
             return PAGE_NOT_FOUND_ERROR_PAGE;
+        System.out.println(userService.findLoggedInUsername());
+        System.out.println(userService.getUserByUsername(userService.findLoggedInUsername()));
+
         if (!userService.getUserByUsername(userService.findLoggedInUsername()).isVerified()) {
             redirectAttributes.addFlashAttribute("warningMsg",
                     "Please check your email, and verify your account first!");
-            return "redirect:/logout";
+            return "redirect:/logout/";
         }
         redirectAttributes.addFlashAttribute("successMsg", "Welcome!");
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))
@@ -66,7 +67,6 @@ public class LoginController extends BaseController {
         if (isLoggedIn())
             return PAGE_NOT_FOUND_ERROR_PAGE;
         System.out.println("Logged out!");
-        redirectAttributes.addFlashAttribute("successMsg", "Logged out successfully!");
         if (isAuthorized(model, ROLE_ABOVE_ADMIN))
             model.addAttribute("isAdmin", true);
         return "redirect:/";

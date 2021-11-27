@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void saveUser(User user) {
+        user.setRole("ROLE_USER");
         userDAO.createUser(user);
         Profile profile = new Profile(user.getUsername());
         profile.setEmail(user.getEmail());
