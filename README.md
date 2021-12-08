@@ -1,5 +1,7 @@
 # ezyManage
 
+<img src="https://wakatime.com/badge/user/6f0a3756-f42b-4b2c-b51e-3af523e8c304/project/d21c1e55-75e1-4554-a93c-b5b182e8054d.svg" alt="wakatime">
+
 ezyManage is a web application backed by Spring Boot and MySQL, that helps you manage your shops including products, inventory, staffs, customers, orders and payments.
 
 ![Website Landing Page](https://github.com/AnonySharma/SpringBoot-ezyManage/blob/master/images/home.jpg?raw=true)
